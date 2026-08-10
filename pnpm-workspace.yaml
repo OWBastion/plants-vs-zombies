@@ -1,0 +1,8 @@
+# pnpm workspace / settings (pnpm >= 10)
+# overpy zh-CN translation fixes:
+#   - 8 reeval/enum "None" values: game exports 无, overpy had stale 全部禁用
+#   - ultDuration% include: +sojourn (game exposes it, overpy list omitted)
+#   - enableInfiniteUlt include: +mauga (game exposes it, overpy list omitted)
+#   - enableInfiniteAmmo exclude: -kiriko (game exposes it, overpy list wrongly excluded)
+patchedDependencies:
+  overpy@9.7.9: patches/overpy@9.7.9.patch

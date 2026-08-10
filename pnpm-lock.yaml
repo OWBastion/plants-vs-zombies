@@ -4,13 +4,16 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  overpy@9.7.9: dcef40931c8b0848b761bf24f7e297359295588b4891a4dfb7d32b5ecebaba8d
+
 importers:
 
   .:
     devDependencies:
       overpy:
         specifier: ^9.7.9
-        version: 9.7.9
+        version: 9.7.9(patch_hash=dcef40931c8b0848b761bf24f7e297359295588b4891a4dfb7d32b5ecebaba8d)
 
 packages:
 
@@ -20,4 +23,4 @@ packages:
 
 snapshots:
 
-  overpy@9.7.9: {}
+  overpy@9.7.9(patch_hash=dcef40931c8b0848b761bf24f7e297359295588b4891a4dfb7d32b5ecebaba8d): {}
