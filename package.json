@@ -5,10 +5,8 @@
   "description": "Overwatch Workshop PvE mode inspired by Plants vs. Zombies, authored with OverPy.",
   "type": "commonjs",
   "scripts": {
-    "decompile": "overpy decompile -i PvZ.ow -o PvZ.opy -l zh-CN",
-    "compile": "overpy compile -i PvZ.opy -o PvZ.ow -l zh-CN",
-    "decompile:pvz2": "sed 's/, 无);/, 全部禁用);/g' pvz2.ow | overpy decompile -l zh-CN > /tmp/pvz2.decompiled.opy && python3 scripts/fix-pvz2-decompiled.py /tmp/pvz2.decompiled.opy pvz2.opy",
-    "compile:pvz2": "overpy compile -i pvz2.opy -o pvz2.compiled.ow -l zh-CN"
+    "compile": "overpy compile -i pvz2.opy -o pvz2.compiled.ow -l zh-CN",
+    "decompile": "sh scripts/import.sh"
   },
   "devDependencies": {
     "overpy": "^9.7.9"
