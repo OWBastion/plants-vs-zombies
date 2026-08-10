@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """反编译后的针对性修复（overpy 9.7.9 数据缺陷，不修改 overpy 本体）。
 
-适用场景: pvz2.ow（该脚本假定输入是它的反编译输出）。
+适用场景: 植物大战僵尸模式的游戏导出（.ow）反编译输出;锚点针对当前 main.opy
+的内容编写,若导出内容变化导致锚点失配,脚本会显式报错,需按报错更新锚点。
 
 修复内容（均为队伍2/植物侧的设置,overpy 过旧 include/exclude 列表导致反编译静默丢弃）:
 - 毛加「终极技能持续时间无限」(enableInfiniteUlt include 缺 mauga)

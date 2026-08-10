@@ -1,6 +1,6 @@
 #!/bin/sh
-# 导入工具: 把游戏内导出的 .ow 反编译回 pvz2.opy
-# 用法: pnpm run decompile -- <导出的.ow路径>
+# 导入工具: 把游戏内导出的 .ow 反编译回 main.opy
+# 用法: pnpm run decompile <导出的.ow路径>  (pnpm 不加 --; npm 需 npm run decompile -- <file>)
 set -e
 
 if [ -z "$1" ]; then
@@ -15,4 +15,4 @@ sed 's/, 无);/, 全部禁用);/g' "$1" \
     > /tmp/pvz2.decompiled.opy
 
 # 恢复 overpy 过旧 include/exclude 列表静默丢弃的设置,并追加 #!postCompileHook 指令。
-python3 scripts/fix-pvz2-decompiled.py /tmp/pvz2.decompiled.opy pvz2.opy
+python3 scripts/fix-pvz2-decompiled.py /tmp/pvz2.decompiled.opy main.opy

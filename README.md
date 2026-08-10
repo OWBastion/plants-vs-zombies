@@ -4,7 +4,7 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 
 ## 目录结构
 
-- `pvz2.opy` — 唯一源码（OverPy）。队伍 1 为 AI 僵尸（dummy bot），队伍 2 为玩家（植物）。
+- `main.opy` — 唯一源码（OverPy）。队伍 1 为 AI 僵尸（dummy bot），队伍 2 为玩家（植物）。
 - `postCompileHook.js` — 编译后处理：overpy 9.7.9 的 zh-CN 数据里 chase 函数的 "None" 枚举是过期的「全部禁用」，当前游戏客户端导出/接受的是「无」，此处仅在该枚举处替换回「无」。
 - `scripts/fix-pvz2-decompiled.py` — 反编译后处理：overpy 过旧 include/exclude 列表会静默丢弃 3 条队伍 2 设置（毛加「终极技能持续时间无限」、索杰恩「终极技能持续时间 150%」、雾子「无需装弹」），此处以中文字面量键恢复，并追加 `#!postCompileHook` 指令。
 - `package.json` / `pnpm-lock.yaml` / `.gitignore` — 工具链。
@@ -14,10 +14,10 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 ## 工作流
 
 ```sh
-# 编译：pvz2.opy -> pvz2.compiled.ow（gitignored，直接粘贴进游戏）
+# 编译：main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
 pnpm run compile
 
-# 导入：把游戏里新导出的 .ow 反编译回 pvz2.opy
+# 导入：把游戏里新导出的 .ow 反编译回 main.opy
 # 注意: pnpm 会原样保留 `--`, 不要带; 用 npm 时才需要 `npm run decompile -- <file>`
 pnpm run decompile /path/to/export.ow
 ```
