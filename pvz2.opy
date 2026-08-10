@@ -680,7 +680,7 @@ settings {
                 "primaryFireIgniteDamage": 166,
                 "primaryFireIgniteDuration": 150,
                 "health%": 50,
-                "enableInfiniteUlt": true,
+                "终极技能持续时间无限": "开启",
                 "enableAbility1": false
             },
             "pharah": {
@@ -793,8 +793,8 @@ settings {
             },
             "sojourn": {
                 "充能速度 充能射击": "125%",
-                "ability2Cooldown%": 54,
-                "ultDuration%": 150
+                "终极技能持续时间": "150%",
+                "ability2Cooldown%": 54
             },
             "mei": {
                 "damageDealt%": 110,
@@ -884,7 +884,7 @@ settings {
                 "ability1Distance%": 300,
                 "damageDealt%": 115,
                 "projectileSpeed%": 115,
-                "enableInfiniteAmmo": true,
+                "无需装弹": "开启",
                 "healingDealt%": 160,
                 "ultGen%": 185,
                 "ability2Cooldown%": 53
@@ -1013,6 +1013,8 @@ subroutine knockBack 5
 
 #Only remove the following directive if the gamemode does not use tricks such as A+0, A*0, A or "", "am" == "**", etc which would otherwise be optimized out.
 #!optimizeStrict
+
+#!postCompileHook "postCompileHook.js"
 
 rule "Copyright (c) 2025 他又（aka Teakowa）":
     disableInspector()

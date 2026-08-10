@@ -223,3 +223,6 @@ node_modules/
 
 # macOS
 .DS_Store
+
+# pvz2 compiled output (generated)
+pvz2.compiled.ow
