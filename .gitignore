@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node / pnpm (OverPy CLI toolchain)
+node_modules/
+.pnpm-store/
+
+# macOS
+.DS_Store
