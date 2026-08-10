@@ -18,7 +18,8 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 pnpm run compile
 
 # 导入：把游戏里新导出的 .ow 反编译回 pvz2.opy
-pnpm run decompile -- /path/to/export.ow
+# 注意: pnpm 会原样保留 `--`, 不要带; 用 npm 时才需要 `npm run decompile -- <file>`
+pnpm run decompile /path/to/export.ow
 ```
 
 导入时反编译会先对输入做定点预处理（`无` → `全部禁用`，仅 chase 枚举处），再用
