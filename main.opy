@@ -950,46 +950,46 @@ settings {
 
 #Global variables
 
-globalvar Bot_Respawn_Points 1
-globalvar Brain_Points 2
-globalvar Current_Round 3
-globalvar Config_Total_Round 4
-globalvar Config_Round_Attack_Time 5
-globalvar Config_Round_Lead_Time 6
-globalvar Debug 7
-globalvar Under_Attack 8
-globalvar Difficult 9
-globalvar Round_Attack_Time 10
-globalvar Round_Lead_Time 11
-globalvar NumberOfZombies 12
-globalvar Zombie_Heros 14
-globalvar Tank_Heros 15
-globalvar Damage_Heros 16
-globalvar Support_Heros 17
-globalvar ANTI_CRASH_ACTIVATE_PERCENT 32
-globalvar ANTI_CRASH_HOLD_TIME 33
-globalvar ANTI_CRASH_DEACTIVATE_PERCENT 34
-globalvar Hero_BAN 35
+globalvar Bot_Respawn_Points
+globalvar Brain_Points
+globalvar Current_Round
+globalvar Config_Total_Round
+globalvar Config_Round_Attack_Time
+globalvar Config_Round_Lead_Time
+globalvar Debug
+globalvar Under_Attack
+globalvar Difficult
+globalvar Round_Attack_Time
+globalvar Round_Lead_Time
+globalvar NumberOfZombies
+globalvar Zombie_Heros
+globalvar Tank_Heros
+globalvar Damage_Heros
+globalvar Support_Heros
+globalvar ANTI_CRASH_ACTIVATE_PERCENT
+globalvar ANTI_CRASH_HOLD_TIME
+globalvar ANTI_CRASH_DEACTIVATE_PERCENT
+globalvar Hero_BAN
 
 #Player variables
 
-playervar BotTarget 1
-playervar TTK 2
-playervar heros 3
-playervar mov_speed_penalty 10
-playervar zarya_barrier_shields 20
-playervar sym_barrier_shields 21
-playervar tracer_buff 22
-playervar brig_repair_pack 23
-playervar brig_rally_armor_id 24
-playervar lucio_crossfade_dmg 25
-playervar knockback_direction 26
-playervar zen_transcendence 27
-playervar scoped_shot_distance 106
-playervar scoped_damage_base 107
-playervar ow2_scoped_damage_falloff_scalar 108
-playervar ow1_scoped_damage_falloff_scalar 109
-playervar expected_scoped_damage 110
+playervar BotTarget
+playervar TTK
+playervar heros
+playervar mov_speed_penalty
+playervar zarya_barrier_shields
+playervar sym_barrier_shields
+playervar tracer_buff
+playervar brig_repair_pack
+playervar brig_rally_armor_id
+playervar lucio_crossfade_dmg
+playervar knockback_direction
+playervar zen_transcendence
+playervar scoped_shot_distance
+playervar scoped_damage_base
+playervar ow2_scoped_damage_falloff_scalar
+playervar ow1_scoped_damage_falloff_scalar
+playervar expected_scoped_damage
 
 #Subroutine names
 
