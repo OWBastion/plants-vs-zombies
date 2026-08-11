@@ -39,6 +39,6 @@ rule "Players - Round Attack End":
     @Condition Under_Attack == true
 
     waitUntil(Round_Attack_Time == 0, Config_Round_Attack_Time)
-    waitUntil(getNumberOfLivingPlayers(Team.1) == (len(getLivingPlayers(Team.1).filter(lambda player: distance(player.getPosition(), getSpawnPoints(Team.1).getPosition()) <= 55))) or len(getLivingPlayers(Team.1).filter(lambda player: distance(player.getPosition(), Brain_Points[0].getPosition()) >= 45)), 999999986991104)
+    waitUntil(getNumberOfLivingPlayers(Team.1) == (len(getLivingPlayers(Team.1).filter(lambda player: distance(player.getPosition(), getSpawnPoints(Team.1).getPosition()) <= 55))) or getNumberOfLivingPlayers(Team.1) == len(getLivingPlayers(Team.1).filter(lambda player: distance(player.getPosition(), Brain_Points[0].getPosition()) >= 45)), 999999986991104)
     Under_Attack = false
     Round_Lead_Time = Config_Round_Lead_Time
