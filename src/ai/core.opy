@@ -108,6 +108,9 @@ def stuckCheck():
     # 控制状态中: 不累计卡死判定
     if eventPlayer.hasStatus(Status.STUNNED) or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.KNOCKED_DOWN):
         return
+    # 特殊能力激活期间: 不累计卡死判定 (能力自带移动/停顿, 不与基础寻路混判)
+    if eventPlayer.isUsingAbility1() or eventPlayer.isUsingAbility2() or eventPlayer.isUsingUltimate():
+        return
     # 持续无位置进展才判定卡死; 恢复梯度: 刷新目标/跳起 -> 持续失败后击杀重生
     if distance(eventPlayer.getPosition(), eventPlayer.stuck_last_pos) >= 1.5:
         eventPlayer.stuck_count = 0
@@ -136,8 +139,6 @@ rule "//AI Move":
     AITarget()
     AIMove()
     stuckCheck()
-    eventPlayer.forceButtonPress(Button.JUMP)
-    eventPlayer.forceButtonPress(Button.MELEE)
     wait(0.8)
     wait(0.3, Wait.ABORT_WHEN_FALSE)
     if ruleCondition:
