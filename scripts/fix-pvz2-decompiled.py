@@ -93,11 +93,11 @@ def main() -> None:
         "队伍2 雾子 无需装弹",
     )
 
-    # 4. 追加 postCompileHook 指令
+    # 4. 追加 postCompileHook 指令 (src/main.opy 相对仓库根目录为 ../)
     text = replace_once(
         text,
         "#!optimizeStrict\n",
-        "#!optimizeStrict\n\n#!postCompileHook \"postCompileHook.js\"\n",
+        "#!optimizeStrict\n\n#!postCompileHook \"../postCompileHook.js\"\n",
         "postCompileHook 指令",
     )
 
