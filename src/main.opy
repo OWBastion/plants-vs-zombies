@@ -362,7 +362,7 @@ settings {
                 "damageReceived%": 100,
                 "health%": 140,
                 "movementSpeed%": 50,
-                "辅助攻击模式": "关闭"
+                "充能射击": "关闭"
             },
             "mei": {
                 "enablePrimaryFire": false,
