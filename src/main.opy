@@ -13,7 +13,7 @@ settings {
         "returnToLobby": "never"
     },
     "gamemodes": {
-        "elimination": {
+        "tdm": {
             "enabledMaps": [
                 "iliosRuins",
                 "iliosLighthouse",
@@ -21,8 +21,7 @@ settings {
                 "nepalSanctum",
                 "nepalVillage",
                 "lijiangNightMarket",
-                "lijiangControlCenter",
-                "ayutthaya"
+                "lijiangControlCenter"
             ]
         },
         "general": {

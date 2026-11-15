@@ -16,13 +16,9 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
 
 
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
-    getPlayers(Team.1).disableRespawn()
     disableGamemodeCompletion()
     #Arena locations
-    if __getCurrentMap__() == Map.AYUTTHAYA:
-        Bot_Respawn_Points = [vect(16, 1, 25), vect(-6.5, 5, 25), vect(34.52, 6, 38.1), vect(16, 6, 23)]
-        Brain_Points = [vect(16, 1.19, 52), vect(24, 1, 56), vect(-6, 3, 54)]
-    elif __getCurrentMap__() == Map.LIJIANG_NIGHT_MARKET:
+    if __getCurrentMap__() == Map.LIJIANG_NIGHT_MARKET:
         Bot_Respawn_Points = [vect(32, 0, -21.75), vect(42.35, 6, -46), vect(30, 6, -14.18), vect(40, 2, -41.8)]
         Brain_Points = [vect(88.5, 4.5, -25.5)]
     elif __getCurrentMap__() == Map.LIJIANG_CONTROL_CENTER:
@@ -55,6 +51,15 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Bot_Respawn_Points[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Bot_Respawn_Points[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Points[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+
+
+# 团队死斗会自动复活玩家; 关闭后由下方规则按波次复活
+rule "Player Resurrect - Disable Built-in Respawn":
+    @Event eachPlayer
+    @Team 2
+    @Condition eventPlayer.isDummy() == false
+
+    eventPlayer.disableRespawn()
 
 
 rule "Player Resurrect - Respawn at Brain Points":
