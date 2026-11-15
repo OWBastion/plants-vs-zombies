@@ -63,12 +63,12 @@ rule "Player Resurrect - Disable Built-in Respawn":
 
 
 # 团队死斗的出生点随机, 重生室无法进入: 出生后统一传送。
-# 僵尸每次自动复活都传送到刷新点; 玩家阵亡后只能由复活机制复活, 所以只在首次出生时传送到脑子旁。
+# 僵尸只在比赛进行中传送到刷新点; 玩家无论是否开赛, 每次出生或被复活都落在脑子旁。
 rule "[Mode]: Spawn Teleport":
     @Event eachPlayer
-    @Condition isGameInProgress() == true
     @Condition eventPlayer.isAlive() == true
-    @Condition (eventPlayer.isDummy() or not eventPlayer.Spawn_Teleported) == true
+    @Condition (not eventPlayer.isDummy() or isGameInProgress()) == true
+    @Condition len(Brain_Points) > 0
 
     if eventPlayer.isDummy():
         eventPlayer.teleport(random.choice(Bot_Respawn_Points))
@@ -76,7 +76,6 @@ rule "[Mode]: Spawn Teleport":
         eventPlayer.setRespawnTime(6 if Current_Round == Config_Total_Round else 10)
     else:
         eventPlayer.teleport(Brain_Points[0])
-        eventPlayer.Spawn_Teleported = true
 
 
 rule "Player Resurrect - Respawn at Brain Points":

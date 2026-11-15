@@ -43,4 +43,3 @@ playervar expected_scoped_damage
 playervar scan_candidates
 playervar stuck_last_pos
 playervar stuck_count
-playervar Spawn_Teleported
