@@ -257,7 +257,7 @@ settings {
                 "health%": 200,
                 "movementSpeed%": 50,
                 "secondaryFireKb%": 0,
-                "锯齿利刃（格雷西）": "禁用"
+                "锯齿利刃（格雷西）": "关闭"
             },
             "winston": {
                 "enablePrimaryFire": false,
