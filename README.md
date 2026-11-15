@@ -12,7 +12,7 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 - `src/player/movement.opy` — 玩家移动限制。
 - `src/ui/` — HUD 与调试显示（`hud.opy`、`debug.opy`）。
 - `src/utilities/camera.opy` — 第三人称相机。
-- `postCompileHook.js` — 编译后处理：overpy 9.7.9 的 zh-CN 数据里 chase 函数的 "None" 枚举是过期的「全部禁用」，当前游戏客户端导出/接受的是「无」，此处仅在该枚举处替换回「无」。
+- `postCompileHook.js` — 编译后处理：overpy 9.7.9 的 zh-CN 数据里 chase 函数的 "None" 枚举是过期的「全部禁用」，当前游戏客户端导出/接受的是「无」，此处仅在该枚举处替换回「无」。另外把黑影重做后过期的「黑客入侵冷却时间」改为「在线修复冷却时间」（新名为推测，待上游 workshop-rs#617 修正后删除）。
 - `scripts/fix-pvz2-decompiled.py` — 反编译后处理：overpy 过旧 include/exclude 列表会静默丢弃 3 条队伍 2 设置（毛加「终极技能持续时间无限」、索杰恩「终极技能持续时间 150%」、雾子「无需装弹」），此处以中文字面量键恢复，并追加 `#!postCompileHook` 指令。
 - `package.json` / `pnpm-lock.yaml` / `.gitignore` — 工具链。
 
