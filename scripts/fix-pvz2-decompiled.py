@@ -9,7 +9,7 @@
 - 索杰恩「终极技能持续时间 150%」(ultDuration% include 缺 sojourn)
 - 雾子「无需装弹」(enableInfiniteAmmo exclude 误含 kiriko)
 以中文字面量键写入,编译端会原样保留。
-另追加 #!postCompileHook 指令:编译时把 chase 枚举「全部禁用」改回游戏导出的「无」。
+另追加 #!postCompileHook 指令:编译后由 postCompileHook.js 修正过期的设置名。
 
 用法: python3 fix-pvz2-decompiled.py <反编译输出> <修复后输出>
 """

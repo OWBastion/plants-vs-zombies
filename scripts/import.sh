@@ -8,8 +8,8 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# overpy 9.7.9 的 ChaseTimeReeval/ChaseRateReeval "None" 中文值是过期的「全部禁用」,
-# 游戏客户端导出的是「无」;仅在 chase 调用处替换,让反编译能识别该枚举。
+# overpy 9.7.9 的 ChaseTimeReeval/ChaseRateReeval "None" 中文值是「全部禁用」。
+# 旧版客户端导出「无」,当前客户端导出「全部禁用」;下面仅在 chase 调用处替换旧导出,对新导出无影响。
 sed 's/, 无);/, 全部禁用);/g' "$1" \
     | ./node_modules/.bin/overpy decompile -l zh-CN \
     > /tmp/pvz2.decompiled.opy
