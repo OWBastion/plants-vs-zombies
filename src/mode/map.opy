@@ -62,6 +62,17 @@ rule "Player Resurrect - Disable Built-in Respawn":
     eventPlayer.disableRespawn()
 
 
+# 团队死斗的出生点随机且重生室无法进入: 玩家一出生就传送到脑子旁
+rule "Player Spawn - Teleport to Brain Points":
+    @Event eachPlayer
+    @Team 2
+    @Condition isGameInProgress() == true
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isAlive() == true
+
+    eventPlayer.teleport(Brain_Points[0])
+
+
 rule "Player Resurrect - Respawn at Brain Points":
     @Event playerDied
     @Team 2
