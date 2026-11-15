@@ -7,7 +7,7 @@ Read when compiling, importing, or finishing a change.
 `package.json` is the authority. Available:
 
 ```sh
-pnpm run compile                       # src/main.opy -> main.compiled.ow (zh-CN, postCompileHook.js)
+pnpm run compile                       # wright: src/main.opy -> main.compiled.ow (zh-CN, then scripts/post-compile.js)
 pnpm run decompile /path/to/export.ow  # import a game export into src/main.opy
 ```
 

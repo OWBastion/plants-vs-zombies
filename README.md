@@ -12,7 +12,7 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 - `src/player/movement.opy` — 玩家移动限制。
 - `src/ui/` — HUD 与调试显示（`hud.opy`、`debug.opy`）。
 - `src/utilities/camera.opy` — 第三人称相机。
-- `postCompileHook.js` — 编译后处理：overpy 9.7.9 的 zh-CN 数据里 chase 函数的 "None" 枚举是过期的「全部禁用」，当前游戏客户端导出/接受的是「无」，此处仅在该枚举处替换回「无」。
+- `postCompileHook.js` / `scripts/post-compile.js` — 编译后处理：zh-CN 词表里 chase 函数的 "None" 枚举是过期的「全部禁用」，当前游戏客户端导出/接受的是「无」，此处仅在该枚举处替换回「无」。wright 编译不会执行 `#!postCompileHook` 指令，由 `post-compile.js` 复用该脚本。
 - `scripts/fix-pvz2-decompiled.py` — 反编译后处理：overpy 过旧 include/exclude 列表会静默丢弃 3 条队伍 2 设置（毛加「终极技能持续时间无限」、索杰恩「终极技能持续时间 150%」、雾子「无需装弹」），此处以中文字面量键恢复，并追加 `#!postCompileHook` 指令。
 - `package.json` / `pnpm-lock.yaml` / `.gitignore` — 工具链。
 
@@ -21,7 +21,7 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 ## 工作流
 
 ```sh
-# 编译：src/main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
+# 编译（wright）：src/main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
 pnpm run compile
 
 # 导入：把游戏里新导出的 .ow 反编译回 src/main.opy
