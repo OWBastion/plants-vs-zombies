@@ -12,6 +12,8 @@ const renames = [
     [/^(\s*)tiebreakerTime: /gm, "$1目标点决胜机制激活时间: "],
     [/^(\s*)secondaryFireRechargeRate%: (\S+)$/gm, "$1呼吸器充能速度: $2%"],
     [/^(\s*)secondaryFireMaximumTime%: (\S+)$/gm, "$1呼吸器最长时间: $2%"],
+    // 客户端把该设置叫「急救包刷新」, wright 词表是「生成治疗包」。只处理源码用到的 Disabled。
+    [/^(\s*)Spawn Health Packs: Disabled$/gm, "$1急救包刷新: 禁用"],
     // 黑影重做后「黑客入侵」更名为「在线修复」 (workshop-rs#617)。冷却时间的新名按其他技能的命名规律推得, 未经客户端确认。
     [/^(\s*)Hack Cooldown Time: /gm, "$1在线修复冷却时间: "],
 ];
