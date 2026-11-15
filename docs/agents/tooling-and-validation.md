@@ -1,14 +1,13 @@
 # Tooling, generated output, and validation
 
-Read when compiling, importing, or finishing a change.
+Read when compiling or finishing a change.
 
 ## Commands
 
-`package.json` is the authority. Available:
+`package.json` is the authority. Available (wright must be on `PATH`; the repo has no npm dependencies):
 
 ```sh
 pnpm run compile                       # wright: src/main.opy -> main.compiled.ow (zh-CN, postCompileHook.js, then scripts/post-compile.js)
-pnpm run decompile /path/to/export.ow  # import a game export into src/main.opy
 ```
 
 There is no test, lint, or format script; do not claim those ran.
@@ -19,7 +18,7 @@ There is no test, lint, or format script; do not claim those ran.
 - Do not commit `*.ow` or `*.compiled.ow`.
 - Preserve `src/main.opy` settings, named variables, subroutine numbers, extensions, post-compile hook, and `#!include` order unless the task changes that contract.
 - Rule order in the compiled output follows `#!include` order. Keep the relative order of rules unchanged, or Workshop execution semantics change.
-- Compile and decompile both use `zh-CN`. The overpy zh-CN word list and the game client differ slightly in some wording (for example `关闭` vs `禁用`). If a setting does not take effect after pasting into the game, fix it in `postCompileHook.js`.
+- Compile uses `zh-CN`. The wright zh-CN word list and the game client differ slightly in some wording (for example `关闭` vs `禁用`). If a setting does not take effect after pasting into the game, fix it in `postCompileHook.js`.
 
 ## Compile pipeline
 
@@ -34,17 +33,9 @@ There is no test, lint, or format script; do not claim those ran.
 
 `#!postCompileHook` cannot do the last fix: wright re-parses the hook output and adds the prefix again.
 
-## Decompile / import
+## Import
 
-`pnpm run decompile` overwrites `src/main.opy` with a single file that must be re-split into modules. Check the working tree first. Use it only when the user intends to replace and re-split source.
-
-`scripts/import.sh` does three things:
-
-1. Replace `无` with `全部禁用` in chase enum arguments only.
-2. Decompile with overpy.
-3. Run `scripts/fix-pvz2-decompiled.py`. It restores three team 2 settings that the old overpy include/exclude list drops silently: Mauga `终极技能持续时间无限`, Sojourn `终极技能持续时间 150%`, Kiriko `无需装弹`. It also appends `#!postCompileHook`.
-
-If an export changes and the script anchors no longer match, the script fails with an explicit error. Update the anchors from the message.
+There is no decompile path. wright `convert` refuses this mode's game export (`unsupported-settings`), and the overpy workflow was removed. `src/` is the only source: edit `.opy` by hand.
 
 ## Validation
 

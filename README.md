@@ -12,7 +12,7 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 - `src/player/movement.opy` — 玩家移动限制。
 - `src/ui/` — HUD（`hud`）与调试显示（`debug`）。
 - `src/utilities/camera.opy` — 第三人称相机。
-- `postCompileHook.js`、`scripts/` — 编译与导入的后处理，详见 [`docs/agents/tooling-and-validation.md`](docs/agents/tooling-and-validation.md)。
+- `postCompileHook.js`、`scripts/post-compile.js` — 编译后处理，详见 [`docs/agents/tooling-and-validation.md`](docs/agents/tooling-and-validation.md)。
 - `docs/agents/` — 面向 agent 的分主题规则，入口见 [`AGENTS.md`](AGENTS.md)。
 
 `.ow`（游戏导出/编译产物）不入库。
@@ -20,14 +20,8 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 ## 工作流
 
 ```sh
-# 编译：src/main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
+# 编译（需要 wright）：src/main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
 pnpm run compile
-
-# 导入：把游戏里新导出的 .ow 反编译回 src/main.opy
-# pnpm 不要带 `--`；用 npm 时才需要 `npm run decompile -- <file>`
-pnpm run decompile /path/to/export.ow
 ```
-
-反编译产出是单文件，会覆盖 `src/main.opy`，导入后需按 `#!include` 顺序重新拆分模块。除非需要与游戏往返同步，否则不推荐反复导入。
 
 模块边界与 `#!include` 顺序即编译产物中的规则顺序。改动时保持规则相对顺序不变，以免改变 Workshop 执行语义。

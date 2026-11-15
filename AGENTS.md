@@ -28,7 +28,7 @@ This file holds only the rules that always apply. Load a topic doc from the inde
 | Movement, heroes, zombie AI, waves, new mechanics | `docs/agents/gameplay.md` |
 | Variables, arrays, subroutines, bots, effects, HUD, camera | `docs/agents/state-and-lifecycle.md` |
 | Frequent rules, scans, hot paths | `docs/agents/performance.md` |
-| Compile, decompile/import, post-compile fixes, validation | `docs/agents/tooling-and-validation.md` |
+| Compile, post-compile fixes, validation | `docs/agents/tooling-and-validation.md` |
 
 ## Workflow
 
