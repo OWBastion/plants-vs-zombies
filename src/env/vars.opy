@@ -25,6 +25,7 @@ globalvar Hero_BAN
 
 playervar BotTarget
 playervar Teleported_Hero
+playervar Spawned_At
 playervar TTK
 playervar heros
 playervar mov_speed_penalty

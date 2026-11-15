@@ -72,6 +72,10 @@ rule "[Mode]: Spawn Teleport":
 
     if eventPlayer.isDummy():
         eventPlayer.teleport(random.choice(Bot_Respawn_Points))
+        eventPlayer.Spawned_At = getTotalTimeElapsed()
+        # 重生后清除上一条命的卡死计数, 避免沿用旧位置判定
+        eventPlayer.stuck_count = 0
+        eventPlayer.stuck_last_pos = eventPlayer.getPosition()
         # 实测请求值比实际复活等待多约 2 秒: 10 -> 约 8 秒, 6 -> 约 4 秒
         eventPlayer.setRespawnTime(6 if Current_Round == Config_Total_Round else 10)
     else:

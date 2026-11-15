@@ -24,3 +24,12 @@ rule "[debug.opy]: player debug (Top Right)":
     hudSubheader(eventPlayer, "当前位置 = {0}".format(eventPlayer.getPosition()), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.STRING)
     #hudSubheader(eventPlayer, "当前速度 = {0}".format(eventPlayer.getSpeed()), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.STRING)
     #hudSubheader(eventPlayer, "当前速率 = {0}".format(eventPlayer.getVelocity()), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.STRING)
+
+
+rule "[Debug]: Log zombie deaths":
+    @Event playerDied
+    @Team 1
+    @Condition Debug == true
+
+    enableInspector()
+    logToInspector("僵尸阵亡 存活 {0}s 位置 {1} 击杀者 {2} 卡死计数 {3} 回合 {4} 进攻中 {5}".format(getTotalTimeElapsed() - eventPlayer.Spawned_At, eventPlayer.getPosition(), attacker, eventPlayer.stuck_count, Current_Round, Under_Attack))
