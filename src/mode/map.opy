@@ -78,6 +78,19 @@ rule "[Mode]: Spawn Teleport":
         eventPlayer.teleport(Brain_Points[0])
 
 
+# 开赛前选英雄不会触发重生, 换英雄后需要再传送一次
+rule "[Mode]: Hero Change Teleport":
+    @Event eachPlayer
+    @Team 2
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isAlive() == true
+    @Condition eventPlayer.getHero() != eventPlayer.Teleported_Hero
+    @Condition len(Brain_Points) > 0
+
+    eventPlayer.Teleported_Hero = eventPlayer.getHero()
+    eventPlayer.teleport(Brain_Points[0])
+
+
 rule "Player Resurrect - Respawn at Brain Points":
     @Event playerDied
     @Team 2
