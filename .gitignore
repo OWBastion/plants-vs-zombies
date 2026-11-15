@@ -230,3 +230,6 @@ node_modules/
 # src/env is a source module directory, not a virtualenv — keep it tracked
 !src/env/
 !src/env/vars.opy
+
+# wright run cache
+.wright/

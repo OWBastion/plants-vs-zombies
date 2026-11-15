@@ -9,7 +9,6 @@
 - 索杰恩「终极技能持续时间 150%」(ultDuration% include 缺 sojourn)
 - 雾子「无需装弹」(enableInfiniteAmmo exclude 误含 kiriko)
 以中文字面量键写入,编译端会原样保留。
-另追加 #!postCompileHook 指令:编译后由 postCompileHook.js 修正过期的设置名。
 
 用法: python3 fix-pvz2-decompiled.py <反编译输出> <修复后输出>
 """
@@ -91,14 +90,6 @@ def main() -> None:
         '                "ability2Cooldown%": 53\n'
         '            },',
         "队伍2 雾子 无需装弹",
-    )
-
-    # 4. 追加 postCompileHook 指令 (src/main.opy 相对仓库根目录为 ../)
-    text = replace_once(
-        text,
-        "#!optimizeStrict\n",
-        "#!optimizeStrict\n\n#!postCompileHook \"../postCompileHook.js\"\n",
-        "postCompileHook 指令",
     )
 
     # 清理行尾空白与末尾空行,保持 git diff --check 干净

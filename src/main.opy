@@ -974,7 +974,6 @@ subroutine stuckCheck 7
 #Only remove the following directive if the gamemode does not use tricks such as A+0, A*0, A or "", "am" == "**", etc which would otherwise be optimized out.
 #!optimizeStrict
 
-#!postCompileHook "../postCompileHook.js"
 
 #!include "mode/init.opy"
 #!include "mode/map.opy"

@@ -12,8 +12,8 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 - `src/player/movement.opy` — 玩家移动限制。
 - `src/ui/` — HUD 与调试显示（`hud.opy`、`debug.opy`）。
 - `src/utilities/camera.opy` — 第三人称相机。
-- `postCompileHook.js` — 编译后处理：把黑影重做后过期的「黑客入侵冷却时间」改为「在线修复冷却时间」（新名为推测，待上游 workshop-rs#617 修正后删除）。
-- `scripts/fix-pvz2-decompiled.py` — 反编译后处理：overpy 过旧 include/exclude 列表会静默丢弃 3 条队伍 2 设置（毛加「终极技能持续时间无限」、索杰恩「终极技能持续时间 150%」、雾子「无需装弹」），此处以中文字面量键恢复，并追加 `#!postCompileHook` 指令。
+- `scripts/post-compile.js` — 编译后处理，修正 wright zh-CN 词表的两类问题：团队死斗综合设置和路霸呼吸器设置输出了英文键（待上游 opy-rs#723 修正后删除）；黑影重做后过期的「黑客入侵冷却时间」改为「在线修复冷却时间」（新名为推测，待上游 workshop-rs#617 修正后删除）。
+- `scripts/fix-pvz2-decompiled.py` — 反编译后处理：overpy 过旧 include/exclude 列表会静默丢弃 3 条队伍 2 设置（毛加「终极技能持续时间无限」、索杰恩「终极技能持续时间 150%」、雾子「无需装弹」），此处以中文字面量键恢复。
 - `package.json` / `pnpm-lock.yaml` / `.gitignore` — 工具链。
 
 `.ow`（游戏导出/编译产物）不入库。
@@ -21,7 +21,7 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 ## 工作流
 
 ```sh
-# 编译：src/main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
+# 编译（wright）：src/main.opy -> main.compiled.ow（gitignored，直接粘贴进游戏）
 pnpm run compile
 
 # 导入：把游戏里新导出的 .ow 反编译回 src/main.opy
@@ -38,5 +38,5 @@ pnpm run decompile /path/to/export.ow
 ## 说明
 
 - 反编译/编译均使用 `zh-CN`（源文件为简体中文导出）。
-- overpy 自带的 zh-CN 词表与客户端版本之间存在少量措辞漂移（如部分开关用「关闭」而客户端导出「禁用」），语义等价；若游戏内粘贴遇到个别设置不生效，可扩展 `postCompileHook.js` 逐设置修正。
+- overpy 自带的 zh-CN 词表与客户端版本之间存在少量措辞漂移（如部分开关用「关闭」而客户端导出「禁用」），语义等价；若游戏内粘贴遇到个别设置不生效，可扩展 `scripts/post-compile.js` 逐设置修正。
 - 模块边界与 `#!include` 顺序即编译产物中的规则顺序，改动时应保持规则相对顺序不变，以免改变 Workshop 执行语义。
