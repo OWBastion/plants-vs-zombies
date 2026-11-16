@@ -16,6 +16,8 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
 
 
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
+    # 关闭内置计分: 团队死斗的分数由本模式自己判定, 不让游戏模式改写
+    disableScoring()
     disableGamemodeCompletion()
     #Arena locations
     if getCurrentMap() == Map.LIJIANG_NIGHT_MARKET:
