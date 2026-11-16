@@ -111,16 +111,15 @@ def stuckCheck():
     # 特殊能力激活期间: 不累计卡死判定 (能力自带移动/停顿, 不与基础寻路混判)
     if eventPlayer.isUsingAbility1() or eventPlayer.isUsingAbility2() or eventPlayer.isUsingUltimate():
         return
-    # 持续无位置进展才判定卡死; 恢复梯度: 刷新目标/跳起 -> 持续失败后击杀重生
+    # 持续无位置进展时刷新目标并跳跃，不因卡住击杀僵尸
     if distance(eventPlayer.getPosition(), eventPlayer.stuck_last_pos) >= 1.5:
         eventPlayer.stuck_count = 0
         eventPlayer.stuck_last_pos = eventPlayer.getPosition()
     else:
         eventPlayer.stuck_count += 1
-        if eventPlayer.stuck_count >= 5:
+        if eventPlayer.stuck_count >= 3:
             eventPlayer.stuck_count = 0
-            kill(eventPlayer)
-        elif eventPlayer.stuck_count == 3:
+            eventPlayer.stuck_last_pos = eventPlayer.getPosition()
             eventPlayer.BotTarget = null
             eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), Brain_Points[0].getPosition()), 270)
             eventPlayer.forceButtonPress(Button.JUMP)
