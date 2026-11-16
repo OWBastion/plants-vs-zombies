@@ -78,6 +78,12 @@ rule "[Mode]: Spawn Teleport":
         # 重生后清除上一条命的卡死计数, 避免沿用旧位置判定
         eventPlayer.stuck_count = 0
         eventPlayer.stuck_last_pos = eventPlayer.getPosition()
+        # 重生后清除上一条命残留的移动锁定: 僵尸死亡时能力/锁定规则留下的强制油门、ROOTED、减速
+        # 会跟着玩家槽位存活, 新命会原地不动并被卡死看门狗击杀
+        eventPlayer.stopForcingThrottle()
+        eventPlayer.clearStatusEffect(Status.ROOTED)
+        # 与 [ai]: Create AI Bot 的基准速度一致; 能力残留的 setMoveSpeed 同样跨死亡保留
+        eventPlayer.setMoveSpeed(90)
         # 实测请求值比实际复活等待多约 2 秒: 10 -> 约 8 秒, 6 -> 约 4 秒
         eventPlayer.setRespawnTime(6 if Current_Round == Config_Total_Round else 10)
     else:

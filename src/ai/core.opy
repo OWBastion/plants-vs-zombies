@@ -139,7 +139,8 @@ rule "//AI Move":
     AITarget()
     AIMove()
     stuckCheck()
-    wait(0.8)
+    # 死亡/波次结束时立刻退出循环: 否则旧实例会带着上一命的相位继续运行, 重生后与实例重叠并加快卡死计数
+    wait(0.8, Wait.ABORT_WHEN_FALSE)
     wait(0.3, Wait.ABORT_WHEN_FALSE)
     if ruleCondition:
         loop()

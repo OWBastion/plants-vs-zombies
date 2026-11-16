@@ -25,13 +25,17 @@ rule "[Juno]: 41":
     @Condition len(getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)) > 0
 
     wait(0.496, Wait.ABORT_WHEN_FALSE)
-    (getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)).setEnvironmentalKillCreditor(eventPlayer)
-    (getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)).setMoveSpeed(15)
-    (getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)).setGravity(0)
-    (getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)).applyImpulse(vect(0, 1, 0), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    # 固化受影响名单: 结束还原时若按当时的存活/LoS 重算, 中途死亡或离开视线的僵尸会永久保留 15% 速度与零重力
+    eventPlayer.juno_ray_targets = getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)
+    eventPlayer.juno_ray_targets.setEnvironmentalKillCreditor(eventPlayer)
+    eventPlayer.juno_ray_targets.setMoveSpeed(15)
+    eventPlayer.juno_ray_targets.setGravity(0)
+    eventPlayer.juno_ray_targets.applyImpulse(vect(0, 1, 0), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     waitUntil(not eventPlayer.isUsingUltimate(), 8)
-    (getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)).setGravity(100)
-    (getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)).setMoveSpeed(100)
+    eventPlayer.juno_ray_targets.setGravity(100)
+    # 还原到僵尸基准速度, 与 [ai]: Create AI Bot 和重生归一化一致
+    eventPlayer.juno_ray_targets.setMoveSpeed(90)
+    eventPlayer.juno_ray_targets = []
 
 
 rule "[Roadhog]: hook lancher":
@@ -45,6 +49,10 @@ rule "[Roadhog]: hook lancher":
     victim.startForcingThrottle(0, 0, 0, 0, 0, 0)
     victim.setGravity(10)
     victim.applyImpulse(attacker.getFacingDirection(), 85, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    # 定身只用于起跳瞬间; 不解除会永久覆盖僵尸自己的寻路油门, 目标原地不动直至被卡死看门狗击杀
+    wait(0.5)
+    victim.stopForcingThrottle()
+    victim.setGravity(100)
 
 
 rule "[Ramattra]: Pain endures":
