@@ -101,7 +101,7 @@ def stuckCheck():
     @Name "//AI Stuck Recovery"
 
     # 正在近战攻击目标或已到达脑点: 不算卡死
-    if (eventPlayer.BotTarget != null and eventPlayer.BotTarget.isAlive() and distance(eventPlayer, eventPlayer.BotTarget) <= 2.5) or distance(eventPlayer, Brain_Points[0]) <= 2.5:
+    if (eventPlayer.BotTarget != null and eventPlayer.BotTarget.isAlive() and distance(eventPlayer, eventPlayer.BotTarget) <= 3.5) or distance(eventPlayer, Brain_Points[0]) <= 2.5:
         eventPlayer.stuck_count = 0
         eventPlayer.stuck_last_pos = eventPlayer.getPosition()
         return

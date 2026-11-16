@@ -13,7 +13,7 @@ rule "[ai]: Base Melee":
     @Condition Under_Attack == true
     @Condition eventPlayer.BotTarget != null
     @Condition eventPlayer.BotTarget.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.BotTarget) <= 2.5
+    @Condition distance(eventPlayer, eventPlayer.BotTarget) <= 3.5
     @Condition eventPlayer.isUsingAbility1() != true
     @Condition eventPlayer.isUsingAbility2() != true
     @Condition eventPlayer.isUsingUltimate() != true
