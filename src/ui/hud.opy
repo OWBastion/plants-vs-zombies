@@ -3,7 +3,6 @@ rule "Players - HUD - Hide built-in HUD":
     @Event playerJoined
     @Team 2
 
-    eventPlayer.disableHeroHud()
     eventPlayer.disableGamemodeHud()
 
 
