@@ -20,6 +20,16 @@ globalvar ANTI_CRASH_ACTIVATE_PERCENT
 globalvar ANTI_CRASH_HOLD_TIME
 globalvar ANTI_CRASH_DEACTIVATE_PERCENT
 globalvar Hero_BAN
+globalvar Completed_Attacks
+globalvar Feska_Upgrades
+
+# 科技 ID 0..7; 锻体 ID 8..13。表字段: 名称、描述、伤害%、生命%、治疗%。
+#!define FESKA_TECH_COUNT 8
+#!define FESKA_MAX_TECH 4
+#!define FESKA_DAMAGE 2
+#!define FESKA_HEALTH 3
+#!define FESKA_HEALING 4
+#!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
 
 #Player variables
 
@@ -46,3 +56,18 @@ playervar scan_candidates
 playervar juno_ray_targets
 playervar stuck_last_pos
 playervar stuck_count
+
+# 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄。
+playervar feska_initialized
+playervar feska_tech
+playervar feska_forge_pending
+playervar feska_forge_count
+playervar feska_bonus
+playervar feska_damage_mod
+playervar feska_options
+playervar feska_cursor
+playervar feska_rerolled
+playervar feska_visible
+playervar feska_choice_type
+playervar feska_choice
+playervar feska_stat_hero

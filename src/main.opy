@@ -988,3 +988,4 @@ subroutine stuckCheck 7
 #!include "mode/victory.opy"
 #!include "player/movement.opy"
 #!include "heroes/abilities.opy"
+#!include "player/progression.opy"
