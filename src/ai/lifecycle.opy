@@ -1,7 +1,7 @@
 rule "[ai]: Create AI Bot":
     @Condition isGameInProgress() == true
     @Condition Under_Attack == true
-    @Condition Round_Attack_Time != 0
+    @Condition Round_Attack_Time > 10
     @Condition getNumberOfPlayers(Team.1) < NumberOfZombies
 
     createDummy(Hero.BRIGITTE, Team.1, -1, Bot_Respawn_Points[0].getPosition(), Brain_Points[0])

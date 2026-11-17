@@ -17,20 +17,23 @@ rule "Players - Round Lead Time End":
 
     waitUntil(Round_Lead_Time == 0, Config_Round_Lead_Time)
     destroyAllDummies()
-    Under_Attack = true
     Current_Round++
     Round_Attack_Time = Config_Round_Attack_Time
     Round_Lead_Time = 0
+    Under_Attack = true
 
 
 rule "Players - Round Attack Start":
     @Condition isGameInProgress() == true
-    @Condition Current_Round < Config_Total_Round
+    @Condition Current_Round <= Config_Total_Round
     @Condition Under_Attack == true
 
     getPlayers(Team.1).clearStatusEffect(Status.INVINCIBLE)
     bigMessage(getAllPlayers(), "第 {0} 波进攻".format(Current_Round))
     chaseOverTime(Round_Attack_Time, 0, Config_Round_Attack_Time, ChaseTimeReeval.NONE)
+    # 留出最长复活等待时间，让已死亡的僵尸在波次结束前停止复活。
+    waitUntil(Round_Attack_Time <= 10, Config_Round_Attack_Time)
+    getPlayers(Team.1).disableRespawn()
 
 
 rule "Players - Round Attack End":
@@ -39,6 +42,6 @@ rule "Players - Round Attack End":
     @Condition Under_Attack == true
 
     waitUntil(Round_Attack_Time == 0, Config_Round_Attack_Time)
-    waitUntil(getNumberOfLivingPlayers(Team.1) == (len(getLivingPlayers(Team.1).filter(lambda player: distance(player.getPosition(), getSpawnPoints(Team.1).getPosition()) <= 55))) or getNumberOfLivingPlayers(Team.1) == len(getLivingPlayers(Team.1).filter(lambda player: distance(player.getPosition(), Brain_Points[0].getPosition()) >= 45)), 999999986991104)
+    waitUntil(getNumberOfLivingPlayers(Team.1) == 0, 999999986991104)
     Under_Attack = false
     Round_Lead_Time = Config_Round_Lead_Time
