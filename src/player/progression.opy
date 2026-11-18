@@ -205,6 +205,12 @@ rule "Feska - Release player modifier":
     eventPlayer.feska_recv_mod = null
     if Feska_Shield_Holder == eventPlayer:
         Feska_Shield_Holder = null
+        # 持有者离场则科技失效: 清掉其他玩家身上本来源的护盾池, 不留常驻残血池。
+        P = getPlayers(Team.2)
+        for Feska_Index in range(len(P)):
+            if P[Feska_Index].feska_shield_pool != null:
+                removeHealthPool(P[Feska_Index].feska_shield_pool)
+            P[Feska_Index].feska_shield_pool = null
 
 
 rule "Feska - Offer upgrade":
