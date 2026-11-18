@@ -99,6 +99,10 @@ globalvar Feska_Index
 #!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[1]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
 # 反应装甲护甲量: 固定 100 点 + 可计入最大生命的 10%(护甲池自身不计入, 避免自我放大)
 #!define feskaReactiveArmor(p) ceil(100 + feskaMaxHP(p) * 0.1)
+# 狂战士之魂: 总生命上限变为可计入最大生命值的 21 倍(2000% 额外 + 100% 基础)。
+# setMaxHealth 按英雄原始最大生命的百分比设置且生命池另行叠加, 因此百分比里含生命池的 20 倍补偿。
+#!define feskaBerserkPercent(p) (2100 + 21 * p.feska_bonus[1] + 2000 * (p.feska_heartsteel_flat + 25 * p.feska_armor_count) / p.feska_base_hp)
+#!define feskaBerserkMaxHP(p) (21 * feskaMaxHP(p))
 #!define feskaDamagePercent(p) (100 + p.feska_bonus[0] + (20 if p.feska_lone else 0))
 #!define feskaReceivedPercent(p) ((100 - p.feska_dr) * (0.85 if p.feska_lone else 1))
 

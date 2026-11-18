@@ -129,6 +129,17 @@ def feskaApplyReactivePool():
         Feska_P.feska_reactive_last_hit = null
 
 
+def feskaStopBerserk():
+    @Name "Feska - stop berserk"
+
+    # 结束(波次切换/换英雄)时恢复正常生命口径与禁疗; 移动约束由对应阶段的规则恢复。
+    if Feska_P.feska_berserk == true:
+        Feska_P.feska_berserk = false
+        Feska_P.setMaxHealth(feskaHealthPercent(Feska_P))
+        Feska_P.setHealingReceived(100 + 10 * Feska_P.feska_heal_received)
+        Feska_P.setKnockbackReceived(100 - 10 * Feska_P.feska_kbr)
+
+
 def feskaRefreshShields():
     @Name "Feska - refresh photon shields"
 
@@ -435,13 +446,17 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.feska_stat_hero = eventPlayer.getHero()
     eventPlayer.feska_stat_dirty = false
     eventPlayer.feska_lock = false
+    # 换英雄/重生都结束狂战士; 若仍在进攻阶段, 重新套上定点油门(狂战士之前解除过)。
+    Feska_P = eventPlayer
+    feskaStopBerserk()
+    if Under_Attack:
+        eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
     # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHP。
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
     eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
-    if eventPlayer.feska_heal_received > 0:
-        eventPlayer.setHealingReceived(100 + 10 * eventPlayer.feska_heal_received)
-    if eventPlayer.feska_kbr > 0:
-        eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.feska_kbr)
+    # 重生/换英雄会清掉英雄属性修改, 这里按累计状态无条件重放, 不能只在有堆叠时恢复。
+    eventPlayer.setHealingReceived(100 + 10 * eventPlayer.feska_heal_received)
+    eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.feska_kbr)
     if T_BASICS in eventPlayer.feska_tech:
         eventPlayer.setUltEnabled(false)
     Feska_P = eventPlayer
@@ -458,6 +473,8 @@ rule "Feska - Invalidate hero on death":
 
     # 只标记需要重放属性恢复; 不置空 feska_stat_hero, 否则死亡后换英雄会被误判成重生而不重捕基准。
     eventPlayer.feska_stat_dirty = true
+    # 狂战士随本次生命结束; 下一次生命可重新触发。
+    eventPlayer.feska_berserk = false
     eventPlayer.feska_lock = false
 
 
@@ -476,6 +493,9 @@ rule "Feska - Wave end cleanup":
 
     P = getPlayers(Team.2)
     for Feska_Index in range(len(P)):
+        # 波次切换结束狂战士: 恢复正常生命口径与禁疗, 移动约束由进攻锁定规则负责恢复。
+        Feska_P = P[Feska_Index]
+        feskaStopBerserk()
         if P[Feska_Index].feska_blood_pool != null:
             removeHealthPool(P[Feska_Index].feska_blood_pool)
         P[Feska_Index].feska_blood_pool = null
@@ -503,6 +523,8 @@ rule "Feska - Regeneration":
     @Team 2
     @Condition Under_Attack
     @Condition eventPlayer.isAlive()
+    # 狂战士禁疗: 自我修复与再生强化都不回血。
+    @Condition eventPlayer.feska_berserk != true
     @Condition (T_REPAIR in eventPlayer.feska_tech) or eventPlayer.feska_regen > 0
 
     wait(1, Wait.ABORT_WHEN_FALSE)
@@ -530,6 +552,8 @@ rule "Feska - Lifesteal on elimination":
     @Condition Under_Attack
     @Condition eventPlayer.isAlive()
     @Condition victim.getTeam() == Team.1
+    # 狂战士禁疗。
+    @Condition eventPlayer.feska_berserk != true
     @Condition T_LIFESTEAL in eventPlayer.feska_tech
 
     heal(eventPlayer, null, feskaMaxHP(eventPlayer) * 0.05)
@@ -667,7 +691,8 @@ rule "Feska - Healing tower":
     @Condition T_TOWER in eventPlayer.feska_tech
 
     wait(2, Wait.ABORT_WHEN_FALSE)
-    heal(getLivingPlayers(Team.2).filter(lambda player: not player.isDummy()), eventPlayer, feskaMaxHP(eventPlayer) * 0.02)
+    # 全体治疗不含狂战士(禁疗); 其余存活真人队友都治, 含持有者。
+    heal(getLivingPlayers(Team.2).filter(lambda player: not player.isDummy() and player.feska_berserk != true), eventPlayer, feskaMaxHP(eventPlayer) * 0.02)
     if ruleCondition:
         loop()
 
@@ -678,6 +703,8 @@ rule "Feska - Victory will":
     @Condition Under_Attack
     @Condition eventPlayer.isAlive()
     @Condition T_WILL in eventPlayer.feska_tech
+    # 狂战士优先: 激活期间胜利意志不触发, 避免禁疗状态被回血和无敌覆盖。
+    @Condition eventPlayer.feska_berserk != true
     @Condition eventPlayer.feska_will_used != true
     @Condition eventPlayer.getHealth() <= feskaMaxHP(eventPlayer) * 0.25
 
@@ -685,6 +712,44 @@ rule "Feska - Victory will":
     heal(eventPlayer, null, feskaMaxHP(eventPlayer))
     eventPlayer.setStatusEffect(eventPlayer, Status.INVINCIBLE, 8)
     smallMessage(eventPlayer, "胜利意志：8 秒无敌")
+
+
+rule "Feska - Berserk trigger":
+    @Event playerTookDamage
+    @Team 2
+    @Condition Under_Attack
+    @Condition T_BERSERK in eventPlayer.feska_tech
+    @Condition eventPlayer.feska_berserk != true
+    @Condition eventPlayer.isAlive()
+    @Condition attacker != null
+    @Condition attacker.getTeam() == Team.1
+    # playerTookDamage 在死亡结算前触发, 此时 getHealth() 是受伤后的数值; ≤0 即本次伤害致命。
+    # 该先后语义未在工坊文档中写明, 需游戏内验证; 若实际是受伤前数值, 本科技不会触发而非误触发。
+    @Condition eventPlayer.getHealth() <= 0
+
+    # 真实拦截致命伤: 事件内抬生命上限并回满即不会阵亡, 不是先阵亡再复活。
+    eventPlayer.feska_berserk = true
+    eventPlayer.setMaxHealth(feskaBerserkPercent(eventPlayer))
+    eventPlayer.setHealth(feskaBerserkMaxHP(eventPlayer))
+    # 禁疗: 挡掉英雄治疗与模式治疗动作; setHealth 与生命池创建不受影响。
+    eventPlayer.setHealingReceived(0)
+    # 解除进攻定点油门; 状态结束/死亡/换英雄/波次切换时由对应规则恢复。
+    eventPlayer.stopForcingThrottle()
+    smallMessage(eventPlayer, "狂战士之魂：无法被治疗，每秒损失生命")
+
+
+rule "Feska - Berserk drain":
+    @Event eachPlayer
+    @Team 2
+    @Condition Under_Attack
+    @Condition eventPlayer.feska_berserk == true
+    @Condition eventPlayer.isAlive()
+
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    # 每秒损失当前最大生命值(21 倍口径)的 10%, 约 10 秒后耗尽; 死亡即状态结束。
+    damage(eventPlayer, eventPlayer, ceil(feskaBerserkMaxHP(eventPlayer) * 0.1))
+    if ruleCondition:
+        loop()
 
 
 rule "Feska - Radiant light":
