@@ -30,7 +30,7 @@ globalvar Feska_Shield_Holder
 globalvar Feska_P
 globalvar Feska_Index
 
-# 目录由数组驱动: 每行一项, 列固定。科技 ID 沿用 0..7, 新科技追加 14..27;
+# 目录由数组驱动: 每行一项, 列固定。科技 ID 沿用 0..7, 新科技追加 14..27, 本轮五项追加 34..38;
 # 强化 ID 沿用 8..13, 新强化追加 28..33。候选池按类型列生成, 不硬编码 ID 区间。
 #!define FESKA_COL_NAME 0
 #!define FESKA_COL_DESC 1
@@ -68,6 +68,12 @@ globalvar Feska_Index
 #!define T_WILL 25
 #!define T_BATTERY 26
 #!define T_LONE 27
+# 本轮确认的五项新科技
+#!define T_AIDKIT 34
+#!define T_RADIANT 35
+#!define T_CRUSADER 36
+#!define T_REACTIVE 37
+#!define T_BERSERK 38
 
 # 属性强化 ID
 #!define A_ARMOR 28
@@ -77,15 +83,20 @@ globalvar Feska_Index
 #!define A_ULT 32
 #!define A_KBR 33
 
-# 波次成长: 第 1 波为最小值, 设置的最终波为最大值, 中间线性。总波数来自设置, 不写死。
+# 波次成长统一入口: 第 1 波取最小值, 设置的最终波取最大值, 中间线性。总波数来自设置, 不写死。
+#!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgress() min(max((Current_Round - 1) / max(Config_Total_Round - 1, 1), 0), 1)
-#!define feskaPreviewProgress() min(max((max(Completed_Attacks, 1) - 1) / max(Config_Total_Round - 1, 1), 0), 1)
-#!define feskaGrowthHeartsteel() round(1 + 24 * feskaProgress())
-#!define feskaGrowthPool() round(50 + 200 * feskaProgress())
+# 预览成长按实际结算波次: 进攻阶段用当前波, 准备阶段用即将进攻的下一波, 避免显示与结算错一波。
+#!define feskaPreviewProgress() min(max(((Current_Round if Under_Attack else Completed_Attacks + 1) - 1) / max(Config_Total_Round - 1, 1), 0), 1)
+#!define feskaGrowthHeartsteel() feskaGrowthAt(feskaProgress(), 1, 24)
+#!define feskaGrowthPool() feskaGrowthAt(feskaProgress(), 50, 200)
 
-# 成长系统自己的生命基准: 只含本模式的百分比加成, 不计入护盾/临时生命/心之钢等生命池,
-# 避免同一来源的百分比把自己新增的生命值再次计入。
-#!define feskaMaxHP(p) (100 + p.feska_bonus[1])
+# setMaxHealth 只接受百分比(相对英雄原始最大生命)。可计入最大生命值是绝对点数:
+# 英雄原始最大生命×(100+生命加成)% + 心之钢永久增量 + 护甲强化。
+# 光子护盾/血肉/反应装甲等本来源生命池不计入, 防止百分比效果把自己新增的生命值再次计入。
+# feska_base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
+#!define feskaHealthPercent(p) (100 + p.feska_bonus[1])
+#!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[1]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
 #!define feskaDamagePercent(p) (100 + p.feska_bonus[0] + (20 if p.feska_lone else 0))
 #!define feskaReceivedPercent(p) ((100 - p.feska_dr) * (0.85 if p.feska_lone else 1))
 
@@ -120,6 +131,8 @@ playervar stuck_count
 # 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄与生命池。
 playervar feska_initialized
 playervar feska_tech
+# 英雄原始最大生命(绝对点数), 初始化与换英雄时从工坊实际属性读取
+playervar feska_base_hp
 playervar feska_forge_pending
 playervar feska_forge_count
 playervar feska_bonus
@@ -136,6 +149,8 @@ playervar feska_choice_type
 playervar feska_choice
 playervar feska_lock
 playervar feska_stat_hero
+# 死亡后需要重放一次属性恢复(重生路径), 与真正换英雄区分: 换英雄才重捕英雄原始最大生命
+playervar feska_stat_dirty
 # 属性强化的累计状态
 playervar feska_armor_count
 playervar feska_armor_pool
@@ -153,5 +168,9 @@ playervar feska_blood_pool
 playervar feska_will_used
 playervar feska_lone
 playervar feska_chain
+# 反应装甲: 本来源护甲的镜像值, 用于判定伤害是否被护甲拦下(工坊不能读取生命池余量)
+playervar feska_reactive_value
+# 狂战士之魂: 激活期间可自由移动, 禁疗, 每秒自损
+playervar feska_berserk
 # 僵尸: 冰寒之刃的每目标冷却
 playervar feska_freeze_cd

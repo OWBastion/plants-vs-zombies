@@ -152,6 +152,8 @@ rule "Feska - Initialize player":
 
     eventPlayer.feska_tech = []
     eventPlayer.feska_bonus = [0, 0, 0]
+    # 首次生成时没有任何本模式生命池与 setMaxHealth 修改, 读取到的就是英雄原始最大生命。
+    eventPlayer.feska_base_hp = eventPlayer.getMaxHealth()
     eventPlayer.feska_options = []
     eventPlayer.feska_pool = []
     eventPlayer.feska_forge_pending = 0
@@ -162,6 +164,8 @@ rule "Feska - Initialize player":
     eventPlayer.feska_lock = false
     eventPlayer.feska_cursor = 0
     eventPlayer.feska_rerolled = [false, false, false]
+    eventPlayer.feska_stat_hero = eventPlayer.getHero()
+    eventPlayer.feska_stat_dirty = false
     eventPlayer.feska_armor_count = 0
     eventPlayer.feska_armor_pool = null
     eventPlayer.feska_dr = 0
@@ -177,6 +181,8 @@ rule "Feska - Initialize player":
     eventPlayer.feska_will_used = false
     eventPlayer.feska_lone = false
     eventPlayer.feska_chain = false
+    eventPlayer.feska_reactive_value = 0
+    eventPlayer.feska_berserk = false
     eventPlayer.feska_damage_mod = null
     eventPlayer.feska_recv_mod = null
     eventPlayer.feska_damage_value = 0
@@ -323,7 +329,8 @@ rule "Feska - Confirm card":
     eventPlayer.feska_bonus[0] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_DAMAGE]
     eventPlayer.feska_bonus[1] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALTH]
     eventPlayer.feska_bonus[2] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALING]
-    eventPlayer.setMaxHealth(feskaMaxHP(eventPlayer))
+    # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHP。
+    eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
     eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
     Feska_P = eventPlayer
     if eventPlayer.feska_choice == T_BASICS:
@@ -365,19 +372,9 @@ rule "Feska - Restore stats on hero change or respawn":
     @Condition eventPlayer.feska_initialized
     @Condition eventPlayer.isAlive()
     @Condition eventPlayer.hasSpawned()
-    @Condition eventPlayer.feska_stat_hero != eventPlayer.getHero()
+    @Condition eventPlayer.feska_stat_hero != eventPlayer.getHero() or eventPlayer.feska_stat_dirty
 
-    eventPlayer.feska_stat_hero = eventPlayer.getHero()
-    eventPlayer.feska_lock = false
-    eventPlayer.setMaxHealth(feskaMaxHP(eventPlayer))
-    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
-    if eventPlayer.feska_heal_received > 0:
-        eventPlayer.setHealingReceived(100 + 10 * eventPlayer.feska_heal_received)
-    if eventPlayer.feska_kbr > 0:
-        eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.feska_kbr)
-    if T_BASICS in eventPlayer.feska_tech:
-        eventPlayer.setUltEnabled(false)
-    # 生命池在死亡/重生时的保留规则未在工坊文档中明确; 重生时先清理旧句柄再重建,
+    # 先清理本模式生命池: 生命池是否跨死亡/换英雄保留未在工坊文档中明确, 先移除再重建,
     # 避免旧池若保留下来导致每次重生多叠一层。
     if eventPlayer.feska_armor_pool != null:
         removeHealthPool(eventPlayer.feska_armor_pool)
@@ -391,6 +388,22 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.feska_heartsteel_pool = null
     eventPlayer.feska_shield_pool = null
     eventPlayer.feska_blood_pool = null
+    # feska_stat_dirty 是死亡后的重生路径; 英雄确实变了才是真正换英雄。
+    # 换英雄后工坊重置 setMaxHealth 百分比, 清理生命池后读到的 getMaxHealth() 即新英雄原始最大生命。
+    if eventPlayer.feska_stat_hero != eventPlayer.getHero():
+        eventPlayer.feska_base_hp = eventPlayer.getMaxHealth()
+    eventPlayer.feska_stat_hero = eventPlayer.getHero()
+    eventPlayer.feska_stat_dirty = false
+    eventPlayer.feska_lock = false
+    # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHP。
+    eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
+    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
+    if eventPlayer.feska_heal_received > 0:
+        eventPlayer.setHealingReceived(100 + 10 * eventPlayer.feska_heal_received)
+    if eventPlayer.feska_kbr > 0:
+        eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.feska_kbr)
+    if T_BASICS in eventPlayer.feska_tech:
+        eventPlayer.setUltEnabled(false)
     Feska_P = eventPlayer
     feskaApplyArmorPool()
     feskaApplyHeartsteelPool()
@@ -402,7 +415,8 @@ rule "Feska - Invalidate hero on death":
     @Event playerDied
     @Team 2
 
-    eventPlayer.feska_stat_hero = null
+    # 只标记需要重放属性恢复; 不置空 feska_stat_hero, 否则死亡后换英雄会被误判成重生而不重捕基准。
+    eventPlayer.feska_stat_dirty = true
     eventPlayer.feska_lock = false
 
 
@@ -623,10 +637,10 @@ rule "Feska - Victory will":
     @Condition eventPlayer.isAlive()
     @Condition T_WILL in eventPlayer.feska_tech
     @Condition eventPlayer.feska_will_used != true
-    @Condition eventPlayer.getHealth() <= eventPlayer.getMaxHealth() * 0.25
+    @Condition eventPlayer.getHealth() <= feskaMaxHP(eventPlayer) * 0.25
 
     eventPlayer.feska_will_used = true
-    heal(eventPlayer, null, eventPlayer.getMaxHealth())
+    heal(eventPlayer, null, feskaMaxHP(eventPlayer))
     eventPlayer.setStatusEffect(eventPlayer, Status.INVINCIBLE, 8)
     smallMessage(eventPlayer, "胜利意志：8 秒无敌")
 
@@ -638,5 +652,5 @@ rule "Feska - Selection HUD":
     createInWorldText(localPlayer if not Under_Attack and localPlayer.feska_choice_type != 0 and localPlayer.feska_visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Feska_Upgrades[localPlayer.feska_options[2]][FESKA_COL_NAME], Feska_Upgrades[localPlayer.feska_options[2]][FESKA_COL_DESC], 0 if localPlayer.feska_rerolled[2] else 1), feskaCardPosition(-1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.feska_cursor == 2 else Color.WHITE, SpecVisibility.NEVER)
     hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/4  |  属性强化 {1} 次\n伤害 +{2}%  生命 {3}%  治疗 +{4}%  护甲 +{5}  减伤 {6}%".format(len(localPlayer.feska_tech), localPlayer.feska_forge_count, localPlayer.feska_bonus[0], 100 + localPlayer.feska_bonus[1], localPlayer.feska_bonus[2], 25 * localPlayer.feska_armor_count, localPlayer.feska_dr), HudPosition.LEFT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2), "已选：{0}".format(localPlayer.feska_tech.map(lambda upgrade: Feska_Upgrades[upgrade][FESKA_COL_NAME])), HudPosition.LEFT, 1, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-    hudSubtext(getPlayers(Team.2), "成长基准：第 {0} 波  |  心之钢 +{1}  护盾/血肉 +{2}\n受疗 +{3}%  充能 +{4}%/秒  抗击退 {5}%".format(max(Completed_Attacks, 1), round(1 + 24 * feskaPreviewProgress()), round(50 + 200 * feskaPreviewProgress()), 10 * localPlayer.feska_heal_received, 0.2 * localPlayer.feska_ult_rate, 10 * localPlayer.feska_kbr), HudPosition.LEFT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getPlayers(Team.2), "成长基准：第 {0} 波进攻  |  心之钢 +{1}  护盾/血肉 +{2}\n受疗 +{3}%  充能 +{4}%/秒  抗击退 {5}%".format(Current_Round if Under_Attack else Completed_Attacks + 1, round(1 + 24 * feskaPreviewProgress()), round(50 + 200 * feskaPreviewProgress()), 10 * localPlayer.feska_heal_received, 0.2 * localPlayer.feska_ult_rate, 10 * localPlayer.feska_kbr), HudPosition.LEFT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2).filter(lambda player: not Under_Attack and player.feska_choice_type != 0 and not player.feska_visible), "[互动]打开科技 / 属性强化选择", HudPosition.LEFT, 3, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
