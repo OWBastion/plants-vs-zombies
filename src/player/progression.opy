@@ -790,6 +790,7 @@ rule "Feska - Reactive armor recover":
     @Event eachPlayer
     @Team 2
     @Condition T_REACTIVE in eventPlayer.feska_tech
+    @Condition eventPlayer.isAlive()
 
     wait(1, Wait.ABORT_WHEN_FALSE)
     # 离战 3 秒后镜像回满, 近似护甲池的恢复节奏(实际池恢复曲线不能读取, 需游戏内核对)。
