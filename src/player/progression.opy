@@ -366,8 +366,8 @@ rule "Feska - Confirm card":
     eventPlayer.feska_options = []
     eventPlayer.feska_choice_type = 0
     eventPlayer.feska_visible = false
-    # 松开后才能确认下一次, 防止连续按住蹲误选积攒的奖励。
-    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH), 30)
+    # 必须真正松开蹲才能确认下一次; 不设超时, 防止长按跨多次发牌连续误选积攒的奖励。
+    waitUntil(not eventPlayer.isHoldingButton(Button.CROUCH))
     eventPlayer.feska_lock = false
     eventPlayer.feska_visible = true
 
