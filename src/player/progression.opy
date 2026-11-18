@@ -115,6 +115,20 @@ def feskaApplyShieldToPlayer():
         Feska_P.feska_shield_pool = getLastCreatedHealthPool()
 
 
+def feskaApplyReactivePool():
+    @Name "Feska - apply reactive armor"
+
+    # 护甲量按当前可计入最大生命结算; 池自身不计入 feskaMaxHP, 重新应用不会自我放大。
+    if T_REACTIVE in Feska_P.feska_tech:
+        if Feska_P.feska_reactive_pool != null:
+            removeHealthPool(Feska_P.feska_reactive_pool)
+        Feska_P.addHealthPool(Health.ARMOR, feskaReactiveArmor(Feska_P), true, false)
+        Feska_P.feska_reactive_pool = getLastCreatedHealthPool()
+        # 镜像与游戏池同步重置; 工坊不能读取生命池余量, 未击穿判定只能靠镜像。
+        Feska_P.feska_reactive_value = feskaReactiveArmor(Feska_P)
+        Feska_P.feska_reactive_last_hit = null
+
+
 def feskaRefreshShields():
     @Name "Feska - refresh photon shields"
 
@@ -356,6 +370,9 @@ rule "Feska - Confirm card":
     elif eventPlayer.feska_choice == T_SHIELD:
         Feska_Shield_Holder = eventPlayer
         feskaRefreshShields()
+    elif eventPlayer.feska_choice == T_REACTIVE:
+        Feska_P = eventPlayer
+        feskaApplyReactivePool()
     elif eventPlayer.feska_choice == A_ARMOR:
         eventPlayer.feska_armor_count += 1
         feskaApplyArmorPool()
@@ -402,10 +419,15 @@ rule "Feska - Restore stats on hero change or respawn":
         removeHealthPool(eventPlayer.feska_shield_pool)
     if eventPlayer.feska_blood_pool != null:
         removeHealthPool(eventPlayer.feska_blood_pool)
+    if eventPlayer.feska_reactive_pool != null:
+        removeHealthPool(eventPlayer.feska_reactive_pool)
     eventPlayer.feska_armor_pool = null
     eventPlayer.feska_heartsteel_pool = null
     eventPlayer.feska_shield_pool = null
     eventPlayer.feska_blood_pool = null
+    eventPlayer.feska_reactive_pool = null
+    eventPlayer.feska_reactive_value = 0
+    eventPlayer.feska_reactive_last_hit = null
     # feska_stat_dirty 是死亡后的重生路径; 英雄确实变了才是真正换英雄。
     # 换英雄后工坊重置 setMaxHealth 百分比, 清理生命池后读到的 getMaxHealth() 即新英雄原始最大生命。
     if eventPlayer.feska_stat_hero != eventPlayer.getHero():
@@ -426,6 +448,7 @@ rule "Feska - Restore stats on hero change or respawn":
     feskaApplyArmorPool()
     feskaApplyHeartsteelPool()
     feskaApplyShieldToPlayer()
+    feskaApplyReactivePool()
     feskaRefreshMods()
 
 
@@ -676,6 +699,36 @@ rule "Feska - Radiant light":
     # 15 米内所有友方(含持有者)获得 2.5 秒无敌。setStatusEffect 只叠加时长,
     # 不会清除其他来源的无敌; 不要求视线, 与卡面"15 米内所有友方"一致。
     getLivingPlayers(Team.2).filter(lambda player: not player.isDummy() and distance(player, eventPlayer) <= 15).setStatusEffect(eventPlayer, Status.INVINCIBLE, 2.5)
+    if ruleCondition:
+        loop()
+
+
+rule "Feska - Reactive armor":
+    @Event playerTookDamage
+    @Team 2
+    @Condition T_REACTIVE in eventPlayer.feska_tech
+    @Condition attacker != null
+    @Condition attacker != eventPlayer
+
+    # 工坊不能读取生命池余量: 用镜像值近似本来源护甲。任何受伤都记录时间(游戏池离战才恢复),
+    # 本次伤害被护甲拦下时眩晕攻击者 1.2 秒。镜像按本来源口径扣减, 打在英雄护盾/护甲上的伤害
+    # 也会扣减镜像, 只会少判不会多判; 1.2 秒眩晕不设内置冷却, 频率由护甲量自然限制。
+    eventPlayer.feska_reactive_last_hit = getTotalTimeElapsed()
+    if eventDamage <= eventPlayer.feska_reactive_value:
+        attacker.setStatusEffect(eventPlayer, Status.STUNNED, 1.2)
+    eventPlayer.feska_reactive_value = max(eventPlayer.feska_reactive_value - eventDamage, 0)
+
+
+rule "Feska - Reactive armor recover":
+    @Event eachPlayer
+    @Team 2
+    @Condition T_REACTIVE in eventPlayer.feska_tech
+
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    # 离战 3 秒后镜像回满, 近似护甲池的恢复节奏(实际池恢复曲线不能读取, 需游戏内核对)。
+    if eventPlayer.feska_reactive_last_hit != null and getTotalTimeElapsed() - eventPlayer.feska_reactive_last_hit >= 3:
+        eventPlayer.feska_reactive_value = feskaReactiveArmor(eventPlayer)
+        eventPlayer.feska_reactive_last_hit = null
     if ruleCondition:
         loop()
 

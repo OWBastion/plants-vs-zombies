@@ -97,6 +97,8 @@ globalvar Feska_Index
 # feska_base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
 #!define feskaHealthPercent(p) (100 + p.feska_bonus[1])
 #!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[1]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
+# 反应装甲护甲量: 固定 100 点 + 可计入最大生命的 10%(护甲池自身不计入, 避免自我放大)
+#!define feskaReactiveArmor(p) ceil(100 + feskaMaxHP(p) * 0.1)
 #!define feskaDamagePercent(p) (100 + p.feska_bonus[0] + (20 if p.feska_lone else 0))
 #!define feskaReceivedPercent(p) ((100 - p.feska_dr) * (0.85 if p.feska_lone else 1))
 
@@ -170,6 +172,9 @@ playervar feska_lone
 playervar feska_chain
 # 反应装甲: 本来源护甲的镜像值, 用于判定伤害是否被护甲拦下(工坊不能读取生命池余量)
 playervar feska_reactive_value
+playervar feska_reactive_pool
+# 反应装甲镜像恢复: 上次受到伤害的比赛时间, 离战一段时间后回满
+playervar feska_reactive_last_hit
 # 狂战士之魂: 激活期间可自由移动, 禁疗, 每秒自损
 playervar feska_berserk
 # 僵尸: 冰寒之刃的每目标冷却
