@@ -569,10 +569,11 @@ rule "Feska - Sniper":
     @Team 2
     @Condition victim.getTeam() == Team.1
     @Condition T_SNIPER in eventPlayer.feska_tech
-    @Condition eventAbility in [Button.ABILITY_1, Button.ABILITY_2]
+    # 普通技能含右键; 只有该技能确实处于可读写冷却时才返还, 普攻与无冷却技能不参与。
+    @Condition eventAbility in [Button.ABILITY_1, Button.ABILITY_2, Button.SECONDARY_FIRE]
     @Condition distance(eventPlayer, victim) >= 15
 
-    # 只在技能确实处于冷却时返还, 普攻与无冷却技能不参与。
+    # 只在技能确实处于冷却时返还剩余冷却的 70%, 弹丸命中时冷却尚未启动的技能不参与。
     if eventPlayer.getAbilityCooldown(eventAbility) > 0:
         eventPlayer.setAbilityCooldown(eventAbility, eventPlayer.getAbilityCooldown(eventAbility) * 0.3)
 
