@@ -31,6 +31,18 @@ rule "Feska - Upgrade catalog":
         ["胜利意志", "每波生命值首次低于 25% 时\n获得 8 秒无敌并恢复全部生命", 1, 0, 1, 0, 0, 0],
         ["我按Q辣", "进攻期间每秒额外获得\n0.8% 终极技能充能", 1, 0, 1, 0, 0, 0],
         ["一夫当关", "10 米内没有其他存活队友时\n伤害 +20%, 受到的伤害 -15%", 1, 0, 1, 0, 0, 0],
+        # T23 急救用具: 用户指定的纯治疗强度。与 T03 生机增幅是同一乘区, 现均计入 feska_bonus[2] 叠加;
+        # 是否统一名称只保留一张, 待用户决定, 不擅自合并或删除 T03。
+        ["急救用具", "造成的治疗 +35%", 1, 0, 1, 0, 0, 35],
+        # T24 神圣光辉: 每 10 秒为 15 米内所有友方(含持有者)提供 2.5 秒无敌。
+        ["神圣光辉", "每 10 秒为 15 米内所有友方\n提供 2.5 秒无敌", 1, 0, 1, 0, 0, 0],
+        # T25 十字军铠甲: 工坊没有伤前固定点数减伤手段(startDamageModification 只接受百分比,
+        # 也没有可在受伤前拦截并改写伤害的动作), 按交接要求不交付伪减伤, 暂不进候选池, 待用户定方案。
+        ["十字军铠甲", "使受到的每次伤害降低 15～80 点", 1, 0, 0, 0, 0, 0],
+        # T26 反应装甲: 100+可计入最大生命 10% 的可恢复护甲; 本来源护甲拦下伤害时眩晕攻击者 1.2 秒。
+        ["反应装甲", "获得 100+自身最大生命值 10% 的可恢复护甲\n僵尸未击穿护甲时, 眩晕攻击者 1.2 秒", 1, 0, 1, 0, 0, 0],
+        # T27 狂战士之魂: 致命伤后总生命上限变为可计入最大生命值的 21 倍并回满; 期间禁疗、每秒自损、可自由移动。
+        ["狂战士之魂", "受到致命伤害后获得 2000% 额外生命值\n无法被治疗, 每秒损失 10% 最大生命值\n可以自由移动", 1, 0, 1, 0, 0, 0],
         ["属性强化：护甲", "永久增加 25 点可治疗的护甲", 2, 0, 1, 0, 0, 0],
         ["属性强化：减伤", "额外获得 3% 伤害减免", 2, 0, 1, 0, 0, 0],
         ["属性强化：再生", "进攻期间每秒额外恢复\n0.3% 最大生命值", 2, 0, 1, 0, 0, 0],
@@ -650,6 +662,22 @@ rule "Feska - Victory will":
     heal(eventPlayer, null, feskaMaxHP(eventPlayer))
     eventPlayer.setStatusEffect(eventPlayer, Status.INVINCIBLE, 8)
     smallMessage(eventPlayer, "胜利意志：8 秒无敌")
+
+
+rule "Feska - Radiant light":
+    @Event eachPlayer
+    @Team 2
+    @Condition Under_Attack
+    @Condition eventPlayer.isAlive()
+    @Condition T_RADIANT in eventPlayer.feska_tech
+
+    # 进攻期间每 10 秒一轮; 持有者中途死亡则本规则中止, 不补发。
+    wait(10, Wait.ABORT_WHEN_FALSE)
+    # 15 米内所有友方(含持有者)获得 2.5 秒无敌。setStatusEffect 只叠加时长,
+    # 不会清除其他来源的无敌; 不要求视线, 与卡面"15 米内所有友方"一致。
+    getLivingPlayers(Team.2).filter(lambda player: not player.isDummy() and distance(player, eventPlayer) <= 15).setStatusEffect(eventPlayer, Status.INVINCIBLE, 2.5)
+    if ruleCondition:
+        loop()
 
 
 rule "Feska - Selection HUD":
