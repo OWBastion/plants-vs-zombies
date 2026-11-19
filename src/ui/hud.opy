@@ -1,6 +1,5 @@
 #!mainFile "../main.opy"
 
-# 内置界面(英雄面板与顶部模式 HUD)与本模式无关, 进房即隐藏, 只保留自定义文本
 rule "Players - HUD - Hide built-in HUD":
     @Event playerJoined
     @Team 2

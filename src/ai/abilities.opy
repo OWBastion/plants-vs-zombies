@@ -1,11 +1,5 @@
 #!mainFile "../main.opy"
 
-# Zombie 战斗/技能控制 (M3 收敛):
-# - 普通僵尸: 仅依赖 [ai]: Base Melee 基础近战循环, 在近战范围内按节奏触发。
-# - 特殊僵尸: venture / brig / ram / pharah 规则声明各自差异, 其余英雄默认纯近战。
-# - 已删除 C 类遗留: 通用 Ability 1 spam(含 Reinhardt/JQ/Echo/D.Va 等远程技能)、
-#   Soldier Helix(远程且以终极技能充能做触发条件)、Sombra 传送器 spam。
-
 rule "[ai]: Base Melee":
     @Event eachPlayer
     @Team 1
@@ -37,8 +31,6 @@ rule "[ai]: venture Use Ability 1":
     @Condition Under_Attack == true
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
-    #AITarget()
-    #AIMove()
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(3.6)
     eventPlayer.forceButtonPress(Button.JUMP)

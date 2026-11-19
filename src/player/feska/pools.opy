@@ -1,7 +1,5 @@
 #!mainFile "../../main.opy"
 
-# 费斯卡生命池应用子程序: 只负责按当前累计状态重建本模式的生命池, 供科技文件与生命周期流程调用。
-# 在 main.opy 中先于 player/progression.opy 引入, 这样各科技与 progression 都能直接调用。
 # 调用前必须先把目标玩家赋给全局 Feska_P; 子程序自己清理旧池, 重复调用不会叠层。
 
 

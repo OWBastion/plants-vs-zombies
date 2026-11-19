@@ -1,7 +1,5 @@
 #!mainFile "../../../main.opy"
 
-# 冰寒之刃 (T_ICE = 15)
-# 武器命中有 25% 概率冰冻目标 0.6 秒, 无冷却。
 #!define FESKA_ROW_ICE ["冰寒之刃", "武器命中有 25% 概率冰冻目标 0.6 秒", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Ice blade":

@@ -1,9 +1,5 @@
 #!mainFile "../../../main.opy"
 
-# 反应装甲 (T_REACTIVE = 37)
-# 获得 100 + 可计入最大生命 10% 的可恢复护甲; 护甲未被打穿时眩晕攻击者 1.2 秒。
-# 击穿判定直接读工坊护甲值(Health Of Type), 不维护镜像。
-# 护甲池由本文件负责: 缺池时补建, 每个准备阶段整池重建; 子程序在 feska/pools.opy。
 #!define FESKA_ROW_REACTIVE ["反应装甲", "获得 100+自身最大生命值 10% 的可恢复护甲\n僵尸未击穿护甲时, 眩晕攻击者 1.2 秒", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Reactive armor":

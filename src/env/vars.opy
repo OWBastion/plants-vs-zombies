@@ -1,7 +1,5 @@
 #!mainFile "../main.opy"
 
-#Global variables
-
 globalvar Bot_Respawn_Points
 globalvar Brain_Points
 globalvar Current_Round
@@ -26,14 +24,11 @@ globalvar Completed_Attacks
 globalvar Feska_Upgrades
 globalvar Feska_Tech_Ids
 globalvar Feska_Stat_Ids
-# 唯一科技(光子护盾)的当前持有者; 离场时释放名额。
 globalvar Feska_Shield_Holder
 # 子程序当前操作的玩家。OverPy 子程序不支持参数, 用同步临时变量传递。
 globalvar Feska_P
 globalvar Feska_Index
 
-# 目录由数组驱动: 每行一项, 列固定。科技 ID 沿用 0..7, 新科技追加 14..27, 本轮五项追加 34..38;
-# 强化 ID 沿用 8..13, 新强化追加 28..33。候选池按类型列生成, 不硬编码 ID 区间。
 #!define FESKA_COL_NAME 0
 #!define FESKA_COL_DESC 1
 #!define FESKA_COL_TYPE 2
@@ -47,7 +42,6 @@ globalvar Feska_Index
 #!define FESKA_TYPE_STAT 2
 #!define FESKA_MAX_TECH 4
 
-# 科技 ID
 #!define T_BRUTAL 0
 #!define T_GIANT 1
 #!define T_HEALING 2
@@ -70,14 +64,12 @@ globalvar Feska_Index
 #!define T_WILL 25
 #!define T_BATTERY 26
 #!define T_LONE 27
-# 本轮确认的五项新科技
 #!define T_AIDKIT 34
 #!define T_RADIANT 35
 #!define T_CRUSADER 36
 #!define T_REACTIVE 37
 #!define T_BERSERK 38
 
-# 属性强化 ID
 #!define A_ARMOR 28
 #!define A_DR 29
 #!define A_REGEN 30
@@ -85,7 +77,6 @@ globalvar Feska_Index
 #!define A_ULT 32
 #!define A_KBR 33
 
-# 波次成长统一入口: 第 1 波取最小值, 设置的最终波取最大值, 中间线性。总波数来自设置, 不写死。
 #!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgress() min(max((Current_Round - 1) / max(Config_Total_Round - 1, 1), 0), 1)
 # 预览成长按实际结算波次: 进攻阶段用当前波, 准备阶段用即将进攻的下一波, 避免显示与结算错一波。
@@ -99,7 +90,6 @@ globalvar Feska_Index
 # feska_base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
 #!define feskaHealthPercent(p) (100 + p.feska_bonus[1])
 #!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[1]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
-# 反应装甲护甲量: 固定 100 点 + 可计入最大生命的 10%(护甲池自身不计入, 避免自我放大)
 #!define feskaReactiveArmor(p) ceil(100 + feskaMaxHP(p) * 0.1)
 # 狂战士之魂: 总生命上限变为可计入最大生命值的 21 倍(2000% 额外 + 100% 基础)。
 # setMaxHealth 按英雄原始最大生命的百分比设置且生命池另行叠加, 因此百分比里含生命池的 20 倍补偿。
@@ -109,8 +99,6 @@ globalvar Feska_Index
 #!define feskaReceivedPercent(p) ((100 - p.feska_dr) * (0.85 if p.feska_lone else 1))
 
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
-
-#Player variables
 
 playervar BotTarget
 playervar Teleported_Hero
@@ -136,7 +124,6 @@ playervar stuck_count
 # 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄与生命池。
 playervar feska_initialized
 playervar feska_tech
-# 英雄原始最大生命(绝对点数), 初始化与换英雄时从工坊实际属性读取
 playervar feska_base_hp
 playervar feska_forge_pending
 playervar feska_forge_count
@@ -156,7 +143,6 @@ playervar feska_lock
 playervar feska_stat_hero
 # 死亡后需要重放一次属性恢复(重生路径), 与真正换英雄区分: 换英雄才重捕英雄原始最大生命
 playervar feska_stat_dirty
-# 属性强化的累计状态
 playervar feska_armor_count
 playervar feska_armor_pool
 playervar feska_dr
@@ -164,8 +150,6 @@ playervar feska_regen
 playervar feska_heal_received
 playervar feska_ult_rate
 playervar feska_kbr
-# 科技状态
-# 心之钢: 已结算到的玩家统计消灭数(统计被重置时按当前值重建基准)
 playervar feska_elim_mark
 playervar feska_heartsteel_flat
 playervar feska_heartsteel_pool
@@ -174,9 +158,7 @@ playervar feska_blood_pool
 playervar feska_will_used
 playervar feska_lone
 playervar feska_chain
-# 反应装甲: 本来源护甲池句柄, 准备阶段整池重建
 playervar feska_reactive_pool
-# 狂战士之魂: 激活期间可自由移动, 禁疗, 每秒自损
 playervar feska_berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
 playervar feska_berserk_guard

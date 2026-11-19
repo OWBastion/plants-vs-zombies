@@ -4,7 +4,6 @@ rule "[Soldier: 76]: Helix Rockets lose control":
     @Event playerDealtDamage
     @Team 2
     @Hero soldier
-    #@Condition attacker.getHero() == Hero.SOLDIER
     @Condition eventAbility == Button.SECONDARY_FIRE
     @Condition attacker != victim
 

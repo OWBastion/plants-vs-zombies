@@ -34,7 +34,6 @@ rule "[Brigitte]: Rally provides permanent armor to self":
     waitUntil(not getPlayersOnHero(Hero.BRIGITTE, eventPlayer.getTeam()).isUsingUltimate() and eventPlayer.brig_rally_armor_id != [], 30)
     wait(4)
     removeHealthPool(eventPlayer.brig_rally_armor_id[0])
-    #eventPlayer.brig_rally_armor_id = []
     eventPlayer.brig_rally_armor_id.remove(eventPlayer.brig_rally_armor_id[0])
     if len(eventPlayer.brig_rally_armor_id) != 0:
         loop()

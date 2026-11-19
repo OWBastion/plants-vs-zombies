@@ -1,11 +1,5 @@
 #!mainFile "../main.opy"
 
-# 费斯卡科技与属性强化: 共享子程序、选牌流程与生命周期。
-# 科技的目录行与规则在 player/feska/tech/*.opy; 本文件只保留跨科技的生命池/伤害调整子程序、
-# 选牌与波次/重生流程, 以及按科技文件组装目录。
-# 目录列见 env/vars.opy 的 FESKA_COL_*; 三选一卡片沿用海克斯割草的眼前地图文本布局, 只在准备阶段交互。
-
-
 def feskaRefreshMods():
     @Name "Feska - refresh damage modifiers"
 
@@ -209,7 +203,6 @@ rule "Feska - Reroll card":
     if eventPlayer.feska_rerolled[eventPlayer.feska_cursor]:
         smallMessage(eventPlayer, "这张卡已刷新过")
     else:
-        # 池子随唯一性与互斥变化重建, 再排除手上已有的三张。
         Feska_P = eventPlayer
         feskaBuildPool()
         C = Feska_P.feska_pool.filter(lambda upgrade: upgrade not in eventPlayer.feska_options)
@@ -380,7 +373,6 @@ rule "Feska - Invalidate hero on death":
 
     # 只标记需要重放属性恢复; 不置空 feska_stat_hero, 否则死亡后换英雄会被误判成重生而不重捕基准。
     eventPlayer.feska_stat_dirty = true
-    # 狂战士随本次生命结束; 下一次生命可重新触发。
     eventPlayer.feska_berserk = false
     eventPlayer.feska_berserk_guard = false
     eventPlayer.feska_lock = false
@@ -401,7 +393,6 @@ rule "Feska - Wave end cleanup":
 
     P = getPlayers(Team.2)
     for Feska_Index in range(len(P)):
-        # 波次切换结束狂战士: 恢复正常生命口径与禁疗, 移动约束由进攻锁定规则负责恢复。
         Feska_P = P[Feska_Index]
         feskaStopBerserk()
         if P[Feska_Index].feska_blood_pool != null:
@@ -444,7 +435,6 @@ rule "Feska - Wave end cleanup":
 
 
 rule "Feska - Upgrade catalog":
-    # 目录每行一项: 科技行来自各科技文件的 FESKA_ROW_* 宏, 属性强化行在本文件内定义。
     # 行序必须与 env/vars.opy 的 T_*/A_* 索引一致, 新条目只追加到末尾。
     Feska_Upgrades = [
         FESKA_ROW_BRUTAL,

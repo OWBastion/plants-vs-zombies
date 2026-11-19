@@ -949,8 +949,6 @@ settings {
 
 #!include "env/vars.opy"
 
-#Subroutine names
-
 subroutine AITarget 1
 subroutine AIMove 2
 subroutine setThirdPerson 3
@@ -958,8 +956,6 @@ subroutine setPlayerHeros 4
 subroutine knockBack 5
 subroutine refreshTarget 6
 subroutine stuckCheck 7
-
-#Activated extensions
 
 #!extension buffStatusEffects
 #!extension debuffStatusEffects

@@ -6,7 +6,6 @@ rule "[widowmaker/init.opy]: Initialize Widowmaker ammo":
     @Hero widowmaker
     @Condition eventPlayer.getAmmo() > 5
 
-    #eventPlayer.setMaxAmmo(0, 1)
     eventPlayer.setAmmo(0, 5)
 
 

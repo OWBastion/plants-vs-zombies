@@ -22,7 +22,6 @@ rule "[Player]: Stop move when under attack":
 
     smallMessage(eventPlayer, "  无法移动，正在防御中")
     eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
-    #eventPlayer.setStatusEffect(null, Status.ROOTED, 999999986991104)
     waitUntil(not Under_Attack, 999999986991104)
     smallMessage(eventPlayer, "  准备阶段，可以移动")
     eventPlayer.clearStatusEffect(Status.ROOTED)

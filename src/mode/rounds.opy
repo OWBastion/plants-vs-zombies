@@ -2,7 +2,6 @@
 
 rule "Players - Round Lead Time Start":
     @Condition (isAssemblingHeroes() or isGameInProgress()) == true
-    #@Condition isGameInProgress() == true
     @Condition Current_Round < Config_Total_Round
     @Condition Under_Attack == false
 

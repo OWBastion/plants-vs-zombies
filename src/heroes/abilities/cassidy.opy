@@ -12,13 +12,10 @@ rule "[Cassidy.opy]: Revert sniper damage falloff":
     eventPlayer.ow2_scoped_damage_falloff_scalar = 1 - (((eventPlayer.scoped_shot_distance - 25) / 10) * 0.7) + (1 - ((eventPlayer.scoped_shot_distance - 25) / 10))
     if eventPlayer.ow2_scoped_damage_falloff_scalar > 1:
         eventPlayer.ow2_scoped_damage_falloff_scalar = 1
-    #Min damage scalar
     elif eventPlayer.ow2_scoped_damage_falloff_scalar < 0.3:
         eventPlayer.ow2_scoped_damage_falloff_scalar = 0.3
     eventPlayer.scoped_damage_base = eventDamage / eventPlayer.ow2_scoped_damage_falloff_scalar
     eventPlayer.ow1_scoped_damage_falloff_scalar = 1 - (((eventPlayer.scoped_shot_distance - 25) / 25) * 0.3)
-    #Cap min/max scalar
-    # Max damage scalar
     if eventPlayer.ow1_scoped_damage_falloff_scalar < 0.7:
         eventPlayer.ow1_scoped_damage_falloff_scalar = 0.7
     if eventPlayer.scoped_shot_distance > 50:

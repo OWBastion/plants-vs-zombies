@@ -1,7 +1,5 @@
 #!mainFile "../../../main.opy"
 
-# 神圣光辉 (T_RADIANT = 35)
-# 每 10 秒为 15 米内所有友方(含持有者)提供 2.5 秒无敌。
 #!define FESKA_ROW_RADIANT ["神圣光辉", "每 10 秒为 15 米内所有友方\n提供 2.5 秒无敌", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Radiant light":

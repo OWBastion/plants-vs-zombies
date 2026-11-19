@@ -1,10 +1,5 @@
 #!mainFile "../../../main.opy"
 
-# 狂战士之魂 (T_BERSERK = 38)
-# 持有期间未激活时处于不死状态; 生命降到可计入最大生命值的 25% 时激活,
-# 总生命上限变为可计入最大生命值的 21 倍并回满, 同时取消不死。
-# 激活期间禁疗、每秒自损、可自由移动。
-# 结束子程序 feskaStopBerserk 在 progression.opy(波次切换与重生流程也要调用)。
 #!define FESKA_ROW_BERSERK ["狂战士之魂", "生命值降到 25% 时获得 2000% 额外生命值\n无法被治疗, 每秒损失 10% 最大生命值\n可以自由移动", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Berserk guard":
@@ -24,7 +19,6 @@ rule "Feska - Berserk guard":
     # 本等待不成立, 只有未持有胜利意志(或本波已用掉)时狂战士才接管。
     waitUntil(eventPlayer.getHealth() <= feskaMaxHP(eventPlayer) * 0.25 or eventPlayer.feska_berserk == true or not eventPlayer.isAlive() or not Under_Attack or T_BERSERK not in eventPlayer.feska_tech, 999999986991104)
     eventPlayer.feska_berserk_guard = false
-    # clearStatusEffect 不区分施加者, 这里会连带清掉英雄技能给的同类状态; 本状态只由本规则施加。
     eventPlayer.clearStatusEffect(Status.UNKILLABLE)
     if eventPlayer.isAlive() and eventPlayer.feska_berserk == false and Under_Attack and T_BERSERK in eventPlayer.feska_tech and eventPlayer.getHealth() <= feskaMaxHP(eventPlayer) * 0.25:
         eventPlayer.feska_berserk = true
@@ -45,7 +39,6 @@ rule "Feska - Berserk drain":
     @Condition eventPlayer.isAlive()
 
     wait(1, Wait.ABORT_WHEN_FALSE)
-    # 每秒损失当前最大生命值(21 倍口径)的 10%, 约 10 秒后耗尽; 死亡即状态结束。
     damage(eventPlayer, eventPlayer, ceil(feskaBerserkMaxHP(eventPlayer) * 0.1))
     if ruleCondition:
         loop()

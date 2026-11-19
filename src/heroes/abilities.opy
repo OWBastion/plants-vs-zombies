@@ -1,9 +1,5 @@
 #!mainFile "../main.opy"
 
-# 英雄专属规则按英雄拆到 abilities/<英雄>.opy。
-# include 顺序沿用原文件规则首次出现的顺序; 同一英雄的多条规则已聚到一个文件, 跨英雄相对位置变化不影响独立事件规则。
-# 新增英雄规则写到对应文件; 目录未收录的英雄先按上面的顺序追加 include。
-
 #!include "abilities/juno.opy"
 #!include "abilities/roadhog.opy"
 #!include "abilities/ramattra.opy"

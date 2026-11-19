@@ -1,7 +1,5 @@
 #!mainFile "../../../main.opy"
 
-# 治疗光塔 ProMax (T_TOWER = 24)
-# 每 2 秒治疗全体存活队友(含持有者), 数值为持有者最大生命值的 2%, 无距离限制。
 #!define FESKA_ROW_TOWER ["治疗光塔 ProMax", "每 2 秒治疗全体存活队友\n数值为持有者最大生命值的 2%", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Healing tower":
