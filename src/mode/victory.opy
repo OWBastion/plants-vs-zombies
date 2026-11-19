@@ -9,9 +9,7 @@ rule "Barrier - Eat Brain":
     @Condition eventPlayer.isOnGround() == true
     @Condition (distance(eventPlayer, Brain_Points[0]) <= 1 or len(getLivingPlayers(Team.2)) == 0) == true
 
-    if eventPlayer.isAlive() == false:
-        return
-    wait(0.3)
+    wait(0.3, Wait.ABORT_WHEN_FALSE)
     declareTeamVictory(Team.1)
 
 
