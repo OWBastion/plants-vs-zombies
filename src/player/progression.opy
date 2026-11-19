@@ -29,49 +29,6 @@ def feskaRefreshMods():
         Feska_P.feska_recv_value = feskaReceivedPercent(Feska_P)
 
 
-def feskaApplyArmorPool():
-    @Name "Feska - apply armor pool"
-
-    # 子程序里的 return 会结束整个调用规则, 因此这里只用条件包裹。
-    if Feska_P.feska_armor_count > 0:
-        if Feska_P.feska_armor_pool != null:
-            removeHealthPool(Feska_P.feska_armor_pool)
-        Feska_P.addHealthPool(Health.ARMOR, 25 * Feska_P.feska_armor_count, true, false)
-        Feska_P.feska_armor_pool = getLastCreatedHealthPool()
-
-
-def feskaApplyHeartsteelPool():
-    @Name "Feska - apply heartsteel pool"
-
-    if Feska_P.feska_heartsteel_flat > 0:
-        if Feska_P.feska_heartsteel_pool != null:
-            removeHealthPool(Feska_P.feska_heartsteel_pool)
-        Feska_P.addHealthPool(Health.NORMAL, Feska_P.feska_heartsteel_flat, true, false)
-        Feska_P.feska_heartsteel_pool = getLastCreatedHealthPool()
-
-
-def feskaApplyShieldToPlayer():
-    @Name "Feska - apply photon shield"
-
-    if Feska_Shield_Holder != null and Feska_P.isAlive():
-        if Feska_P.feska_shield_pool != null:
-            removeHealthPool(Feska_P.feska_shield_pool)
-        Feska_P.addHealthPool(Health.SHIELDS, ceil(feskaGrowthPool() + feskaMaxHP(Feska_Shield_Holder) * 0.15), true, false)
-        Feska_P.feska_shield_pool = getLastCreatedHealthPool()
-
-
-def feskaApplyReactivePool():
-    @Name "Feska - apply reactive armor"
-
-    # 护甲量按当前可计入最大生命结算; 池自身不计入 feskaMaxHP, 重新应用不会自我放大。
-    # 每次调用都整池重建, 击穿后的残余不保留。
-    if T_REACTIVE in Feska_P.feska_tech and Feska_P.isAlive():
-        if Feska_P.feska_reactive_pool != null:
-            removeHealthPool(Feska_P.feska_reactive_pool)
-        Feska_P.addHealthPool(Health.ARMOR, feskaReactiveArmor(Feska_P), true, false)
-        Feska_P.feska_reactive_pool = getLastCreatedHealthPool()
-
-
 def feskaStopBerserk():
     @Name "Feska - stop berserk"
 
@@ -327,9 +284,6 @@ rule "Feska - Confirm card":
     elif eventPlayer.feska_choice == T_HEARTSTEEL:
         # 只统计获得该科技之后的消灭, 不追认此前累计的统计值。
         eventPlayer.feska_elim_mark = eventPlayer.getNumberOfElims()
-    elif eventPlayer.feska_choice == T_REACTIVE:
-        Feska_P = eventPlayer
-        feskaApplyReactivePool()
     elif eventPlayer.feska_choice == A_ARMOR:
         eventPlayer.feska_armor_count += 1
         feskaApplyArmorPool()
@@ -407,7 +361,7 @@ rule "Feska - Restore stats on hero change or respawn":
     feskaApplyArmorPool()
     feskaApplyHeartsteelPool()
     feskaApplyShieldToPlayer()
-    feskaApplyReactivePool()
+    # 反应装甲的护甲池由 reactive.opy 的补池规则重建, 这里只清旧池句柄(见上)。
     feskaRefreshMods()
 
 
@@ -446,8 +400,6 @@ rule "Feska - Wave end cleanup":
         P[Feska_Index].feska_blood_pool = null
         P[Feska_Index].feska_lone = false
         P[Feska_Index].feska_will_used = false
-        # 反应装甲每个准备阶段重建整池: 进攻期间被击穿的护甲不带到下一波。
-        feskaApplyReactivePool()
 
 
 # 科技: 每个科技一个文件, 内含目录行宏(FESKA_ROW_*)与该科技的规则。

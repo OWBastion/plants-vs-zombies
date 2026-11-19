@@ -10,7 +10,8 @@ Overwatch Workshop PvE 模式（植物大战僵尸），使用 [OverPy](https://
 - `src/ai/` — 目标选取与移动（`core`）、生成/移除/重生（`lifecycle`）、技能施放（`abilities`）。
 - `src/heroes/abilities.opy` — 植物各英雄能力。
 - `src/player/movement.opy` — 玩家移动限制。
-- `src/player/progression.opy` — 费斯卡科技与属性强化：共享子程序、选牌流程、目录组装。
+- `src/player/progression.opy` — 费斯卡科技与属性强化：选牌流程与目录组装。
+- `src/player/feska/pools.opy` — 生命池应用子程序（护甲、心之钢、光盾、反应装甲），先于 `progression.opy` 引入。
 - `src/player/feska/tech/*.opy` — 每项科技一个文件：目录行宏 `FESKA_ROW_*` 与该科技的规则。
 - `src/ui/` — HUD（`hud`）与调试显示（`debug`）。
 - `src/utilities/camera.opy` — 第三人称相机。
