@@ -7,5 +7,5 @@ rule "Feska - Aid kit":
     @Team 2
     @Condition T_AIDKIT in eventPlayer.feska_tech
 
-    eventPlayer.feska_bonus[2] += Feska_Upgrades[T_AIDKIT][FESKA_COL_HEALING]
+    eventPlayer.feska_bonus[FeskaBonus.HEALING] += Feska_Upgrades[T_AIDKIT][FESKA_COL_HEALING]
     feskaApplyUpgradeStats()

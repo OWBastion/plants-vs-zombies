@@ -8,6 +8,6 @@ rule "Feska - Glass cannon":
     @Condition T_CANNON in eventPlayer.feska_tech
 
     # 两列都累加完再写入, 避免中间值被 setMaxHealth 采用。
-    eventPlayer.feska_bonus[0] += Feska_Upgrades[T_CANNON][FESKA_COL_DAMAGE]
-    eventPlayer.feska_bonus[1] += Feska_Upgrades[T_CANNON][FESKA_COL_HEALTH]
+    eventPlayer.feska_bonus[FeskaBonus.DAMAGE] += Feska_Upgrades[T_CANNON][FESKA_COL_DAMAGE]
+    eventPlayer.feska_bonus[FeskaBonus.HEALTH] += Feska_Upgrades[T_CANNON][FESKA_COL_HEALTH]
     feskaApplyUpgradeStats()

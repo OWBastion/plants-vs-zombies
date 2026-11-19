@@ -28,7 +28,7 @@ def feskaApplyUpgradeStats():
     # 纯数值科技在各自文件里累加 feska_bonus 后调用这里, 保证只有一个属性写入点。
     # 科技只累加不移除, 重放仍由 Restore stats 规则负责。
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
-    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
+    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[FeskaBonus.HEALING])
     feskaRefreshMods()
 
 
@@ -271,9 +271,9 @@ rule "Feska - Confirm card":
         eventPlayer.feska_forge_pending -= 1
         eventPlayer.feska_forge_count += 1
         # 属性强化可重复选择且没有"持有"状态, 无法用科技的条件触发, 只能在选牌处累加。
-        eventPlayer.feska_bonus[0] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_DAMAGE]
-        eventPlayer.feska_bonus[1] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALTH]
-        eventPlayer.feska_bonus[2] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALING]
+        eventPlayer.feska_bonus[FeskaBonus.DAMAGE] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_DAMAGE]
+        eventPlayer.feska_bonus[FeskaBonus.HEALTH] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALTH]
+        eventPlayer.feska_bonus[FeskaBonus.HEALING] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALING]
         feskaApplyUpgradeStats()
     Feska_P = eventPlayer
     # 科技数值由各科技文件在自己的规则里累加 feska_bonus 后调用 feskaApplyUpgradeStats();
@@ -351,7 +351,7 @@ rule "Feska - Restore stats on hero change or respawn":
         eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
     # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHP。
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
-    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
+    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[FeskaBonus.HEALING])
     # 重生/换英雄会清掉英雄属性修改, 这里按累计状态无条件重放, 不能只在有堆叠时恢复。
     eventPlayer.setHealingReceived(100 + 10 * eventPlayer.feska_heal_received)
     eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.feska_kbr)
@@ -491,7 +491,7 @@ rule "Feska - Selection HUD":
     createInWorldText(localPlayer if not Under_Attack and localPlayer.feska_choice_type != 0 and localPlayer.feska_visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Feska_Upgrades[localPlayer.feska_options[0]][FESKA_COL_NAME], Feska_Upgrades[localPlayer.feska_options[0]][FESKA_COL_DESC], 0 if localPlayer.feska_rerolled[0] else 1), feskaCardPosition(1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.feska_cursor == 0 else Color.WHITE, SpecVisibility.NEVER)
     createInWorldText(localPlayer if not Under_Attack and localPlayer.feska_choice_type != 0 and localPlayer.feska_visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Feska_Upgrades[localPlayer.feska_options[1]][FESKA_COL_NAME], Feska_Upgrades[localPlayer.feska_options[1]][FESKA_COL_DESC], 0 if localPlayer.feska_rerolled[1] else 1), feskaCardPosition(0, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.feska_cursor == 1 else Color.WHITE, SpecVisibility.NEVER)
     createInWorldText(localPlayer if not Under_Attack and localPlayer.feska_choice_type != 0 and localPlayer.feska_visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Feska_Upgrades[localPlayer.feska_options[2]][FESKA_COL_NAME], Feska_Upgrades[localPlayer.feska_options[2]][FESKA_COL_DESC], 0 if localPlayer.feska_rerolled[2] else 1), feskaCardPosition(-1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.feska_cursor == 2 else Color.WHITE, SpecVisibility.NEVER)
-    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/4  |  属性强化 {1} 次\n伤害 +{2}%  生命 {3}%  治疗 +{4}%  护甲 +{5}  减伤 {6}%".format(len(localPlayer.feska_tech), localPlayer.feska_forge_count, localPlayer.feska_bonus[0], 100 + localPlayer.feska_bonus[1], localPlayer.feska_bonus[2], 25 * localPlayer.feska_armor_count, localPlayer.feska_dr), HudPosition.LEFT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/4  |  属性强化 {1} 次\n伤害 +{2}%  生命 {3}%  治疗 +{4}%  护甲 +{5}  减伤 {6}%".format(len(localPlayer.feska_tech), localPlayer.feska_forge_count, localPlayer.feska_bonus[FeskaBonus.DAMAGE], 100 + localPlayer.feska_bonus[FeskaBonus.HEALTH], localPlayer.feska_bonus[FeskaBonus.HEALING], 25 * localPlayer.feska_armor_count, localPlayer.feska_dr), HudPosition.LEFT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2), "已选：{0}".format(localPlayer.feska_tech.map(lambda upgrade: Feska_Upgrades[upgrade][FESKA_COL_NAME])), HudPosition.LEFT, 1, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2), "成长基准：第 {0} 波进攻  |  心之钢 +{1}  护盾/血肉 +{2}\n受疗 +{3}%  充能 +{4}%/秒  抗击退 {5}%".format(Current_Round if Under_Attack else Completed_Attacks + 1, round(1 + 24 * feskaPreviewProgress()), round(50 + 200 * feskaPreviewProgress()), 10 * localPlayer.feska_heal_received, 0.2 * localPlayer.feska_ult_rate, 10 * localPlayer.feska_kbr), HudPosition.LEFT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2).filter(lambda player: not Under_Attack and player.feska_choice_type != 0 and not player.feska_visible), "[互动]打开科技 / 属性强化选择", HudPosition.LEFT, 3, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)

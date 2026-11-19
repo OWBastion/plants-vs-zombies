@@ -7,5 +7,5 @@ rule "Feska - Brutal":
     @Team 2
     @Condition T_BRUTAL in eventPlayer.feska_tech
 
-    eventPlayer.feska_bonus[0] += Feska_Upgrades[T_BRUTAL][FESKA_COL_DAMAGE]
+    eventPlayer.feska_bonus[FeskaBonus.DAMAGE] += Feska_Upgrades[T_BRUTAL][FESKA_COL_DAMAGE]
     feskaApplyUpgradeStats()

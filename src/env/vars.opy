@@ -32,15 +32,18 @@ globalvar Feska_Index
 #!define FESKA_COL_NAME 0
 #!define FESKA_COL_DESC 1
 #!define FESKA_COL_TYPE 2
-#!define FESKA_COL_UNIQUE 3
 #!define FESKA_COL_ENABLED 4
 #!define FESKA_COL_DAMAGE 5
 #!define FESKA_COL_HEALTH 6
 #!define FESKA_COL_HEALING 7
 
 #!define FESKA_TYPE_TECH 1
-#!define FESKA_TYPE_STAT 2
 #!define FESKA_MAX_TECH 4
+
+enum FeskaBonus:
+    DAMAGE = 0
+    HEALTH
+    HEALING
 
 #!define T_BRUTAL 0
 #!define T_GIANT 1
@@ -88,14 +91,14 @@ globalvar Feska_Index
 # 英雄原始最大生命×(100+生命加成)% + 心之钢永久增量 + 护甲强化。
 # 光子护盾/血肉/反应装甲等本来源生命池不计入, 防止百分比效果把自己新增的生命值再次计入。
 # feska_base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
-#!define feskaHealthPercent(p) (100 + p.feska_bonus[1])
-#!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[1]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
+#!define feskaHealthPercent(p) (100 + p.feska_bonus[FeskaBonus.HEALTH])
+#!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[FeskaBonus.HEALTH]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
 #!define feskaReactiveArmor(p) ceil(100 + feskaMaxHP(p) * 0.1)
 # 狂战士之魂: 总生命上限变为可计入最大生命值的 21 倍(2000% 额外 + 100% 基础)。
 # setMaxHealth 按英雄原始最大生命的百分比设置且生命池另行叠加, 因此百分比里含生命池的 20 倍补偿。
-#!define feskaBerserkPercent(p) (2100 + 21 * p.feska_bonus[1] + 2000 * (p.feska_heartsteel_flat + 25 * p.feska_armor_count) / p.feska_base_hp)
+#!define feskaBerserkPercent(p) (2100 + 21 * p.feska_bonus[FeskaBonus.HEALTH] + 2000 * (p.feska_heartsteel_flat + 25 * p.feska_armor_count) / p.feska_base_hp)
 #!define feskaBerserkMaxHP(p) (21 * feskaMaxHP(p))
-#!define feskaDamagePercent(p) (100 + p.feska_bonus[0] + (20 if p.feska_lone else 0))
+#!define feskaDamagePercent(p) (100 + p.feska_bonus[FeskaBonus.DAMAGE] + (20 if p.feska_lone else 0))
 #!define feskaReceivedPercent(p) ((100 - p.feska_dr) * (0.85 if p.feska_lone else 1))
 
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))

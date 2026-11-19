@@ -7,8 +7,8 @@ rule "Feska - Back to basics":
     @Team 2
     @Condition T_BASICS in eventPlayer.feska_tech
 
-    eventPlayer.feska_bonus[0] += Feska_Upgrades[T_BASICS][FESKA_COL_DAMAGE]
-    eventPlayer.feska_bonus[1] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALTH]
-    eventPlayer.feska_bonus[2] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALING]
+    eventPlayer.feska_bonus[FeskaBonus.DAMAGE] += Feska_Upgrades[T_BASICS][FESKA_COL_DAMAGE]
+    eventPlayer.feska_bonus[FeskaBonus.HEALTH] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALTH]
+    eventPlayer.feska_bonus[FeskaBonus.HEALING] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALING]
     eventPlayer.setUltEnabled(false)
     feskaApplyUpgradeStats()

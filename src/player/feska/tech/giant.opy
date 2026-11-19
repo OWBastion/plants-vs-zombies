@@ -7,5 +7,5 @@ rule "Feska - Giant":
     @Team 2
     @Condition T_GIANT in eventPlayer.feska_tech
 
-    eventPlayer.feska_bonus[1] += Feska_Upgrades[T_GIANT][FESKA_COL_HEALTH]
+    eventPlayer.feska_bonus[FeskaBonus.HEALTH] += Feska_Upgrades[T_GIANT][FESKA_COL_HEALTH]
     feskaApplyUpgradeStats()
