@@ -165,6 +165,7 @@ rule "Feska - Initialize player":
     eventPlayer.feska_chain = false
     eventPlayer.feska_reactive_value = 0
     eventPlayer.feska_berserk = false
+    eventPlayer.feska_berserk_guard = false
     eventPlayer.feska_damage_mod = null
     eventPlayer.feska_recv_mod = null
     eventPlayer.feska_damage_value = 0
@@ -420,6 +421,7 @@ rule "Feska - Invalidate hero on death":
     eventPlayer.feska_stat_dirty = true
     # 狂战士随本次生命结束; 下一次生命可重新触发。
     eventPlayer.feska_berserk = false
+    eventPlayer.feska_berserk_guard = false
     eventPlayer.feska_lock = false
 
 
