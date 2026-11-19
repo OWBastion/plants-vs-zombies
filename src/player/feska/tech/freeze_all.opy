@@ -1,13 +1,16 @@
 #!mainFile "../../../main.opy"
 
 # 绝对零度 (T_FREEZE_ALL = 19)
-# 施放终极技能时, 冰冻所有存活僵尸 2.5 秒。
-#!define FESKA_ROW_FREEZE_ALL ["绝对零度", "施放终极技能时\n冰冻所有存活僵尸 2.5 秒", 1, 0, 1, 0, 0, 0]
+# 施放终极技能时, 冰冻所有存活僵尸 2.5 秒; 两次触发至少间隔 2.5 秒。
+#!define FESKA_ROW_FREEZE_ALL ["绝对零度", "施放终极技能时\n冰冻所有存活僵尸 2.5 秒\n两次触发至少间隔 2.5 秒", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Absolute zero":
     @Event eachPlayer
     @Team 2
     @Condition T_FREEZE_ALL in eventPlayer.feska_tech
     @Condition eventPlayer.isUsingUltimate()
+    @Condition eventPlayer.feska_freeze_all_last == null or getTotalTimeElapsed() - eventPlayer.feska_freeze_all_last >= 2.5
 
+    # 时间戳冷却不依赖等待结束; 死亡、换英雄、波次切换都不会留下卡住的等待标志。
+    eventPlayer.feska_freeze_all_last = getTotalTimeElapsed()
     getLivingPlayers(Team.1).setStatusEffect(eventPlayer, Status.FROZEN, 2.5)
