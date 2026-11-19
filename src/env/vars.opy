@@ -21,64 +21,72 @@ globalvar ANTI_CRASH_HOLD_TIME
 globalvar ANTI_CRASH_DEACTIVATE_PERCENT
 globalvar Hero_BAN
 globalvar Completed_Attacks
-globalvar Feska_Upgrades
-globalvar Feska_Tech_Ids
-globalvar Feska_Stat_Ids
-globalvar Feska_Shield_Holder
+globalvar Upgrades
+globalvar Tech_Ids
+globalvar Stat_Ids
+globalvar Shield_Holder
 # 子程序当前操作的玩家。OverPy 子程序不支持参数, 用同步临时变量传递。
-globalvar Feska_P
-globalvar Feska_Index
+globalvar Target_Player
+globalvar Work_Index
 
-#!define FESKA_COL_NAME 0
-#!define FESKA_COL_DESC 1
-#!define FESKA_COL_TYPE 2
-#!define FESKA_COL_ENABLED 4
-#!define FESKA_COL_DAMAGE 5
-#!define FESKA_COL_HEALTH 6
-#!define FESKA_COL_HEALING 7
+#!define UPGRADE_COL_NAME 0
+#!define UPGRADE_COL_DESC 1
+#!define UPGRADE_COL_TYPE 2
+#!define UPGRADE_COL_ENABLED 4
+#!define UPGRADE_COL_DAMAGE 5
+#!define UPGRADE_COL_HEALTH 6
+#!define UPGRADE_COL_HEALING 7
 
-#!define FESKA_TYPE_TECH 1
-#!define FESKA_MAX_TECH 4
+#!define UPGRADE_TYPE_TECH 1
+#!define MAX_TECH 4
 
 enum FeskaBonus:
     DAMAGE = 0
     HEALTH
     HEALING
 
-#!define T_BRUTAL 0
-#!define T_GIANT 1
-#!define T_HEALING 2
-#!define T_REPAIR 3
-#!define T_LIFESTEAL 4
-#!define T_THORNS 5
-#!define T_COOKER 6
-#!define T_CANNON 7
-#!define T_PURGE 14
-#!define T_ICE 15
-#!define T_BASICS 16
-#!define T_SWORD 17
-#!define T_SNIPER 18
-#!define T_FREEZE_ALL 19
-#!define T_F5 20
-#!define T_HEARTSTEEL 21
-#!define T_SHIELD 22
-#!define T_FLESH 23
-#!define T_TOWER 24
-#!define T_WILL 25
-#!define T_BATTERY 26
-#!define T_LONE 27
-#!define T_AIDKIT 34
-#!define T_RADIANT 35
-#!define T_CRUSADER 36
-#!define T_REACTIVE 37
-#!define T_BERSERK 38
+enum TechId:
+    BRUTAL = 0
+    GIANT = 1
+    HEALING = 2
+    REPAIR = 3
+    LIFESTEAL = 4
+    THORNS = 5
+    COOKER = 6
+    CANNON = 7
+    PURGE = 14
+    ICE = 15
+    BASICS = 16
+    SWORD = 17
+    SNIPER = 18
+    FREEZE_ALL = 19
+    F5 = 20
+    HEARTSTEEL = 21
+    SHIELD = 22
+    FLESH = 23
+    TOWER = 24
+    WILL = 25
+    BATTERY = 26
+    LONE = 27
+    AIDKIT = 34
+    RADIANT = 35
+    CRUSADER = 36
+    REACTIVE = 37
+    BERSERK = 38
 
-#!define A_ARMOR 28
-#!define A_DR 29
-#!define A_REGEN 30
-#!define A_HEAL_RECEIVED 31
-#!define A_ULT 32
-#!define A_KBR 33
+enum StatId:
+    DAMAGE = 8
+    HEALTH = 9
+    HEALING = 10
+    BALANCED = 11
+    RESONANCE = 12
+    NOURISHMENT = 13
+    ARMOR = 28
+    DR = 29
+    REGEN = 30
+    HEAL_RECEIVED = 31
+    ULT = 32
+    KBR = 33
 
 #!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgress() min(max((Current_Round - 1) / max(Config_Total_Round - 1, 1), 0), 1)
@@ -90,16 +98,16 @@ enum FeskaBonus:
 # setMaxHealth 只接受百分比(相对英雄原始最大生命)。可计入最大生命值是绝对点数:
 # 英雄原始最大生命×(100+生命加成)% + 心之钢永久增量 + 护甲强化。
 # 光子护盾/血肉/反应装甲等本来源生命池不计入, 防止百分比效果把自己新增的生命值再次计入。
-# feska_base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
-#!define feskaHealthPercent(p) (100 + p.feska_bonus[FeskaBonus.HEALTH])
-#!define feskaMaxHP(p) (p.feska_base_hp * (100 + p.feska_bonus[FeskaBonus.HEALTH]) / 100 + p.feska_heartsteel_flat + 25 * p.feska_armor_count)
+# base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
+#!define feskaHealthPercent(p) (100 + p.bonus[FeskaBonus.HEALTH])
+#!define feskaMaxHP(p) (p.base_hp * (100 + p.bonus[FeskaBonus.HEALTH]) / 100 + p.heartsteel_flat + 25 * p.armor_count)
 #!define feskaReactiveArmor(p) ceil(100 + feskaMaxHP(p) * 0.1)
 # 狂战士之魂: 总生命上限变为可计入最大生命值的 21 倍(2000% 额外 + 100% 基础)。
 # setMaxHealth 按英雄原始最大生命的百分比设置且生命池另行叠加, 因此百分比里含生命池的 20 倍补偿。
-#!define feskaBerserkPercent(p) (2100 + 21 * p.feska_bonus[FeskaBonus.HEALTH] + 2000 * (p.feska_heartsteel_flat + 25 * p.feska_armor_count) / p.feska_base_hp)
+#!define feskaBerserkPercent(p) (2100 + 21 * p.bonus[FeskaBonus.HEALTH] + 2000 * (p.heartsteel_flat + 25 * p.armor_count) / p.base_hp)
 #!define feskaBerserkMaxHP(p) (21 * feskaMaxHP(p))
-#!define feskaDamagePercent(p) (100 + p.feska_bonus[FeskaBonus.DAMAGE] + (20 if p.feska_lone else 0))
-#!define feskaReceivedPercent(p) ((100 - p.feska_dr) * (0.85 if p.feska_lone else 1))
+#!define feskaDamagePercent(p) (100 + p.bonus[FeskaBonus.DAMAGE] + (20 if p.lone else 0))
+#!define feskaReceivedPercent(p) ((100 - p.dr) * (0.85 if p.lone else 1))
 
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
 
@@ -125,43 +133,43 @@ playervar stuck_last_pos
 playervar stuck_count
 
 # 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄与生命池。
-playervar feska_initialized
-playervar feska_tech
-playervar feska_base_hp
-playervar feska_forge_pending
-playervar feska_forge_count
-playervar feska_bonus
-playervar feska_damage_mod
-playervar feska_damage_value
-playervar feska_recv_mod
-playervar feska_recv_value
-playervar feska_options
-playervar feska_pool
-playervar feska_cursor
-playervar feska_rerolled
-playervar feska_visible
-playervar feska_choice_type
-playervar feska_choice
-playervar feska_lock
-playervar feska_stat_hero
+playervar initialized
+playervar tech
+playervar base_hp
+playervar forge_pending
+playervar forge_count
+playervar bonus
+playervar damage_mod
+playervar damage_value
+playervar recv_mod
+playervar recv_value
+playervar options
+playervar pool
+playervar cursor
+playervar rerolled
+playervar visible
+playervar choice_type
+playervar choice
+playervar lock
+playervar stat_hero
 # 死亡后需要重放一次属性恢复(重生路径), 与真正换英雄区分: 换英雄才重捕英雄原始最大生命
-playervar feska_stat_dirty
-playervar feska_armor_count
-playervar feska_armor_pool
-playervar feska_dr
-playervar feska_regen
-playervar feska_heal_received
-playervar feska_ult_rate
-playervar feska_kbr
-playervar feska_elim_mark
-playervar feska_heartsteel_flat
-playervar feska_heartsteel_pool
-playervar feska_shield_pool
-playervar feska_blood_pool
-playervar feska_will_used
-playervar feska_lone
-playervar feska_chain
-playervar feska_reactive_pool
-playervar feska_berserk
+playervar stat_dirty
+playervar armor_count
+playervar armor_pool
+playervar dr
+playervar regen
+playervar heal_received
+playervar ult_rate
+playervar kbr
+playervar elim_mark
+playervar heartsteel_flat
+playervar heartsteel_pool
+playervar shield_pool
+playervar blood_pool
+playervar will_used
+playervar lone
+playervar chain
+playervar reactive_pool
+playervar berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
-playervar feska_berserk_guard
+playervar berserk_guard

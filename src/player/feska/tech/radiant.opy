@@ -1,13 +1,13 @@
 #!mainFile "../../../main.opy"
 
-#!define FESKA_ROW_RADIANT ["神圣光辉", "每 10 秒为 15 米内所有友方\n提供 2.5 秒无敌", 1, 0, 1, 0, 0, 0]
+#!define UPGRADE_ROW_RADIANT ["神圣光辉", "每 10 秒为 15 米内所有友方\n提供 2.5 秒无敌", 1, 0, 1, 0, 0, 0]
 
 rule "Feska - Radiant light":
     @Event eachPlayer
     @Team 2
     @Condition Under_Attack
     @Condition eventPlayer.isAlive()
-    @Condition T_RADIANT in eventPlayer.feska_tech
+    @Condition TechId.RADIANT in eventPlayer.tech
 
     # 进攻期间每 10 秒一轮; 持有者中途死亡则本规则中止, 不补发。
     wait(10, Wait.ABORT_WHEN_FALSE)

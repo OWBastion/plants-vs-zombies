@@ -1,14 +1,14 @@
 #!mainFile "../../../main.opy"
 
-#!define FESKA_ROW_BASICS ["回归基本功", "禁用终极技能\n伤害、最大生命值、造成的治疗 +50%", 1, 0, 1, 50, 50, 50]
+#!define UPGRADE_ROW_BASICS ["回归基本功", "禁用终极技能\n伤害、最大生命值、造成的治疗 +50%", 1, 0, 1, 50, 50, 50]
 
 rule "Feska - Back to basics":
     @Event eachPlayer
     @Team 2
-    @Condition T_BASICS in eventPlayer.feska_tech
+    @Condition TechId.BASICS in eventPlayer.tech
 
-    eventPlayer.feska_bonus[FeskaBonus.DAMAGE] += Feska_Upgrades[T_BASICS][FESKA_COL_DAMAGE]
-    eventPlayer.feska_bonus[FeskaBonus.HEALTH] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALTH]
-    eventPlayer.feska_bonus[FeskaBonus.HEALING] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALING]
+    eventPlayer.bonus[FeskaBonus.DAMAGE] += Upgrades[TechId.BASICS][UPGRADE_COL_DAMAGE]
+    eventPlayer.bonus[FeskaBonus.HEALTH] += Upgrades[TechId.BASICS][UPGRADE_COL_HEALTH]
+    eventPlayer.bonus[FeskaBonus.HEALING] += Upgrades[TechId.BASICS][UPGRADE_COL_HEALING]
     eventPlayer.setUltEnabled(false)
     feskaApplyUpgradeStats()

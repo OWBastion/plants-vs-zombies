@@ -36,10 +36,10 @@ rule "[Player]: ult reset":
     @Condition eventPlayer.isUsingUltimate() == true
     @Condition eventPlayer.getHero() in [Hero.DOOMFIST, Hero.BASTION, Hero.REAPER] == true
     # 狂战士之魂激活期间保持自由移动, 不因大招的移动恢复路径重新上定点油门。
-    @Condition eventPlayer.feska_berserk != true
+    @Condition eventPlayer.berserk != true
 
     eventPlayer.stopForcingThrottle()
     waitUntil(not eventPlayer.isUsingUltimate(), 10)
     # 大招期间可能触发狂战士, 结束时再核对一次, 不把已自由移动的玩家重新定点。
-    if Debug != true and Under_Attack and eventPlayer.getHero() in [Hero.DOOMFIST, Hero.BASTION, Hero.REAPER] and eventPlayer.feska_berserk != true:
+    if Debug != true and Under_Attack and eventPlayer.getHero() in [Hero.DOOMFIST, Hero.BASTION, Hero.REAPER] and eventPlayer.berserk != true:
         eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)

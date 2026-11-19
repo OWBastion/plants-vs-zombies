@@ -45,7 +45,7 @@ rule "Players - Round Attack End":
     waitUntil(Round_Attack_Time == 0, Config_Round_Attack_Time)
     waitUntil(getNumberOfLivingPlayers(Team.1) == 0, 999999986991104)
     # 先结算已持有四项科技的玩家, 再开放本波的新科技机会。
-    getPlayers(Team.2).filter(lambda player: not player.isDummy() and len(player.feska_tech) == FESKA_MAX_TECH).feska_forge_pending += 1
+    getPlayers(Team.2).filter(lambda player: not player.isDummy() and len(player.tech) == MAX_TECH).forge_pending += 1
     Completed_Attacks = Current_Round
     Under_Attack = false
     Round_Lead_Time = Config_Round_Lead_Time
