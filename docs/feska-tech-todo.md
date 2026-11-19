@@ -17,7 +17,7 @@
 
 ## 1. 当前代码与任务边界
 
-- 最新已核对提交：`f831b41 refactor(feska): 生命池子程序拆到 pools.opy，反应装甲自管护甲池`；工作区另有 `lone.opy` 未提交改动（一夫当关改用 `getClosestPlayer` 判定，已包含在本次核对中）。
+- 最新已核对提交：`e06b324 refactor(feska): 数值科技在各自文件累加，属性写入保持单点`（其前为 `f831b41` 生命池拆分）；工作区另有 `lone.opy` 未提交改动（一夫当关改用 `getClosestPlayer` 判定，已包含在本次核对中）与未提交的英雄技能拆分文件，均未纳入本次文档更新。
 - `src/player/progression.opy` 已有 27 项科技目录（26 项启用）和 12 项属性强化目录。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
 - 入口：`src/main.opy` include 成长模块；变量与宏位于 `src/env/vars.opy`。目录列已含类型、唯一性、启用列，候选池由目录过滤生成，无硬编码区间。
 - 波次接入：`src/mode/rounds.opy` 的 `Players - Round Attack End` 先给已持有四项科技的玩家 `feska_forge_pending += 1`，再更新 `Completed_Attacks`；条件是 `Current_Round < Config_Total_Round`，最终波不发放。
