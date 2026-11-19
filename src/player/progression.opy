@@ -3,24 +3,23 @@
 def feskaRefreshMods():
     @Name "Feska - refresh damage modifiers"
 
-    # 修正百分比只在创建时取值, 变化时重建, 不用逐帧写 setter。
-    if Feska_P.feska_damage_mod == null or Feska_P.feska_damage_value != feskaDamagePercent(Feska_P):
-        if Feska_P.feska_damage_mod != null:
-            stopDamageModification(Feska_P.feska_damage_mod)
-        startDamageModification(getPlayers(Team.1), Feska_P, feskaDamagePercent(Feska_P), DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
-        Feska_P.feska_damage_mod = getLastDamageModification()
-        Feska_P.feska_damage_value = feskaDamagePercent(Feska_P)
-    if feskaReceivedPercent(Feska_P) >= 100:
-        if Feska_P.feska_recv_mod != null:
-            stopDamageModification(Feska_P.feska_recv_mod)
-            Feska_P.feska_recv_mod = null
-        Feska_P.feska_recv_value = 100
-    elif Feska_P.feska_recv_mod == null or Feska_P.feska_recv_value != feskaReceivedPercent(Feska_P):
-        if Feska_P.feska_recv_mod != null:
-            stopDamageModification(Feska_P.feska_recv_mod)
-        startDamageModification(Feska_P, getPlayers(Team.1), feskaReceivedPercent(Feska_P), DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
-        Feska_P.feska_recv_mod = getLastDamageModification()
-        Feska_P.feska_recv_value = feskaReceivedPercent(Feska_P)
+    if eventPlayer.feska_damage_mod == null or eventPlayer.feska_damage_value != feskaDamagePercent(eventPlayer):
+        if eventPlayer.feska_damage_mod != null:
+            stopDamageModification(eventPlayer.feska_damage_mod)
+        startDamageModification(getPlayers(Team.1), eventPlayer, feskaDamagePercent(eventPlayer), DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
+        eventPlayer.feska_damage_mod = getLastDamageModification()
+        eventPlayer.feska_damage_value = feskaDamagePercent(eventPlayer)
+    if feskaReceivedPercent(eventPlayer) >= 100:
+        if eventPlayer.feska_recv_mod != null:
+            stopDamageModification(eventPlayer.feska_recv_mod)
+            eventPlayer.feska_recv_mod = null
+        eventPlayer.feska_recv_value = 100
+    elif eventPlayer.feska_recv_mod == null or eventPlayer.feska_recv_value != feskaReceivedPercent(eventPlayer):
+        if eventPlayer.feska_recv_mod != null:
+            stopDamageModification(eventPlayer.feska_recv_mod)
+        startDamageModification(eventPlayer, getPlayers(Team.1), feskaReceivedPercent(eventPlayer), DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
+        eventPlayer.feska_recv_mod = getLastDamageModification()
+        eventPlayer.feska_recv_value = feskaReceivedPercent(eventPlayer)
 
 
 def feskaApplyUpgradeStats():
@@ -28,8 +27,8 @@ def feskaApplyUpgradeStats():
 
     # 纯数值科技在各自文件里累加 feska_bonus 后调用这里, 保证只有一个属性写入点。
     # 科技只累加不移除, 重放仍由 Restore stats 规则负责。
-    Feska_P.setMaxHealth(feskaHealthPercent(Feska_P))
-    Feska_P.setHealingDealt(100 + Feska_P.feska_bonus[2])
+    eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
+    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
     feskaRefreshMods()
 
 
@@ -128,7 +127,6 @@ rule "Feska - Initialize player":
     eventPlayer.feska_recv_mod = null
     eventPlayer.feska_damage_value = 0
     eventPlayer.feska_recv_value = 100
-    Feska_P = eventPlayer
     feskaRefreshMods()
     eventPlayer.feska_initialized = true
 
@@ -276,7 +274,6 @@ rule "Feska - Confirm card":
         eventPlayer.feska_bonus[0] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_DAMAGE]
         eventPlayer.feska_bonus[1] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALTH]
         eventPlayer.feska_bonus[2] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALING]
-        Feska_P = eventPlayer
         feskaApplyUpgradeStats()
     Feska_P = eventPlayer
     # 科技数值由各科技文件在自己的规则里累加 feska_bonus 后调用 feskaApplyUpgradeStats();
@@ -293,6 +290,7 @@ rule "Feska - Confirm card":
     elif eventPlayer.feska_choice == A_DR:
         # 成长系统减伤总上限 50%, 避免重复选择后完全免伤。
         eventPlayer.feska_dr = min(eventPlayer.feska_dr + 3, 50)
+        feskaRefreshMods()
     elif eventPlayer.feska_choice == A_REGEN:
         eventPlayer.feska_regen += 1
     elif eventPlayer.feska_choice == A_HEAL_RECEIVED:
@@ -398,7 +396,6 @@ rule "Feska - Wave end cleanup":
         if P[Feska_Index].feska_blood_pool != null:
             removeHealthPool(P[Feska_Index].feska_blood_pool)
         P[Feska_Index].feska_blood_pool = null
-        P[Feska_Index].feska_lone = false
         P[Feska_Index].feska_will_used = false
 
 

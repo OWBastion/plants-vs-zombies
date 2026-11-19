@@ -8,5 +8,4 @@ rule "Feska - Giant":
     @Condition T_GIANT in eventPlayer.feska_tech
 
     eventPlayer.feska_bonus[1] += Feska_Upgrades[T_GIANT][FESKA_COL_HEALTH]
-    Feska_P = eventPlayer
     feskaApplyUpgradeStats()

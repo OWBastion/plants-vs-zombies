@@ -8,7 +8,6 @@ rule "Feska - Thorns health":
     @Condition T_THORNS in eventPlayer.feska_tech
 
     eventPlayer.feska_bonus[1] += Feska_Upgrades[T_THORNS][FESKA_COL_HEALTH]
-    Feska_P = eventPlayer
     feskaApplyUpgradeStats()
 
 rule "Feska - Thorns":

@@ -11,5 +11,4 @@ rule "Feska - Back to basics":
     eventPlayer.feska_bonus[1] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALTH]
     eventPlayer.feska_bonus[2] += Feska_Upgrades[T_BASICS][FESKA_COL_HEALING]
     eventPlayer.setUltEnabled(false)
-    Feska_P = eventPlayer
     feskaApplyUpgradeStats()

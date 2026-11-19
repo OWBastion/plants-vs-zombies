@@ -8,5 +8,4 @@ rule "Feska - Brutal":
     @Condition T_BRUTAL in eventPlayer.feska_tech
 
     eventPlayer.feska_bonus[0] += Feska_Upgrades[T_BRUTAL][FESKA_COL_DAMAGE]
-    Feska_P = eventPlayer
     feskaApplyUpgradeStats()
