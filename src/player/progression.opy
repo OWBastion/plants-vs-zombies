@@ -29,6 +29,16 @@ def feskaRefreshMods():
         Feska_P.feska_recv_value = feskaReceivedPercent(Feska_P)
 
 
+def feskaApplyUpgradeStats():
+    @Name "Feska - apply upgrade stats"
+
+    # 纯数值科技在各自文件里累加 feska_bonus 后调用这里, 保证只有一个属性写入点。
+    # 科技只累加不移除, 重放仍由 Restore stats 规则负责。
+    Feska_P.setMaxHealth(feskaHealthPercent(Feska_P))
+    Feska_P.setHealingDealt(100 + Feska_P.feska_bonus[2])
+    feskaRefreshMods()
+
+
 def feskaStopBerserk():
     @Name "Feska - stop berserk"
 
@@ -269,16 +279,16 @@ rule "Feska - Confirm card":
             return
         eventPlayer.feska_forge_pending -= 1
         eventPlayer.feska_forge_count += 1
-    eventPlayer.feska_bonus[0] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_DAMAGE]
-    eventPlayer.feska_bonus[1] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALTH]
-    eventPlayer.feska_bonus[2] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALING]
-    # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHP。
-    eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
-    eventPlayer.setHealingDealt(100 + eventPlayer.feska_bonus[2])
+        # 属性强化可重复选择且没有"持有"状态, 无法用科技的条件触发, 只能在选牌处累加。
+        eventPlayer.feska_bonus[0] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_DAMAGE]
+        eventPlayer.feska_bonus[1] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALTH]
+        eventPlayer.feska_bonus[2] += Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_HEALING]
+        Feska_P = eventPlayer
+        feskaApplyUpgradeStats()
     Feska_P = eventPlayer
-    if eventPlayer.feska_choice == T_BASICS:
-        eventPlayer.setUltEnabled(false)
-    elif eventPlayer.feska_choice == T_SHIELD:
+    # 科技数值由各科技文件在自己的规则里累加 feska_bonus 后调用 feskaApplyUpgradeStats();
+    # 条件由假变真即"获得科技", 科技不移除所以只触发一次。
+    if eventPlayer.feska_choice == T_SHIELD:
         Feska_Shield_Holder = eventPlayer
         feskaRefreshShields()
     elif eventPlayer.feska_choice == T_HEARTSTEEL:
@@ -301,7 +311,6 @@ rule "Feska - Confirm card":
         eventPlayer.feska_kbr = min(eventPlayer.feska_kbr + 1, 8)
         eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.feska_kbr)
     Feska_P = eventPlayer
-    feskaRefreshMods()
     smallMessage(eventPlayer, "已选择：{0}".format(Feska_Upgrades[eventPlayer.feska_choice][FESKA_COL_NAME]))
     eventPlayer.feska_options = []
     eventPlayer.feska_choice_type = 0
