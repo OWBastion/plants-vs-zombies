@@ -985,5 +985,6 @@ subroutine stuckCheck 7
 #!include "player/movement.opy"
 #!include "heroes/abilities.opy"
 # 生命池子程序先于 progression 引入, 科技文件与生命周期流程都能直接调用。
+#!include "player/feska/tech/shield.opy"
 #!include "player/feska/pools.opy"
 #!include "player/progression.opy"

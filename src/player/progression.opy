@@ -408,7 +408,6 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/cannon.opy"
 #!include "feska/tech/basics.opy"
 #!include "feska/tech/sword.opy"
-#!include "feska/tech/shield.opy"
 #!include "feska/tech/aidkit.opy"
 #!include "feska/tech/crusader.opy"
 #!include "feska/tech/lone.opy"
