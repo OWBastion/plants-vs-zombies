@@ -119,13 +119,10 @@ playervar TTK
 playervar heros
 playervar mov_speed_penalty
 playervar zarya_barrier_shields
-playervar sym_barrier_shields
 playervar tracer_buff
 playervar brig_repair_pack
 playervar brig_rally_armor_id
-playervar lucio_crossfade_dmg
 playervar knockback_direction
-playervar zen_transcendence
 playervar scoped_shot_distance
 playervar scoped_damage_base
 playervar ow2_scoped_damage_falloff_scalar

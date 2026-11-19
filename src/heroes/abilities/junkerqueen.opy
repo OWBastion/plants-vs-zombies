@@ -1,14 +1,5 @@
 #!mainFile "../../main.opy"
 
-rule "[Junker Queen]: Commanding Shout":
-    @Event eachPlayer
-    @Team 2
-    @Hero junkerQueen
-    @Condition eventPlayer.isUsingAbility1() == true
-
-    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 2)
-
-
 rule "[Junker Queen]: Rampage":
     @Event eachPlayer
     @Team 2

@@ -9,16 +9,6 @@ rule "[Juno]: Pulsar Torpedoes":
     damage(victim, attacker, victim.getMaxHealth() * 0.15)
 
 
-rule "[Juno]: Orbital Ray":
-    @Event eachPlayer
-    @Team 2
-    @Hero juno
-    @Condition eventPlayer.isUsingUltimate() == true
-
-    wait(0.496, Wait.ABORT_WHEN_FALSE)
-    (getLivingPlayers(eventPlayer.getTeam()).filter(lambda player: isInLoS(eventPlayer, player) == true)).setStatusEffect(null, Status.UNKILLABLE, 8)
-
-
 rule "[Juno]: 41":
     @Event eachPlayer
     @Team 2
