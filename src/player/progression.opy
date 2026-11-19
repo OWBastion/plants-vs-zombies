@@ -64,14 +64,12 @@ def feskaApplyReactivePool():
     @Name "Feska - apply reactive armor"
 
     # 护甲量按当前可计入最大生命结算; 池自身不计入 feskaMaxHP, 重新应用不会自我放大。
-    if T_REACTIVE in Feska_P.feska_tech:
+    # 每次调用都整池重建, 击穿后的残余不保留。
+    if T_REACTIVE in Feska_P.feska_tech and Feska_P.isAlive():
         if Feska_P.feska_reactive_pool != null:
             removeHealthPool(Feska_P.feska_reactive_pool)
         Feska_P.addHealthPool(Health.ARMOR, feskaReactiveArmor(Feska_P), true, false)
         Feska_P.feska_reactive_pool = getLastCreatedHealthPool()
-        # 镜像与游戏池同步重置; 工坊不能读取生命池余量, 未击穿判定只能靠镜像。
-        Feska_P.feska_reactive_value = feskaReactiveArmor(Feska_P)
-        Feska_P.feska_reactive_last_hit = null
 
 
 def feskaStopBerserk():
@@ -163,7 +161,6 @@ rule "Feska - Initialize player":
     eventPlayer.feska_will_used = false
     eventPlayer.feska_lone = false
     eventPlayer.feska_chain = false
-    eventPlayer.feska_reactive_value = 0
     eventPlayer.feska_berserk = false
     eventPlayer.feska_berserk_guard = false
     eventPlayer.feska_damage_mod = null
@@ -386,8 +383,6 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.feska_shield_pool = null
     eventPlayer.feska_blood_pool = null
     eventPlayer.feska_reactive_pool = null
-    eventPlayer.feska_reactive_value = 0
-    eventPlayer.feska_reactive_last_hit = null
     # feska_stat_dirty 是死亡后的重生路径; 英雄确实变了才是真正换英雄。
     # 换英雄后工坊重置 setMaxHealth 百分比, 清理生命池后读到的 getMaxHealth() 即新英雄原始最大生命。
     if eventPlayer.feska_stat_hero != eventPlayer.getHero():
@@ -451,6 +446,8 @@ rule "Feska - Wave end cleanup":
         P[Feska_Index].feska_blood_pool = null
         P[Feska_Index].feska_lone = false
         P[Feska_Index].feska_will_used = false
+        # 反应装甲每个准备阶段重建整池: 进攻期间被击穿的护甲不带到下一波。
+        feskaApplyReactivePool()
 
 
 # 科技: 每个科技一个文件, 内含目录行宏(FESKA_ROW_*)与该科技的规则。

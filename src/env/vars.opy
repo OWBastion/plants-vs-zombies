@@ -177,11 +177,8 @@ playervar feska_blood_pool
 playervar feska_will_used
 playervar feska_lone
 playervar feska_chain
-# 反应装甲: 本来源护甲的镜像值, 用于判定伤害是否被护甲拦下(工坊不能读取生命池余量)
-playervar feska_reactive_value
+# 反应装甲: 本来源护甲池句柄, 准备阶段整池重建
 playervar feska_reactive_pool
-# 反应装甲镜像恢复: 上次受到伤害的比赛时间, 离战一段时间后回满
-playervar feska_reactive_last_hit
 # 狂战士之魂: 激活期间可自由移动, 禁疗, 每秒自损
 playervar feska_berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
