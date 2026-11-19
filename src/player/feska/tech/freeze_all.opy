@@ -1,0 +1,11 @@
+# 绝对零度 (T_FREEZE_ALL = 19)
+# 施放终极技能时, 冰冻所有存活僵尸 2.5 秒。
+#!define FESKA_ROW_FREEZE_ALL ["绝对零度", "施放终极技能时\n冰冻所有存活僵尸 2.5 秒", 1, 0, 1, 0, 0, 0]
+
+rule "Feska - Absolute zero":
+    @Event eachPlayer
+    @Team 2
+    @Condition T_FREEZE_ALL in eventPlayer.feska_tech
+    @Condition eventPlayer.isUsingUltimate()
+
+    getLivingPlayers(Team.1).setStatusEffect(eventPlayer, Status.FROZEN, 2.5)
