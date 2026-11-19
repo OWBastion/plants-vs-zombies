@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 # Zombie 战斗/技能控制 (M3 收敛):
 # - 普通僵尸: 仅依赖 [ai]: Base Melee 基础近战循环, 在近战范围内按节奏触发。
 # - 特殊僵尸: venture / brig / ram / pharah 规则声明各自差异, 其余英雄默认纯近战。

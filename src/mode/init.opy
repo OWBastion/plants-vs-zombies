@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "Copyright (c) 2025 他又（aka Teakowa）":
     disableInspector()
     Tank_Heros = getTankHeroes()

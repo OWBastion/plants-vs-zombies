@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "[Player]: Stop move when under attack":
     @Event eachPlayer
     @Team 1

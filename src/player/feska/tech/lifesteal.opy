@@ -1,3 +1,5 @@
+#!mainFile "../../../main.opy"
+
 # 吸血习性 (T_LIFESTEAL = 4)
 # 每参与消灭一只僵尸恢复 5% 最大生命值。
 #!define FESKA_ROW_LIFESTEAL ["吸血习性", "每参与消灭一只僵尸恢复 5% 最大生命值", 1, 0, 1, 0, 0, 0]

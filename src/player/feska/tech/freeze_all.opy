@@ -1,3 +1,5 @@
+#!mainFile "../../../main.opy"
+
 # 绝对零度 (T_FREEZE_ALL = 19)
 # 施放终极技能时, 冰冻所有存活僵尸 2.5 秒。
 #!define FESKA_ROW_FREEZE_ALL ["绝对零度", "施放终极技能时\n冰冻所有存活僵尸 2.5 秒", 1, 0, 1, 0, 0, 0]

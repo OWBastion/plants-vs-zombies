@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "[ai]: Create AI Bot":
     @Condition isGameInProgress() == true
     @Condition Under_Attack == true

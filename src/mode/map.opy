@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     @Condition isGameInProgress() == true
     @Condition Current_Round >= 2

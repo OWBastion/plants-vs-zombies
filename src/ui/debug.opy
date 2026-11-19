@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "[debug.opy]: player debug (Top Right)":
     @Event eachPlayer
     @Condition Debug == true

@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "Players - Round Lead Time Start":
     @Condition (isAssemblingHeroes() or isGameInProgress()) == true
     #@Condition isGameInProgress() == true

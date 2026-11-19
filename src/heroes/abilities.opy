@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "[Juno]: Pulsar Torpedoes":
     @Event playerDealtDamage
     @Team 2

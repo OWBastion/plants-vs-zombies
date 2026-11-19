@@ -1,3 +1,5 @@
+#!mainFile "../../../main.opy"
+
 # 狂战士之魂 (T_BERSERK = 38)
 # 受到致命伤害后总生命上限变为可计入最大生命值的 21 倍并回满; 期间禁疗、每秒自损、可自由移动。
 # 结束子程序 feskaStopBerserk 在 progression.opy(波次切换与重生流程也要调用)。

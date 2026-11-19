@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "Barrier - Eat Brain":
     @Event eachPlayer
     @Team 1

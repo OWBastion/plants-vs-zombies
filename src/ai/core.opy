@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 rule "[ai]: Set Bot Name":
     @Event eachPlayer
     @Team 1

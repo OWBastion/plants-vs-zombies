@@ -1,3 +1,5 @@
+#!mainFile "../main.opy"
+
 #Global variables
 
 globalvar Bot_Respawn_Points
