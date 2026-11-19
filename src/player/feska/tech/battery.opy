@@ -7,9 +7,9 @@ rule "Feska - Ultimate charge":
     @Team 2
     @Condition Under_Attack
     @Condition eventPlayer.isAlive()
-    @Condition (TechId.BATTERY in eventPlayer.tech) or eventPlayer.ult_rate > 0
+    @Condition (TechId.BATTERY in eventPlayer.tech) or eventPlayer.bonus[FeskaBonus.ULT_CHARGE] > 0
 
     wait(1, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.setUltCharge(min(eventPlayer.getUltCharge() + (0.8 if TechId.BATTERY in eventPlayer.tech else 0) + 0.2 * eventPlayer.ult_rate, 100))
+    eventPlayer.setUltCharge(min(eventPlayer.getUltCharge() + (0.8 if TechId.BATTERY in eventPlayer.tech else 0) + 0.2 * eventPlayer.bonus[FeskaBonus.ULT_CHARGE], 100))
     if ruleCondition:
         loop()

@@ -9,9 +9,9 @@ rule "Feska - Regeneration":
     @Condition eventPlayer.isAlive()
     # 狂战士禁疗: 自我修复与再生强化都不回血。
     @Condition eventPlayer.berserk != true
-    @Condition (TechId.REPAIR in eventPlayer.tech) or eventPlayer.regen > 0
+    @Condition (TechId.REPAIR in eventPlayer.tech) or eventPlayer.bonus[FeskaBonus.REGEN] > 0
 
     wait(1, Wait.ABORT_WHEN_FALSE)
-    heal(eventPlayer, null, feskaMaxHP(eventPlayer) * ((0.02 if TechId.REPAIR in eventPlayer.tech else 0) + 0.003 * eventPlayer.regen))
+    heal(eventPlayer, null, feskaMaxHP(eventPlayer) * ((0.02 if TechId.REPAIR in eventPlayer.tech else 0) + 0.003 * eventPlayer.bonus[FeskaBonus.REGEN]))
     if ruleCondition:
         loop()

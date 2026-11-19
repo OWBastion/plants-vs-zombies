@@ -39,14 +39,14 @@ def feskaStopBerserk():
     if Target_Player.berserk == true:
         Target_Player.berserk = false
         Target_Player.setMaxHealth(feskaHealthPercent(Target_Player))
-        Target_Player.setHealingReceived(100 + 10 * Target_Player.heal_received)
-        Target_Player.setKnockbackReceived(100 - 10 * Target_Player.kbr)
+        Target_Player.setHealingReceived(100 + 10 * Target_Player.bonus[FeskaBonus.HEALING_RECEIVED])
+        Target_Player.setKnockbackReceived(100 - 10 * Target_Player.bonus[FeskaBonus.KNOCKBACK_RESIST])
 
 
 def feskaRefreshShields():
     @Name "Feska - refresh photon shields"
 
-    if Shield_Holder != null:
+    if len(shieldHolders()) > 0:
         P = getLivingPlayers(Team.2).filter(lambda player: not player.isDummy())
         for Work_Index in range(len(P)):
             Target_Player = P[Work_Index]
@@ -57,7 +57,9 @@ def feskaBuildPool():
     @Name "Feska - build candidate pool"
 
     if Target_Player.choice_type == 1:
-        Target_Player.pool = Tech_Ids.filter(lambda upgrade: upgrade not in Target_Player.tech and not (upgrade == TechId.SHIELD and Shield_Holder != null) and not (upgrade == TechId.BASICS and (TechId.BATTERY in Target_Player.tech or TechId.FREEZE_ALL in Target_Player.tech or Target_Player.ult_rate > 0)) and not (upgrade in [TechId.FREEZE_ALL, TechId.BATTERY] and TechId.BASICS in Target_Player.tech))
+        Target_Player.pool = Tech_Ids.filter(lambda upgrade: upgrade not in Target_Player.tech and not (upgrade == TechId.BASICS and (TechId.BATTERY in Target_Player.tech or TechId.FREEZE_ALL in Target_Player.tech or Target_Player.bonus[FeskaBonus.ULT_CHARGE] > 0)) and not (upgrade in [TechId.FREEZE_ALL, TechId.BATTERY] and TechId.BASICS in Target_Player.tech))
+        if len(shieldHolders()) > 0:
+            Target_Player.pool = Target_Player.pool.filter(lambda upgrade: upgrade != TechId.SHIELD)
     else:
         Target_Player.pool = Stat_Ids.filter(lambda upgrade: not (upgrade == StatId.ULT and TechId.BASICS in Target_Player.tech))
 
@@ -91,7 +93,7 @@ rule "Feska - Initialize player":
     @Condition not eventPlayer.initialized
 
     eventPlayer.tech = []
-    eventPlayer.bonus = [0, 0, 0]
+    eventPlayer.bonus = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     # 首次生成时没有任何本模式生命池与 setMaxHealth 修改, 读取到的就是英雄原始最大生命。
     eventPlayer.base_hp = eventPlayer.getMaxHealth()
     eventPlayer.options = []
@@ -106,13 +108,7 @@ rule "Feska - Initialize player":
     eventPlayer.rerolled = [false, false, false]
     eventPlayer.stat_hero = eventPlayer.getHero()
     eventPlayer.stat_dirty = false
-    eventPlayer.armor_count = 0
     eventPlayer.armor_pool = null
-    eventPlayer.dr = 0
-    eventPlayer.regen = 0
-    eventPlayer.heal_received = 0
-    eventPlayer.ult_rate = 0
-    eventPlayer.kbr = 0
     eventPlayer.elim_mark = 0
     eventPlayer.heartsteel_flat = 0
     eventPlayer.heartsteel_pool = null
@@ -142,8 +138,7 @@ rule "Feska - Release player modifier":
         stopDamageModification(eventPlayer.recv_mod)
     eventPlayer.damage_mod = null
     eventPlayer.recv_mod = null
-    if Shield_Holder == eventPlayer:
-        Shield_Holder = null
+    if TechId.SHIELD in eventPlayer.tech:
         # 持有者离场则科技失效: 清掉其他玩家身上本来源的护盾池, 不留常驻残血池。
         P = getPlayers(Team.2)
         for Work_Index in range(len(P)):
@@ -217,7 +212,7 @@ rule "Feska - Replace taken unique card":
     @Condition not Under_Attack
     @Condition not eventPlayer.lock
     @Condition eventPlayer.choice_type == 1
-    @Condition Shield_Holder != null
+    @Condition len(shieldHolders()) > 0
     @Condition TechId.SHIELD in eventPlayer.options
 
     # 唯一科技被其他玩家先选走后, 在场候选也要换掉, 不能只在抽取时过滤。
@@ -248,13 +243,13 @@ rule "Feska - Confirm card":
         return
     eventPlayer.choice = eventPlayer.options[eventPlayer.cursor]
     if eventPlayer.choice_type == 1:
-        if eventPlayer.choice == TechId.SHIELD and Shield_Holder != null:
+        if eventPlayer.choice == TechId.SHIELD and len(shieldHolders()) > 0:
             smallMessage(eventPlayer, "该科技已被其他玩家选走")
             eventPlayer.choice_type = 0
             eventPlayer.visible = true
             eventPlayer.lock = false
             return
-        if eventPlayer.choice == TechId.BASICS and (TechId.BATTERY in eventPlayer.tech or TechId.FREEZE_ALL in eventPlayer.tech or eventPlayer.ult_rate > 0):
+        if eventPlayer.choice == TechId.BASICS and (TechId.BATTERY in eventPlayer.tech or TechId.FREEZE_ALL in eventPlayer.tech or eventPlayer.bonus[FeskaBonus.ULT_CHARGE] > 0):
             smallMessage(eventPlayer, "与已持有的科技冲突")
             eventPlayer.choice_type = 0
             eventPlayer.visible = true
@@ -279,28 +274,27 @@ rule "Feska - Confirm card":
     # 科技数值由各科技文件在自己的规则里累加 bonus 后调用 feskaApplyUpgradeStats();
     # 条件由假变真即"获得科技", 科技不移除所以只触发一次。
     if eventPlayer.choice == TechId.SHIELD:
-        Shield_Holder = eventPlayer
         feskaRefreshShields()
     elif eventPlayer.choice == TechId.HEARTSTEEL:
         # 只统计获得该科技之后的消灭, 不追认此前累计的统计值。
         eventPlayer.elim_mark = eventPlayer.getNumberOfElims()
     elif eventPlayer.choice == StatId.ARMOR:
-        eventPlayer.armor_count += 1
+        eventPlayer.bonus[FeskaBonus.ARMOR] += 1
         feskaApplyArmorPool()
     elif eventPlayer.choice == StatId.DR:
         # 成长系统减伤总上限 50%, 避免重复选择后完全免伤。
-        eventPlayer.dr = min(eventPlayer.dr + 3, 50)
+        eventPlayer.bonus[FeskaBonus.DAMAGE_REDUCTION] = min(eventPlayer.bonus[FeskaBonus.DAMAGE_REDUCTION] + 3, 50)
         feskaRefreshMods()
     elif eventPlayer.choice == StatId.REGEN:
-        eventPlayer.regen += 1
+        eventPlayer.bonus[FeskaBonus.REGEN] += 1
     elif eventPlayer.choice == StatId.HEAL_RECEIVED:
-        eventPlayer.heal_received += 1
-        eventPlayer.setHealingReceived(100 + 10 * eventPlayer.heal_received)
+        eventPlayer.bonus[FeskaBonus.HEALING_RECEIVED] += 1
+        eventPlayer.setHealingReceived(100 + 10 * eventPlayer.bonus[FeskaBonus.HEALING_RECEIVED])
     elif eventPlayer.choice == StatId.ULT:
-        eventPlayer.ult_rate += 1
+        eventPlayer.bonus[FeskaBonus.ULT_CHARGE] += 1
     elif eventPlayer.choice == StatId.KBR:
-        eventPlayer.kbr = min(eventPlayer.kbr + 1, 8)
-        eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.kbr)
+        eventPlayer.bonus[FeskaBonus.KNOCKBACK_RESIST] = min(eventPlayer.bonus[FeskaBonus.KNOCKBACK_RESIST] + 1, 8)
+        eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.bonus[FeskaBonus.KNOCKBACK_RESIST])
     Target_Player = eventPlayer
     smallMessage(eventPlayer, "已选择：{0}".format(Upgrades[eventPlayer.choice][UPGRADE_COL_NAME]))
     eventPlayer.options = []
@@ -353,8 +347,8 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
     eventPlayer.setHealingDealt(100 + eventPlayer.bonus[FeskaBonus.HEALING])
     # 重生/换英雄会清掉英雄属性修改, 这里按累计状态无条件重放, 不能只在有堆叠时恢复。
-    eventPlayer.setHealingReceived(100 + 10 * eventPlayer.heal_received)
-    eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.kbr)
+    eventPlayer.setHealingReceived(100 + 10 * eventPlayer.bonus[FeskaBonus.HEALING_RECEIVED])
+    eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.bonus[FeskaBonus.KNOCKBACK_RESIST])
     if TechId.BASICS in eventPlayer.tech:
         eventPlayer.setUltEnabled(false)
     Target_Player = eventPlayer
@@ -490,7 +484,7 @@ rule "Feska - Selection HUD":
     createInWorldText(localPlayer if not Under_Attack and localPlayer.choice_type != 0 and localPlayer.visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrades[localPlayer.options[0]][UPGRADE_COL_NAME], Upgrades[localPlayer.options[0]][UPGRADE_COL_DESC], 0 if localPlayer.rerolled[0] else 1), feskaCardPosition(1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.cursor == 0 else Color.WHITE, SpecVisibility.NEVER)
     createInWorldText(localPlayer if not Under_Attack and localPlayer.choice_type != 0 and localPlayer.visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrades[localPlayer.options[1]][UPGRADE_COL_NAME], Upgrades[localPlayer.options[1]][UPGRADE_COL_DESC], 0 if localPlayer.rerolled[1] else 1), feskaCardPosition(0, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.cursor == 1 else Color.WHITE, SpecVisibility.NEVER)
     createInWorldText(localPlayer if not Under_Attack and localPlayer.choice_type != 0 and localPlayer.visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrades[localPlayer.options[2]][UPGRADE_COL_NAME], Upgrades[localPlayer.options[2]][UPGRADE_COL_DESC], 0 if localPlayer.rerolled[2] else 1), feskaCardPosition(-1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.cursor == 2 else Color.WHITE, SpecVisibility.NEVER)
-    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/4  |  属性强化 {1} 次\n伤害 +{2}%  生命 {3}%  治疗 +{4}%  护甲 +{5}  减伤 {6}%".format(len(localPlayer.tech), localPlayer.forge_count, localPlayer.bonus[FeskaBonus.DAMAGE], 100 + localPlayer.bonus[FeskaBonus.HEALTH], localPlayer.bonus[FeskaBonus.HEALING], 25 * localPlayer.armor_count, localPlayer.dr), HudPosition.LEFT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/4  |  属性强化 {1} 次\n伤害 +{2}%  生命 {3}%  治疗 +{4}%  护甲 +{5}  减伤 {6}%".format(len(localPlayer.tech), localPlayer.forge_count, localPlayer.bonus[FeskaBonus.DAMAGE], 100 + localPlayer.bonus[FeskaBonus.HEALTH], localPlayer.bonus[FeskaBonus.HEALING], 25 * localPlayer.bonus[FeskaBonus.ARMOR], localPlayer.bonus[FeskaBonus.DAMAGE_REDUCTION]), HudPosition.LEFT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2), "已选：{0}".format(localPlayer.tech.map(lambda upgrade: Upgrades[upgrade][UPGRADE_COL_NAME])), HudPosition.LEFT, 1, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-    hudSubtext(getPlayers(Team.2), "成长基准：第 {0} 波进攻  |  心之钢 +{1}  护盾/血肉 +{2}\n受疗 +{3}%  充能 +{4}%/秒  抗击退 {5}%".format(Current_Round if Under_Attack else Completed_Attacks + 1, round(1 + 24 * feskaPreviewProgress()), round(50 + 200 * feskaPreviewProgress()), 10 * localPlayer.heal_received, 0.2 * localPlayer.ult_rate, 10 * localPlayer.kbr), HudPosition.LEFT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getPlayers(Team.2), "成长基准：第 {0} 波进攻  |  心之钢 +{1}  护盾/血肉 +{2}\n受疗 +{3}%  充能 +{4}%/秒  抗击退 {5}%".format(Current_Round if Under_Attack else Completed_Attacks + 1, round(1 + 24 * feskaPreviewProgress()), round(50 + 200 * feskaPreviewProgress()), 10 * localPlayer.bonus[FeskaBonus.HEALING_RECEIVED], 0.2 * localPlayer.bonus[FeskaBonus.ULT_CHARGE], 10 * localPlayer.bonus[FeskaBonus.KNOCKBACK_RESIST]), HudPosition.LEFT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
     hudSubtext(getPlayers(Team.2).filter(lambda player: not Under_Attack and player.choice_type != 0 and not player.visible), "[互动]打开科技 / 属性强化选择", HudPosition.LEFT, 3, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)

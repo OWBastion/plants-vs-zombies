@@ -7,10 +7,10 @@ def feskaApplyArmorPool():
     @Name "Feska - apply armor pool"
 
     # 子程序里的 return 会结束整个调用规则, 因此这里只用条件包裹。
-    if Target_Player.armor_count > 0:
+    if Target_Player.bonus[FeskaBonus.ARMOR] > 0:
         if Target_Player.armor_pool != null:
             removeHealthPool(Target_Player.armor_pool)
-        Target_Player.addHealthPool(Health.ARMOR, 25 * Target_Player.armor_count, true, false)
+        Target_Player.addHealthPool(Health.ARMOR, 25 * Target_Player.bonus[FeskaBonus.ARMOR], true, false)
         Target_Player.armor_pool = getLastCreatedHealthPool()
 
 
@@ -27,10 +27,10 @@ def feskaApplyHeartsteelPool():
 def feskaApplyShieldToPlayer():
     @Name "Feska - apply photon shield"
 
-    if Shield_Holder != null and Target_Player.isAlive():
+    if len(shieldHolders()) > 0 and Target_Player.isAlive():
         if Target_Player.shield_pool != null:
             removeHealthPool(Target_Player.shield_pool)
-        Target_Player.addHealthPool(Health.SHIELDS, ceil(feskaGrowthPool() + feskaMaxHP(Shield_Holder) * 0.15), true, false)
+        Target_Player.addHealthPool(Health.SHIELDS, ceil(feskaGrowthPool() + feskaMaxHP(shieldHolders()[0]) * 0.15), true, false)
         Target_Player.shield_pool = getLastCreatedHealthPool()
 
 

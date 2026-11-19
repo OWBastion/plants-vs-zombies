@@ -25,8 +25,8 @@ globalvar Upgrades
 globalvar Tech_Ids
 globalvar Stat_Ids
 # 子程序当前操作的玩家。OverPy 子程序不支持参数, 用同步临时变量传递。
-globalvar Target_Player
-globalvar Work_Index
+globalvar Target_Player 29
+globalvar Work_Index 30
 
 #!define UPGRADE_COL_NAME 0
 #!define UPGRADE_COL_DESC 1
@@ -43,6 +43,12 @@ enum FeskaBonus:
     DAMAGE = 0
     HEALTH
     HEALING
+    ARMOR
+    DAMAGE_REDUCTION
+    REGEN
+    HEALING_RECEIVED
+    ULT_CHARGE
+    KNOCKBACK_RESIST
 
 enum TechId:
     BRUTAL = 0
@@ -99,14 +105,14 @@ enum StatId:
 # 光子护盾/血肉/反应装甲等本来源生命池不计入, 防止百分比效果把自己新增的生命值再次计入。
 # base_hp 在初始化与换英雄时读取工坊实际属性, 不维护英雄基础属性表。
 #!define feskaHealthPercent(p) (100 + p.bonus[FeskaBonus.HEALTH])
-#!define feskaMaxHP(p) (p.base_hp * (100 + p.bonus[FeskaBonus.HEALTH]) / 100 + p.heartsteel_flat + 25 * p.armor_count)
+#!define feskaMaxHP(p) (p.base_hp * (100 + p.bonus[FeskaBonus.HEALTH]) / 100 + p.heartsteel_flat + 25 * p.bonus[FeskaBonus.ARMOR])
 #!define feskaReactiveArmor(p) ceil(100 + feskaMaxHP(p) * 0.1)
 # 狂战士之魂: 总生命上限变为可计入最大生命值的 21 倍(2000% 额外 + 100% 基础)。
 # setMaxHealth 按英雄原始最大生命的百分比设置且生命池另行叠加, 因此百分比里含生命池的 20 倍补偿。
-#!define feskaBerserkPercent(p) (2100 + 21 * p.bonus[FeskaBonus.HEALTH] + 2000 * (p.heartsteel_flat + 25 * p.armor_count) / p.base_hp)
+#!define feskaBerserkPercent(p) (2100 + 21 * p.bonus[FeskaBonus.HEALTH] + 2000 * (p.heartsteel_flat + 25 * p.bonus[FeskaBonus.ARMOR]) / p.base_hp)
 #!define feskaBerserkMaxHP(p) (21 * feskaMaxHP(p))
 #!define feskaDamagePercent(p) (100 + p.bonus[FeskaBonus.DAMAGE] + (20 if p.lone else 0))
-#!define feskaReceivedPercent(p) ((100 - p.dr) * (0.85 if p.lone else 1))
+#!define feskaReceivedPercent(p) ((100 - p.bonus[FeskaBonus.DAMAGE_REDUCTION]) * (0.85 if p.lone else 1))
 
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
 
@@ -153,21 +159,15 @@ playervar lock
 playervar stat_hero
 # 死亡后需要重放一次属性恢复(重生路径), 与真正换英雄区分: 换英雄才重捕英雄原始最大生命
 playervar stat_dirty
-playervar armor_count
-playervar armor_pool
-playervar dr
-playervar regen
-playervar heal_received
-playervar ult_rate
-playervar kbr
-playervar elim_mark
-playervar heartsteel_flat
-playervar heartsteel_pool
-playervar blood_pool
-playervar will_used
-playervar lone
-playervar chain
-playervar reactive_pool
-playervar berserk
+playervar armor_pool 41
+playervar elim_mark 47
+playervar heartsteel_flat 48
+playervar heartsteel_pool 49
+playervar blood_pool 51
+playervar will_used 52
+playervar lone 53
+playervar chain 54
+playervar reactive_pool 55
+playervar berserk 56
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
-playervar berserk_guard
+playervar berserk_guard 57
