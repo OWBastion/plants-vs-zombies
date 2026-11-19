@@ -293,6 +293,7 @@ rule "Feska - Confirm card":
     elif eventPlayer.feska_choice == A_DR:
         # 成长系统减伤总上限 50%, 避免重复选择后完全免伤。
         eventPlayer.feska_dr = min(eventPlayer.feska_dr + 3, 50)
+        feskaRefreshMods()
     elif eventPlayer.feska_choice == A_REGEN:
         eventPlayer.feska_regen += 1
     elif eventPlayer.feska_choice == A_HEAL_RECEIVED:
@@ -398,7 +399,9 @@ rule "Feska - Wave end cleanup":
         if P[Feska_Index].feska_blood_pool != null:
             removeHealthPool(P[Feska_Index].feska_blood_pool)
         P[Feska_Index].feska_blood_pool = null
-        P[Feska_Index].feska_lone = false
+        if P[Feska_Index].feska_lone:
+            P[Feska_Index].feska_lone = false
+            feskaRefreshMods()
         P[Feska_Index].feska_will_used = false
 
 
