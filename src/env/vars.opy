@@ -185,5 +185,3 @@ playervar feska_reactive_last_hit
 playervar feska_berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
 playervar feska_berserk_guard
-# 绝对零度: 上次触发的比赛时间, 用于两次触发的最短间隔
-playervar feska_freeze_all_last

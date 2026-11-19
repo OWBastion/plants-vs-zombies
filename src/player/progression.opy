@@ -161,7 +161,6 @@ rule "Feska - Initialize player":
     eventPlayer.feska_shield_pool = null
     eventPlayer.feska_blood_pool = null
     eventPlayer.feska_will_used = false
-    eventPlayer.feska_freeze_all_last = null
     eventPlayer.feska_lone = false
     eventPlayer.feska_chain = false
     eventPlayer.feska_reactive_value = 0

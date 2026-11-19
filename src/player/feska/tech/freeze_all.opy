@@ -9,8 +9,6 @@ rule "Feska - Absolute zero":
     @Team 2
     @Condition T_FREEZE_ALL in eventPlayer.feska_tech
     @Condition eventPlayer.isUsingUltimate()
-    @Condition eventPlayer.feska_freeze_all_last == null or getTotalTimeElapsed() - eventPlayer.feska_freeze_all_last >= 2.5
 
-    # 时间戳冷却不依赖等待结束; 死亡、换英雄、波次切换都不会留下卡住的等待标志。
-    eventPlayer.feska_freeze_all_last = getTotalTimeElapsed()
     getLivingPlayers(Team.1).setStatusEffect(eventPlayer, Status.FROZEN, 2.5)
+    wait(2.5)
