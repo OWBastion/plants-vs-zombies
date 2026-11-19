@@ -155,7 +155,7 @@ rule "Feska - Initialize player":
     eventPlayer.feska_heal_received = 0
     eventPlayer.feska_ult_rate = 0
     eventPlayer.feska_kbr = 0
-    eventPlayer.feska_elim_count = 0
+    eventPlayer.feska_elim_mark = 0
     eventPlayer.feska_heartsteel_flat = 0
     eventPlayer.feska_heartsteel_pool = null
     eventPlayer.feska_shield_pool = null
@@ -327,6 +327,9 @@ rule "Feska - Confirm card":
     elif eventPlayer.feska_choice == T_SHIELD:
         Feska_Shield_Holder = eventPlayer
         feskaRefreshShields()
+    elif eventPlayer.feska_choice == T_HEARTSTEEL:
+        # 只统计获得该科技之后的消灭, 不追认此前累计的统计值。
+        eventPlayer.feska_elim_mark = eventPlayer.getNumberOfElims()
     elif eventPlayer.feska_choice == T_REACTIVE:
         Feska_P = eventPlayer
         feskaApplyReactivePool()

@@ -168,7 +168,8 @@ playervar feska_heal_received
 playervar feska_ult_rate
 playervar feska_kbr
 # 科技状态
-playervar feska_elim_count
+# 心之钢: 已结算到的玩家统计消灭数(统计被重置时按当前值重建基准)
+playervar feska_elim_mark
 playervar feska_heartsteel_flat
 playervar feska_heartsteel_pool
 playervar feska_shield_pool
