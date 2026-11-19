@@ -6,7 +6,7 @@ Read when adding or changing a variable, array, subroutine, dummy bot, effect, H
 
 Before adding or changing state, determine: global or entity-specific; where it is initialized; which rule is authoritative and which may mutate it; when it becomes invalid; how it is reset; whether an external handle must be destroyed.
 
-Do not keep competing representations of the same state. Keep these categories separate: authoritative gameplay, player, zombie, wave/spawn, external handles, temporary calculation, UI presentation. Existing representation wins over a new architecture. Variable declarations live in `src/main.opy` and `src/env/vars.opy`.
+Do not keep competing representations of the same state. Keep these categories separate: authoritative gameplay, player, zombie, wave/spawn, external handles, temporary calculation, UI presentation. Existing representation wins over a new architecture. Shared variable declarations live in `src/main.opy` and `src/env/vars.opy`. Declare technology-specific variables in a file beside the owning technology, include it before its first use, and preserve existing slots.
 
 ## Arrays and indexing
 

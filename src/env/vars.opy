@@ -24,7 +24,6 @@ globalvar Completed_Attacks
 globalvar Upgrades
 globalvar Tech_Ids
 globalvar Stat_Ids
-globalvar Shield_Holder
 # 子程序当前操作的玩家。OverPy 子程序不支持参数, 用同步临时变量传递。
 globalvar Target_Player
 globalvar Work_Index
@@ -161,15 +160,11 @@ playervar regen
 playervar heal_received
 playervar ult_rate
 playervar kbr
-playervar elim_mark
-playervar heartsteel_flat
-playervar heartsteel_pool
-playervar shield_pool
-playervar blood_pool
-playervar will_used
-playervar lone
 playervar chain
-playervar reactive_pool
-playervar berserk
-# 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
-playervar berserk_guard
+#!include "../player/feska/tech/heartsteel-vars.opy"
+#!include "../player/feska/tech/shield-vars.opy"
+#!include "../player/feska/tech/flesh-vars.opy"
+#!include "../player/feska/tech/will-vars.opy"
+#!include "../player/feska/tech/lone-vars.opy"
+#!include "../player/feska/tech/reactive-vars.opy"
+#!include "../player/feska/tech/berserk-vars.opy"
