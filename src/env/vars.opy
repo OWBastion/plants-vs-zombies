@@ -25,6 +25,7 @@ globalvar Stat_Catalog_Indexes
 # 子程序当前操作的玩家与循环下标。OverPy 子程序不支持参数, 用同步临时变量传递。
 globalvar Target_Player
 globalvar Loop_Index
+globalvar Team_Tech_Rows
 # OverPy 只允许单字母的隐式临时变量。需要具名的临时工作值只能显式声明。
 globalvar Player_List
 globalvar Ready_Ability_Buttons
