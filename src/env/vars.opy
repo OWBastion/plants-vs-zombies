@@ -32,7 +32,6 @@ globalvar Loop_Index
 globalvar Player_List
 globalvar Ready_Ability_Buttons
 globalvar Reroll_Candidates
-globalvar Ignite_Source_Index
 globalvar Blocked_Player_Names
 
 # 目录每行的列下标。3 为唯一性标志(仅光子护盾为 1, 判定仍按 Tech_Id), 8 图标, 9 英雄池。
@@ -165,9 +164,6 @@ playervar Visible_Target_Candidates
 playervar Orbital_Ray_Affected_Players
 playervar Last_Progress_Position
 playervar No_Progress_Count
-# 技能强化·灼蚀: 在本僵尸身上施加灼烧的玩家及各自到期时间(同下标), 用于防止同源叠层。
-playervar Ignite_Sources
-playervar Ignite_Expire_Times
 
 # 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄与生命池。
 playervar Is_Initialized
