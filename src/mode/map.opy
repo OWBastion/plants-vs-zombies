@@ -85,7 +85,7 @@ rule "[Mode]: Spawn Teleport":
         eventPlayer.stopForcingThrottle()
         eventPlayer.clearStatusEffect(Status.ROOTED)
         # 与 [ai]: Create AI Bot 的基准速度一致; 能力残留的 setMoveSpeed 同样跨死亡保留
-        eventPlayer.setMoveSpeed(90)
+        eventPlayer.setMoveSpeed(85)
         # 实测请求值比实际复活等待多约 2 秒: 10 -> 约 8 秒, 6 -> 约 4 秒
         eventPlayer.setRespawnTime(6 if Current_Wave == Total_Wave_Count else 10)
     else:
