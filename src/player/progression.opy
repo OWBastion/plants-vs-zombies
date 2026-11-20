@@ -113,6 +113,7 @@ rule "Feska - Initialize player":
     eventPlayer.Armor_Health_Pool = null
     eventPlayer.Elimination_Baseline = 0
     eventPlayer.Heartsteel_Flat_Health = 0
+    eventPlayer.Heartsteel_Stacks = 0
     eventPlayer.Heartsteel_Health_Pool = null
     eventPlayer.Shield_Health_Pool = null
     eventPlayer.Regeneration_Health_Pool = null
@@ -346,6 +347,8 @@ rule "Feska - Restore stats on hero change or respawn":
         eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
     # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHealth。
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
+    if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids or Tech_Id.HEARTSTEEL in eventPlayer.Owned_Tech_Ids:
+        eventPlayer.startScalingSize((1.3 if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids else 1) + 0.05 * eventPlayer.Heartsteel_Stacks, false)
     eventPlayer.setHealingDealt(100 + eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING])
     # 重生/换英雄会清掉英雄属性修改, 这里按累计状态无条件重放, 不能只在有堆叠时恢复。
     eventPlayer.setHealingReceived(100 + 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
