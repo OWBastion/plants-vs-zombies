@@ -509,7 +509,6 @@ settings {
             "cassidy": {
                 "damageDealt%": 95,
                 "damageReceived%": 500,
-                "ammoClipSize%": 400,
                 "combatUltGen%": 95,
                 "ability1Cooldown%": 250,
                 "ultGen%": 95
@@ -562,7 +561,6 @@ settings {
             "ana": {
                 "damageDealt%": 110,
                 "damageReceived%": 500,
-                "ammoClipSize%": 200,
                 "combatUltGen%": 130,
                 "ability2Cooldown%": 150,
                 "ultGen%": 130,
@@ -660,7 +658,6 @@ settings {
             },
             "mauga": {
                 "damageReceived%": 400,
-                "ammoClipSize%": 200,
                 "ability2Cooldown%": 50,
                 "primaryFireIgniteDamage": 166,
                 "primaryFireIgniteDuration": 150,
@@ -721,7 +718,6 @@ settings {
             "tracer": {
                 "damageDealt%": 95,
                 "damageReceived%": 500,
-                "ammoClipSize%": 250,
                 "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 275,
                 "ability1Cooldown%": 450
@@ -758,7 +754,6 @@ settings {
                 "damageReceived%": 500,
                 "ability1Cooldown%": 260,
                 "jumpVerticalSpeed%": 150,
-                "ammoClipSize%": 120,
                 "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
                 "movementGravity%": 75,
