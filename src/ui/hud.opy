@@ -6,9 +6,9 @@
 # 当前阶段剩余时间的比例(0-100): 进攻期按进攻计时, 准备期按准备计时, 条随时间缩短。
 #!define hudWaveRemaining() 100 * (Wave_Attack_Time_Left / Wave_Attack_Duration if Is_Attack_Phase else Wave_Prep_Time_Left / Wave_Prep_Duration)
 #!define hudWaveNumber() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
-# 左侧列出当前玩家已选的科技: 名称用子标题(字号大), 描述用子文本(字号小), 按排序号交错, 未选的槽位不显示。
+# 左侧列出当前玩家已选的科技: 名称与描述都用子标题, 保证同样靠左对齐; 描述去掉手动换行, 单行显示。
 #!define hudTechName(slot) hudSubheader(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_NAME], HudPosition.LEFT, 2 * slot + 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-#!define hudTechDescription(slot) hudSubtext(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_DESCRIPTION], HudPosition.LEFT, 2 * slot + 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+#!define hudTechDescription(slot) hudSubheader(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], "{0}".format(Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_DESCRIPTION]).replace("\n", ""), HudPosition.LEFT, 2 * slot + 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 
 
 # 属性栏图标; 属性强化没有对应技能, 取含义相近的英雄技能。
