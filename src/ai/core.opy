@@ -64,7 +64,22 @@ rule "[ai]: Set Bot Name":
         eventPlayer.startForcingName("抓钩僵尸")
     elif eventPlayer.getHero() == Hero.REAPER:
         eventPlayer.startForcingName("活神")
-    else:
+    elif eventPlayer.getHero() == Hero.DOOMFIST:
+        eventPlayer.startForcingName("铁拳僵尸")
+    elif eventPlayer.getHero() == Hero.WINSTON:
+        eventPlayer.startForcingName("跳高僵尸")
+    elif eventPlayer.getHero() == Hero.SIGMA:
+        eventPlayer.startForcingName("欧美僵尸")
+    elif eventPlayer.getHero() == Hero.TRACER:
+        eventPlayer.startForcingName("闪现僵尸")
+    elif eventPlayer.getHero() == Hero.ILLARI:
+        eventPlayer.startForcingName("光塔僵尸")
+    elif eventPlayer.getHero() == Hero.ANA:
+        eventPlayer.startForcingName("老太僵尸")
+    elif eventPlayer.getHero() == Hero.BAPTISTE:
+        eventPlayer.startForcingName("弹跳僵尸")
+    elif eventPlayer.getHero() == Hero.KIRIKO:
+        eventPlayer.startForcingName("瞬移僵尸")
 
 
 def refreshTarget():
