@@ -24,7 +24,10 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     disableScoring()
     disableGamemodeCompletion()
-    if getCurrentMap() == Map.LIJIANG_NIGHT_MARKET:
+    if getCurrentMap() == Map.AYUTTHAYA:
+        Zombie_Spawn_Positions = [vect(16, 1, 25), vect(-6.5, 5, 25), vect(34.52, 6, 38.1), vect(16, 6, 23)]
+        Brain_Positions = [vect(16, 1.19, 52)]
+    elif getCurrentMap() == Map.LIJIANG_NIGHT_MARKET:
         Zombie_Spawn_Positions = [vect(32, 0, -21.75), vect(42.35, 6, -46), vect(30, 6, -14.18), vect(40, 2, -41.8)]
         Brain_Positions = [vect(88.5, 4.5, -25.5)]
     elif getCurrentMap() == Map.LIJIANG_CONTROL_CENTER:

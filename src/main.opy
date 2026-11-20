@@ -15,6 +15,7 @@ settings {
     "gamemodes": {
         "tdm": {
             "enabledMaps": [
+                "ayutthaya",
                 "iliosRuins",
                 "iliosLighthouse",
                 "nepalShrine",
