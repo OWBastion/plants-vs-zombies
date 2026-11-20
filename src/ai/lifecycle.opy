@@ -20,5 +20,3 @@ rule "[ai]: Create AI Bot":
         # 准备阶段玩家可以提前开火, 僵尸必须不可伤害, 否则波次没开始就少人。
         if Is_Attack_Phase == false:
             getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, Wave_Prep_Time_Left)
-    # 基准 5.5 m/s 的 85%, 比原 90% 再慢一点
-    getPlayers(Team.1).setMoveSpeed(85)
