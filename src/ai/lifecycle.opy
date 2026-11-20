@@ -24,13 +24,14 @@ rule "[ai]: Create AI Bot":
 
 
 # 出生与重生都补满生命值。
-# settings 的 health% 与 setMaxHealth 只抬上限不回血, 上限若在出生后一帧才写入,
-# 当前生命会停在上限写入前的数值, 僵尸带着残血进场会被玩家直接秒掉。
+# settings 的 health% 与 setMaxHealth 只抬上限不回血: 重生时上限按 settings 重新写入,
+# 当前生命却从上一条命继承, 僵尸会带残血复活被玩家直接秒掉。
+# 上限写入不在出生当帧完成, 因此等 6 帧再读 getMaxHealth, 拿到的才是最终上限。
 rule "[ai]: Refill health on spawn":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isDummy() == true
     @Condition eventPlayer.isAlive() == true
 
-    wait(0.016, Wait.ABORT_WHEN_FALSE)
+    wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setHealth(eventPlayer.getMaxHealth())
