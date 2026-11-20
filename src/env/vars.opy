@@ -148,17 +148,11 @@ playervar Last_Teleported_Hero
 playervar Spawn_Time
 playervar Target_Refresh_Time
 playervar Allowed_Hero_Pool
-playervar Is_Hazard_Slowed
 playervar Zarya_Barrier_Pending
 playervar Zarya_Barrier_Health_Pool
 playervar Blink_Detonation_Pending
 playervar Blink_Owner
-playervar Repair_Pack_Pending
-playervar Repair_Pack_Health_Pool
-playervar Rally_Armor_Pool_Ids
-playervar Knockback_Direction
 playervar Visible_Target_Candidates
-playervar Orbital_Ray_Affected_Players
 playervar Last_Progress_Position
 playervar No_Progress_Count
 

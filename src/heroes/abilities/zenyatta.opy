@@ -1,21 +1,4 @@
 #!mainFile "../../main.opy"
 
-def knockBack():
-    @Name "[Zenyatta] Sub Knockback"
-
-    wait()
-    eventPlayer.applyImpulse(eventPlayer.Knockback_Direction, 22.5, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    eventPlayer.applyImpulse(Vector.UP, 22.5 * 0.3, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-
-
-rule "[Zenyatta] Snap Kick (enemy)":
-    @Event playerTookDamage
-    @Team 1
-    @Condition eventAbility == Button.MELEE
-    @Condition attacker.getHero() == Hero.ZENYATTA == true
-
-    eventPlayer.Knockback_Direction = directionFromAngles(attacker.getHorizontalFacingAngle(), -10)
-    eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 0.5)
-    knockBack()
-    wait()
-    eventPlayer.stopForcingThrottle()
+# 飞踢的冲量与锁油门已移除; 禅雅塔只保留原生近战击退。
+# 强位移会把僵尸推离路线, 不再由英雄脚本额外放大。

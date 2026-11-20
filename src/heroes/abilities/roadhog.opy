@@ -1,20 +1,7 @@
 #!mainFile "../../main.opy"
 
-rule "[Roadhog]: hook lancher":
-    @Event playerDealtDamage
-    @Team 2
-    @Hero roadhog
-    @Condition eventAbility == Button.ABILITY_1
-
-    waitUntil(not eventPlayer.isUsingAbility1() or distance(attacker, victim) <= 1.5, 8)
-    eventPlayer.cancelPrimaryAction()
-    victim.startForcingThrottle(0, 0, 0, 0, 0, 0)
-    victim.setGravity(10)
-    victim.applyImpulse(attacker.getFacingDirection(), 85, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    # 定身只用于起跳瞬间; 不解除会永久覆盖僵尸自己的寻路油门, 目标原地不动直至被卡死看门狗击杀
-    wait(0.5)
-    victim.stopForcingThrottle()
-    victim.setGravity(100)
+# 钩子的拉拽冲量、锁油门与重力改写已移除; 只保留原生钩子效果。
+# 85 冲量会把僵尸甩离路线, 且定身期间会覆盖 AI 自己的寻路油门。
 
 
 rule "[Roadhog]: stun":

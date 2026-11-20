@@ -1,24 +1,4 @@
 #!mainFile "../../main.opy"
 
-rule "[Hazard]: Mov speed penalty":
-    @Event playerDealtDamage
-    @Team 2
-    @Hero hazard
-    @Condition eventAbility == Button.SECONDARY_FIRE
-    @Condition victim.Is_Hazard_Slowed != true
-
-    victim.Is_Hazard_Slowed = true
-    wait(1)
-    victim.Is_Hazard_Slowed = false
-
-
-rule "[Hazard]: Mov speed penalty":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.Is_Hazard_Slowed == true
-
-    eventPlayer.startForcingThrottle(0, 0.5, 0, 0.5, 0, 0.5)
-    waitUntil(not eventPlayer.Is_Hazard_Slowed, 1)
-    eventPlayer.stopForcingThrottle()
-    eventPlayer.Is_Hazard_Slowed = false
+# 尖刺迟滞已移除: 右键命中不再标记僵尸, 也不再通过僵尸侧规则限制油门约 1 秒。
+# 生产者与消费者成对删除, 避免只删一半留下孤立的 Is_Hazard_Slowed 标记。
