@@ -1,18 +1,5 @@
 #!mainFile "../main.opy"
 
-#!include "abilities/juno.opy"
-#!include "abilities/roadhog.opy"
-#!include "abilities/junkerqueen.opy"
-#!include "abilities/winston.opy"
-#!include "abilities/bastion.opy"
-#!include "abilities/cassidy.opy"
-#!include "abilities/freja.opy"
-#!include "abilities/mei.opy"
-#!include "abilities/reaper.opy"
-#!include "abilities/sojourn.opy"
-#!include "abilities/ana.opy"
-#!include "abilities/zarya.opy"
-#!include "abilities/soldier.opy"
-#!include "abilities/tracer.opy"
-#!include "abilities/widowmaker.opy"
-#!include "abilities/illari.opy"
+# 英雄脚本效果已全部移除: 控制、附伤、秒杀、弹夹改写、倍率改写、护盾池与自身位移都不再由模式脚本提供。
+# 英雄只保留原生机制, 成长加成统一走费斯卡科技(src/player/feska/)。
+# 本文件保留在 main.opy 的 include 顺序里, 避免改动既有合约。

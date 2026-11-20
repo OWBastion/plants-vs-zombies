@@ -11,7 +11,7 @@
 | 技能强化与迁移合并卡 | 灼蚀、会心一击、终极循环往复已实现 |
 | 选择流程、波次奖励、HUD、唯一性 | 已实现 |
 | 生命口径（百分比 / 生命点数） | 已分离实现 |
-| 英雄效果迁移 | 已迁移 3 项；其余免费增益按用户确认直接删除（位移、减速、护甲、无敌类），剩纯眩晕控制 |
+| 英雄效果迁移 | 已迁移 3 项；英雄脚本效果全删，英雄回到原生强度，成长只由费斯卡提供 |
 | 游戏内验证（全部机制） | 未执行 |
 
 未完成项集中在两处：英雄效果迁移与技能强化、游戏内验证与 P3 收尾。
@@ -25,7 +25,7 @@
 - 生命口径已分离：`feskaHealthPercent(p)` 是 `setMaxHealth` 用的百分比，`feskaMaxHealth(p)` 是实际生命点数（原始生命 × 加成% ＋ 心之钢 ＋ 护甲强化），不含本来源光盾/血肉/反应装甲池。前置单位问题已修正。
 - 狂战士自由移动已接入 `src/player/movement.opy`（`berserk != true` 才施加进攻定点约束）。
 - 目标 27 项科技与 12 项属性强化均已有代码。T23 与 T03 效果重叠，仍未合并，等用户决定。
-- 英雄效果已迁移 3 项（灼蚀、会心一击、终极循环往复），其余免费增益按用户确认直接删除；仅保留纯眩晕控制（路霸 Ability 2、温斯顿、堡垒）与英雄自带附伤。全部游戏内验证仍未开始。
+- 英雄效果已迁移 3 项（灼蚀、会心一击、终极循环往复），其余英雄脚本效果按用户确认全部删除，`src/heroes/abilities/` 目录已移除。全部游戏内验证仍未开始。
 
 开始实施前读取 `AGENTS.md` 及 `docs/agents/{gameplay,state-and-lifecycle,performance,tooling-and-validation}.md`。玩家是队伍 2，僵尸是队伍 1。进攻时保持玩家定点约束，普通僵尸保持原有近战行为。
 
@@ -105,7 +105,23 @@
 
 - 顺带清理因衰减补偿失效的 5 个玩家变量：`Shot_Distance`、`Raw_Damage_Before_Falloff`、`Observed_Falloff_Ratio`、`Target_Falloff_Ratio`、`Recalculated_Damage`。
 - `heroes.team1`（僵尸）的 `health%` 未改动。
-- 只含注释的空英雄文件已删除：`reinhardt`、`baptiste`、`kiriko`、`ramattra`、`doomfist`、`hazard`、`brigitte`、`zenyatta`；`src/heroes/abilities.opy` 的对应 `#!include` 一并去掉。`cassidy.opy` 仍有副武器倍率规则，保留。
+- 只含注释的空英雄文件已删除：`reinhardt`、`baptiste`、`kiriko`、`ramattra`、`doomfist`、`hazard`、`brigitte`、`zenyatta`；`src/heroes/abilities.opy` 的对应 `#!include` 一并去掉。
+
+## 3.3 英雄脚本效果全部清空（2026-11-20）
+
+按用户确认「全删」，`src/heroes/abilities/` 目录与 16 个英雄文件一并移除，`src/heroes/abilities.opy` 只留说明注释，仍保留在 `main.opy` 的 include 顺序里。删除的 24 条规则：
+
+| 类别 | 内容 |
+| --- | --- |
+| 控制 | 堡垒左键击退眩晕 0.5 秒 / 大招击倒 5 秒、温斯顿右键眩晕 0.75 秒、路霸 Ability 2 眩晕 1 秒、美右键爆头冰冻 0.5～1.25 秒 |
+| 附伤与秒杀 | 安娜双键秒杀、索杰恩 ≤20% 斩杀、黑百合开镜爆头 +50% 最大生命、Freja 副火 25% 与残血斩杀、朱诺鱼雷 15%、士兵火箭 10% DoT、伊拉里副火 25、猎空大招连锁爆炸 10%/8% |
+| 倍率改写 | 卡西迪副火 180%、渣客女王大招 1000%、死神大招 200% 伤害与移速 |
+| 弹药 | 安娜弹夹 1 发、黑百合 5 发、Freja 击杀 +1 |
+| 护盾池 | 查莉娅投射屏障 50 可恢复护盾 |
+| 自身位移 | 美 Shift + 跳滑行 |
+
+- 一并清理 4 个孤立 `playervar`：`Zarya_Barrier_Pending`、`Zarya_Barrier_Health_Pool`、`Blink_Detonation_Pending`、`Blink_Owner`。
+- 后果：英雄回到原生强度。安娜、黑百合弹夹恢复原生；卡西迪、渣客女王、死神失去倍率加成；僵尸不再被眩晕、冰冻、击倒；查莉娅屏障只剩原生无敌；猎空大招不再连锁。
 
 ## 4. 属性强化目录（12 项）
 允许重复选择，不占四个科技槽，持续到本局结束。12 项均已实现并进池（A07～A12 在 `progression.opy` 选牌处累加，无独立目录文件）。以下沿用上一轮清单初值；减伤、再生和充能叠加上限不是已经确认的需求。已实现的实现口径：A08 上限 50%，A12 上限 80%，A09 与 A11 复用 `repair.opy`、`battery.opy` 的定时规则。
