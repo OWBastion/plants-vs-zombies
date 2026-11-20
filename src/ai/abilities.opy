@@ -104,6 +104,58 @@ rule "[ai]: Lucio Amp":
         loop()
 
 
+rule "[ai]: Roadhog Use Breather":
+    @Event eachPlayer
+    @Team 1
+    @Hero roadhog
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.getHealth() <= eventPlayer.getMaxHealth() * 0.5
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
+
+    eventPlayer.forceButtonPress(Button.ABILITY_2)
+    wait(3)
+    if ruleCondition:
+        loop()
+
+
+rule "[ai]: Junker Queen Use Shout":
+    @Event eachPlayer
+    @Team 1
+    @Hero junker_queen
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
+    @Condition eventPlayer.Chase_Target_Player != null
+    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
+
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
+rule "[ai]: Torbjorn Use Overload":
+    @Event eachPlayer
+    @Team 1
+    @Hero torbjorn
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
+    @Condition eventPlayer.Chase_Target_Player != null
+    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
+
+    eventPlayer.forceButtonPress(Button.ABILITY_2)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
 rule "[ai]: venture Use Ability 1":
     @Event eachPlayer
     @Team 1
