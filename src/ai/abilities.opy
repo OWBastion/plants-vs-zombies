@@ -28,9 +28,6 @@ rule "[ai]: Zarya Use Barrier":
     @Condition eventPlayer.isDummy() == true
     @Condition eventPlayer.isAlive() == true
     @Condition Is_Attack_Phase == true
-    @Condition eventPlayer.Chase_Target_Player != null
-    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -46,9 +43,6 @@ rule "[ai]: Orisa Use Fortify":
     @Condition eventPlayer.isDummy() == true
     @Condition eventPlayer.isAlive() == true
     @Condition Is_Attack_Phase == true
-    @Condition eventPlayer.Chase_Target_Player != null
-    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -64,10 +58,6 @@ rule "[ai]: Cassidy Use Roll":
     @Condition eventPlayer.isDummy() == true
     @Condition eventPlayer.isAlive() == true
     @Condition Is_Attack_Phase == true
-    @Condition eventPlayer.Chase_Target_Player != null
-    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) > 4
-    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -96,7 +86,6 @@ rule "[ai]: Lucio Amp":
     @Condition eventPlayer.isAlive() == true
     @Condition Is_Attack_Phase == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
-    @Condition len(getPlayersInRadius(eventPlayer, 12, Team.1, LosCheck.SURFACES).filter(lambda player: player.isAlive() and player != eventPlayer)) >= 2
 
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(1, Wait.ABORT_WHEN_FALSE)
@@ -128,9 +117,6 @@ rule "[ai]: Junker Queen Use Shout":
     @Condition eventPlayer.isAlive() == true
     @Condition Is_Attack_Phase == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
-    @Condition eventPlayer.Chase_Target_Player != null
-    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     wait(1, Wait.ABORT_WHEN_FALSE)
@@ -146,9 +132,6 @@ rule "[ai]: Torbjorn Use Overload":
     @Condition eventPlayer.isAlive() == true
     @Condition Is_Attack_Phase == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
-    @Condition eventPlayer.Chase_Target_Player != null
-    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
 
     eventPlayer.forceButtonPress(Button.ABILITY_2)
     wait(1, Wait.ABORT_WHEN_FALSE)
