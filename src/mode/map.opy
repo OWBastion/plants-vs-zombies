@@ -84,8 +84,8 @@ rule "[Mode]: Spawn Teleport":
         # 会跟着玩家槽位存活, 新命会原地不动并被卡死看门狗击杀
         eventPlayer.stopForcingThrottle()
         eventPlayer.clearStatusEffect(Status.ROOTED)
-        # 实测请求值比实际复活等待多约 2 秒: 10 -> 约 8 秒, 6 -> 约 4 秒
-        eventPlayer.setRespawnTime(6 if Current_Wave == Total_Wave_Count else 10)
+        # 实测请求值比实际复活等待多约 2 秒: 5 -> 约 3 秒, 3 -> 约 1 秒
+        eventPlayer.setRespawnTime(3 if Current_Wave == Total_Wave_Count else 5)
     else:
         eventPlayer.teleport(PLAYER_SPAWN_POSITION())
 
