@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_LONE_WOLF ["一夫当关", "10 米内没有其他队友时\n伤害 +20%, 受到的伤害 -15%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.CASSIDY, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_LONE_WOLF ["一夫当关", "10 米内没有其他存活队友时：\n造成的伤害提高 20%，受到的伤害降低 15%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.CASSIDY, Button.ULTIMATE), []]
 
 rule "Feska - Lone wolf":
     @Event eachPlayer

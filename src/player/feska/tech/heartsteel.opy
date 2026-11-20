@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_HEARTSTEEL ["心之钢", "每参与消灭 20 次永久增加生命上限\n数值为成长固定值 + 自身最大生命值的 2%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_HEARTSTEEL ["心之钢", "每参与消灭 20 只僵尸，永久提升生命上限：\n1～25 点（随波次递增）+ 最大生命值 × 2%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), []]
 
 rule "Feska - Heartsteel":
     @Event eachPlayer

@@ -4,7 +4,7 @@
 # 牺牲远程换近战: 7 米外僵尸受到本玩家的伤害为 0; 伤害 +50%, 最大生命值 +40%, 武器/近战吸血 15%。
 # 范围限制用伤害调整的接收者过滤实现: 只把 7 米外僵尸的受伤百分比压到 0, 数组随重算刷新,
 # 僵尸进出 7 米自动生效或失效。与既有伤害加成相乘仍是 0。
-#!define UPGRADE_ROW_DRAW_SWORD ["亮出你的剑", "7 米外无法造成伤害\n伤害 +50%, 最大生命值 +40%\n武器/近战吸血 15%", UPGRADE_KIND_TECH, 0, 1, 50, 40, 0, abilityIconString(Hero.GENJI, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_DRAW_SWORD ["亮出你的剑", "7 米外无法造成伤害；\n伤害提高 50%，最大生命值提高 40%，\n武器与近战攻击附带 15% 吸血", UPGRADE_KIND_TECH, 0, 1, 50, 40, 0, abilityIconString(Hero.GENJI, Button.ULTIMATE), []]
 
 rule "Feska - Draw sword stats":
     @Event eachPlayer

@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_PRESSURE_COOKER ["高压锅", "每秒对 9 米内僵尸造成\n自身最大生命值 4% 的伤害", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.TORBJORN, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_PRESSURE_COOKER ["高压锅", "每秒对 9 米内的所有僵尸\n造成自身最大生命值 4% 的伤害", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.TORBJORN, Button.ULTIMATE), []]
 
 rule "Feska - Pressure cooker":
     @Event eachPlayer

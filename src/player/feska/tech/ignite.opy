@@ -6,7 +6,7 @@
 #!define FESKA_IGNITE_HERO_POOL [Hero.ANA, Hero.REINHARDT, Hero.HANZO, Hero.EMRE, Hero.SIERRA]
 #!define FESKA_IGNITE_PERCENT 5
 #!define FESKA_IGNITE_SECONDS 3
-#!define UPGRADE_ROW_IGNITE ["技能强化：灼蚀", "E 技能造成伤害后\n目标每秒受到其最大生命值 5% 的灼烧, 持续 3 秒", UPGRADE_KIND_SKILL, 0, 1, 0, 0, 0, abilityIconString(Hero.ANA, Button.ABILITY_2), FESKA_IGNITE_HERO_POOL]
+#!define UPGRADE_ROW_IGNITE ["技能强化：灼蚀", "E 技能造成伤害时施加灼烧：\n每秒造成目标最大生命值 5% 的伤害，持续 3 秒", UPGRADE_KIND_SKILL, 0, 1, 0, 0, 0, abilityIconString(Hero.ANA, Button.ABILITY_2), FESKA_IGNITE_HERO_POOL]
 
 rule "Feska - Ignite on ability 2 damage":
     @Event playerDealtDamage

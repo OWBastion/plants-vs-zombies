@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_SOUL_PURGE ["心灵净化", "最后一击引爆目标\n对其 5 米内其他僵尸造成 60 点伤害", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.JUNKRAT, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_SOUL_PURGE ["心灵净化", "完成最后一击时引爆目标，\n对其 5 米内的其他僵尸造成 60 点伤害", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.JUNKRAT, Button.ULTIMATE), []]
 
 rule "Feska - Soul purge":
     @Event playerDealtFinalBlow

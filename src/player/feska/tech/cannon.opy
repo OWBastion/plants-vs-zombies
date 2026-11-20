@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_GLASS_CANNON ["玻璃大炮", "造成的伤害 +55%\n最大生命值 -20%", UPGRADE_KIND_TECH, 0, 1, 55, -20, 0, abilityIconString(Hero.HANZO, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_GLASS_CANNON ["玻璃大炮", "造成的伤害提高 55%，\n最大生命值降低 20%", UPGRADE_KIND_TECH, 0, 1, 55, -20, 0, abilityIconString(Hero.HANZO, Button.ULTIMATE), []]
 
 rule "Feska - Glass cannon":
     @Event eachPlayer

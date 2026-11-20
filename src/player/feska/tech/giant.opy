@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_GIANT ["歌利亚巨人", "最大生命值 +40%", UPGRADE_KIND_TECH, 0, 1, 0, 40, 0, abilityIconString(Hero.WINSTON, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_GIANT ["歌利亚巨人", "最大生命值提高 40%", UPGRADE_KIND_TECH, 0, 1, 0, 40, 0, abilityIconString(Hero.WINSTON, Button.ULTIMATE), []]
 
 rule "Feska - Giant":
     @Event eachPlayer
