@@ -163,6 +163,8 @@ playervar No_Progress_Count
 # 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄与生命池。
 playervar Is_Initialized
 playervar Owned_Tech_Ids
+# 左侧队伍科技栏显示的 4 个科技图标, 持有科技变化时刷新, HUD 只读它。
+playervar Tech_Icon_Text
 playervar Base_Max_Health
 playervar Pending_Stat_Upgrade_Count
 playervar Taken_Stat_Upgrade_Count

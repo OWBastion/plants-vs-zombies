@@ -93,6 +93,7 @@ rule "Feska - Initialize player":
     @Condition not eventPlayer.Is_Initialized
 
     eventPlayer.Owned_Tech_Ids = []
+    eventPlayer.Tech_Icon_Text = hudTechIconText(eventPlayer)
     eventPlayer.Bonus_By_Stat = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     # 首次生成时没有任何本模式生命池与 setMaxHealth 修改, 读取到的就是英雄原始最大生命。
     eventPlayer.Base_Max_Health = eventPlayer.getMaxHealth()
@@ -168,7 +169,6 @@ rule "Feska - Offer upgrade":
 rule "Feska - Toggle selection":
     @Event eachPlayer
     @Team 2
-    @Condition not Is_Attack_Phase
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind != Choice_Kind.NONE
     @Condition eventPlayer.isHoldingButton(Button.INTERACT)
@@ -179,7 +179,6 @@ rule "Feska - Toggle selection":
 rule "Feska - Next card":
     @Event eachPlayer
     @Team 2
-    @Condition not Is_Attack_Phase
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind != Choice_Kind.NONE
     @Condition eventPlayer.Is_Card_Panel_Visible
@@ -191,7 +190,6 @@ rule "Feska - Next card":
 rule "Feska - Reroll card":
     @Event eachPlayer
     @Team 2
-    @Condition not Is_Attack_Phase
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind != Choice_Kind.NONE
     @Condition eventPlayer.Is_Card_Panel_Visible
@@ -213,7 +211,6 @@ rule "Feska - Reroll card":
 rule "Feska - Replace taken unique card":
     @Event eachPlayer
     @Team 2
-    @Condition not Is_Attack_Phase
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind == Choice_Kind.TECH
     @Condition len(shieldTechHolders()) > 0
@@ -232,17 +229,16 @@ rule "Feska - Replace taken unique card":
 rule "Feska - Confirm card":
     @Event eachPlayer
     @Team 2
-    @Condition not Is_Attack_Phase
     @Condition eventPlayer.isAlive()
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind != Choice_Kind.NONE
     @Condition eventPlayer.Is_Card_Panel_Visible
     @Condition eventPlayer.isHoldingButton(Button.CROUCH)
 
-    # 确认期间上锁; 等待忽略条件, 结束后再核对阶段与按键, 防止跨阶段误选。
+    # 确认期间上锁; 等待忽略条件, 结束后再核对按键, 防止松手后仍被确认。
     eventPlayer.Is_Choice_Locked = true
     wait(0.35, Wait.IGNORE_CONDITION)
-    if Is_Attack_Phase or not eventPlayer.isAlive() or not eventPlayer.isHoldingButton(Button.CROUCH):
+    if not eventPlayer.isAlive() or not eventPlayer.isHoldingButton(Button.CROUCH):
         eventPlayer.Is_Choice_Locked = false
         return
     eventPlayer.Chosen_Upgrade_Id = eventPlayer.Card_Upgrade_Ids[eventPlayer.Selected_Card_Index]
@@ -260,6 +256,7 @@ rule "Feska - Confirm card":
             eventPlayer.Is_Choice_Locked = false
             return
         eventPlayer.Owned_Tech_Ids.append(eventPlayer.Chosen_Upgrade_Id)
+        eventPlayer.Tech_Icon_Text = hudTechIconText(eventPlayer)
     else:
         if eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.ULTIMATE_CHARGE and Tech_Id.NO_ULTIMATE in eventPlayer.Owned_Tech_Ids:
             smallMessage(eventPlayer, "与已持有的科技冲突")
@@ -484,8 +481,8 @@ rule "Feska - Upgrade catalog":
 
 
 rule "Feska - Selection HUD":
-    createInWorldText(localPlayer if not Is_Attack_Phase and localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "{0}\n[近战]切换  长按[蹲]确认\n[换弹]刷新当前卡（每张一次）  [互动]隐藏".format("选择费斯卡科技（{0}/4）".format(len(localPlayer.Owned_Tech_Ids) + 1) if localPlayer.Current_Choice_Kind == Choice_Kind.TECH else "属性强化（待选 {0} 次）".format(localPlayer.Pending_Stat_Upgrade_Count)), feskaCardPosition(0, 0.95), 1.6, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW, SpecVisibility.NEVER)
-    createInWorldText(localPlayer if not Is_Attack_Phase and localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[0]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[0]][UPGRADE_COLUMN_DESCRIPTION], 0 if localPlayer.Card_Rerolled_Flags[0] else 1), feskaCardPosition(1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.Selected_Card_Index == 0 else Color.WHITE, SpecVisibility.NEVER)
-    createInWorldText(localPlayer if not Is_Attack_Phase and localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[1]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[1]][UPGRADE_COLUMN_DESCRIPTION], 0 if localPlayer.Card_Rerolled_Flags[1] else 1), feskaCardPosition(0, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.Selected_Card_Index == 1 else Color.WHITE, SpecVisibility.NEVER)
-    createInWorldText(localPlayer if not Is_Attack_Phase and localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[2]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[2]][UPGRADE_COLUMN_DESCRIPTION], 0 if localPlayer.Card_Rerolled_Flags[2] else 1), feskaCardPosition(-1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.Selected_Card_Index == 2 else Color.WHITE, SpecVisibility.NEVER)
-    hudSubtext(getPlayers(Team.2).filter(lambda player: not Is_Attack_Phase and player.Current_Choice_Kind != Choice_Kind.NONE and not player.Is_Card_Panel_Visible), "[互动]打开科技 / 属性强化选择", HudPosition.LEFT, 7, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
+    createInWorldText(localPlayer if localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "{0}\n{1} 切换    长按 {2} 确认\n{3} 刷新当前卡（每张一次）    {4} 隐藏".format("选择费斯卡科技（{0}/4）".format(len(localPlayer.Owned_Tech_Ids) + 1) if localPlayer.Current_Choice_Kind == Choice_Kind.TECH else "属性强化（待选 {0} 次）".format(localPlayer.Pending_Stat_Upgrade_Count), inputBindingString(Button.MELEE), inputBindingString(Button.CROUCH), inputBindingString(Button.RELOAD), inputBindingString(Button.INTERACT)), feskaCardPosition(0, 0.95), 1.6, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW, SpecVisibility.NEVER)
+    createInWorldText(localPlayer if localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[0]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[0]][UPGRADE_COLUMN_DESCRIPTION], 0 if localPlayer.Card_Rerolled_Flags[0] else 1), feskaCardPosition(1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.Selected_Card_Index == 0 else Color.WHITE, SpecVisibility.NEVER)
+    createInWorldText(localPlayer if localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[1]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[1]][UPGRADE_COLUMN_DESCRIPTION], 0 if localPlayer.Card_Rerolled_Flags[1] else 1), feskaCardPosition(0, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.Selected_Card_Index == 1 else Color.WHITE, SpecVisibility.NEVER)
+    createInWorldText(localPlayer if localPlayer.Current_Choice_Kind != Choice_Kind.NONE and localPlayer.Is_Card_Panel_Visible else [], "┌── {0} ──┐\n\n{1}\n\n剩余刷新：{2}/1".format(Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[2]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Card_Upgrade_Ids[2]][UPGRADE_COLUMN_DESCRIPTION], 0 if localPlayer.Card_Rerolled_Flags[2] else 1), feskaCardPosition(-1.6, 0.1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.YELLOW if localPlayer.Selected_Card_Index == 2 else Color.WHITE, SpecVisibility.NEVER)
+    hudSubtext(getPlayers(Team.2).filter(lambda player: player.Current_Choice_Kind != Choice_Kind.NONE and not player.Is_Card_Panel_Visible), "{0} 打开科技 / 属性强化选择".format(inputBindingString(Button.INTERACT)), HudPosition.LEFT, 7, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
