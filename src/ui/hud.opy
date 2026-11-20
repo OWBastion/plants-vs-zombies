@@ -6,8 +6,8 @@
 # 当前阶段剩余时间的比例(0-100): 进攻期按进攻计时, 准备期按准备计时, 条随时间缩短。
 #!define hudWaveRemaining() 100 * (Wave_Attack_Time_Left / Wave_Attack_Duration if Is_Attack_Phase else Wave_Prep_Time_Left / Wave_Prep_Duration)
 #!define hudWaveNumber() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
-# 左侧列出当前玩家自己已选的科技名称, 每个槽位一行, 未选的槽位不显示。
-#!define hudTechRow(slot) hudSubtext(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_NAME], HudPosition.LEFT, slot + 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+# 左侧把当前玩家已选的科技合并进一个 HUD 文本, 用换行靠左对齐: 每个科技两行, 名称加描述。
+#!define hudTechEntry(slot) ("{0}\n{1}\n".format(Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_NAME], Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_DESCRIPTION]) if len(localPlayer.Owned_Tech_Ids) > slot else "")
 
 
 # 属性栏图标; 属性强化没有对应技能, 取含义相近的英雄技能。
@@ -44,10 +44,7 @@ rule "Players - HUD - Show round":
 
 rule "Players - HUD - Show own tech":
     hudSubheader(getPlayers(Team.2), "费斯卡科技 {0}/{1}".format(len(localPlayer.Owned_Tech_Ids), MAX_TECH_COUNT), HudPosition.LEFT, 0, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-    hudTechRow(0)
-    hudTechRow(1)
-    hudTechRow(2)
-    hudTechRow(3)
+    hudSubtext(localPlayer if len(localPlayer.Owned_Tech_Ids) > 0 else [], "{0}{1}{2}{3}".format(hudTechEntry(0), hudTechEntry(1), hudTechEntry(2), hudTechEntry(3)), HudPosition.LEFT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 
 
 # 个人属性放在屏幕下方: HUD 文本无法直接贴底, 与 Bastion 一样用开头的换行把内容挤到底部。第三行是持有对应科技时的当前成长值。
