@@ -493,7 +493,7 @@ settings {
                 "solarEnergyMax%": 500,
                 "solarEnergyRecharge%": 500,
                 "projectileSpeed%": 100,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 50
             },
             "hanzo": {
@@ -518,7 +518,7 @@ settings {
                 "damageDealt%": 125,
                 "damageReceived%": 325,
                 "projectileSpeed%": 200,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "enableSpawningWithUlt": true,
                 "secondaryFireKb%": 150
             },
@@ -530,7 +530,7 @@ settings {
                 "damageDealt%": 90,
                 "damageReceived%": 500,
                 "jumpVerticalSpeed%": 230,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultDuration%": 75
             },
             "soldier": {
@@ -547,7 +547,7 @@ settings {
                 "damageDealt%": 95,
                 "damageReceived%": 500,
                 "combatUltGen%": 120,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultGen%": 120,
                 "passiveUltGen%": 120,
                 "ability2Cooldown%": 8
@@ -556,7 +556,7 @@ settings {
                 "damageReceived%": 500,
                 "projectileSpeed%": 130,
                 "ability1Cooldown%": 150,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "secondaryFireCooldown%": 50
             },
             "ana": {
@@ -572,7 +572,7 @@ settings {
             "baptiste": {
                 "damageDealt%": 110,
                 "damageReceived%": 330,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "healingDealt%": 50,
                 "ultGen%": 120
             },
@@ -621,7 +621,7 @@ settings {
                 "damageReceived%": 90,
                 "ability1Cooldown%": 50,
                 "combatUltGen%": 125,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "secondaryFireCooldown%": 120,
                 "secondaryFireKb%": 120,
                 "ultGen%": 125,
@@ -631,7 +631,7 @@ settings {
             },
             "juno": {
                 "damageDealt%": 130,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "secondaryFireCooldown%": 60,
                 "ability2Cooldown%": 20
             },
@@ -642,7 +642,7 @@ settings {
                 "projectileSpeed%": 130,
                 "combatUltGen%": 155,
                 "ability2Cooldown%": 89,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ability1Cooldown%": 73,
                 "ultGen%": 155,
                 "passiveUltGen%": 160
@@ -652,7 +652,7 @@ settings {
                 "damageReceived%": 90,
                 "ability1Cooldown%": 95,
                 "combatUltGen%": 140,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 125,
                 "healingDealt%": 105,
                 "ultGen%": 140,
@@ -673,7 +673,7 @@ settings {
                 "passiveRechargeRate%": 15,
                 "passiveMaxTime%": 60,
                 "enableAbility1": false,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "primaryFireKb%": 75,
                 "ability2Cooldown%": 200
             },
@@ -692,7 +692,7 @@ settings {
                 "jumpVerticalSpeed%": 110,
                 "ability2Cooldown%": 75,
                 "combatUltGen%": 125,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultGen%": 125,
                 "passiveUltGen%": 125
             },
@@ -700,7 +700,7 @@ settings {
                 "damageReceived%": 100,
                 "projectileSpeed%": 225,
                 "ability1Cooldown%": 150,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultDuration%": 134,
                 "ability2Cooldown%": 50
             },
@@ -710,7 +710,7 @@ settings {
                 "projectileSpeed%": 125,
                 "combatUltGen%": 95,
                 "ability2Cooldown%": 200,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "primaryFireKb%": 75,
                 "movementGravity%": 110,
                 "ultGen%": 95,
@@ -722,13 +722,13 @@ settings {
                 "damageDealt%": 95,
                 "damageReceived%": 500,
                 "ammoClipSize%": 250,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 275,
                 "ability1Cooldown%": 450
             },
             "lifeweaver": {
                 "ability1Cooldown%": 200,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 50,
                 "primaryFireRange%": 200,
                 "secondaryFireCooldown%": 20
@@ -738,7 +738,7 @@ settings {
                 "secondaryFireCooldown%": 50,
                 "ability1Kb%": 150,
                 "combatUltGen%": 125,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
                 "ability3Cooldown%": 30,
@@ -748,7 +748,7 @@ settings {
                 "damageReceived%": 90,
                 "projectileSpeed%": 200,
                 "combatUltGen%": 125,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultGen%": 125,
                 "passiveUltGen%": 125
             },
@@ -760,7 +760,7 @@ settings {
                 "jumpVerticalSpeed%": 150,
                 "ammoClipSize%": 120,
                 "combatUltGen%": 125,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "movementGravity%": 75,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
@@ -784,7 +784,7 @@ settings {
                 "ability1Cooldown%": 50,
                 "combatUltGen%": 125,
                 "projectileGravity%": 110,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultFreezeRate%": 120,
                 "ultFreezeMinimum%": 40,
                 "ultGen%": 125,
@@ -797,7 +797,7 @@ settings {
                 "ability2Cooldown%": 50,
                 "ability2FuseTime%": 1,
                 "combatUltGen%": 110,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ability1Cooldown%": 80,
                 "ultGen%": 110,
                 "ultDuration%": 150,
@@ -844,7 +844,7 @@ settings {
                 "secondaryFireMaximumTime%": 200,
                 "projectileSpeed%": 150,
                 "combatUltGen%": 165,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "healingDealt%": 50,
                 "ultGen%": 165,
                 "passiveUltGen%": 165,
@@ -873,7 +873,7 @@ settings {
                 "damageReceived%": 500,
                 "combatUltGen%": 125,
                 "projectileGravity%": 120,
-                "enableInfiniteAmmo": true,
+                "enableInfiniteAmmo": false,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
                 "secondaryFireCooldown%": 250
