@@ -1,8 +1,9 @@
 #!mainFile "../main.opy"
 
-# 准备阶段逐个预生成僵尸: 把创建开销摊到整段准备时间, 开波瞬间不再成批创建, 避免明显卡顿。
-# 间隔要保证 AI 上限(最多 16)在最短准备时间(15 秒)内生成完。
-#!define AI_PRELOAD_INTERVAL 0.8
+# 准备阶段逐个预生成僵尸: 不在同一帧成批创建, 避免明显卡顿。
+# 但间隔必须短到开波时本波配额已经全部到位: 最多 16 只在 0.16 秒间隔下 2.6 秒生成完,
+# 远小于最短准备时间(15 秒), 所以每波一开始就是该波应有的数量, 不会再从 2 只慢慢加。
+#!define AI_PRELOAD_INTERVAL 0.16
 
 # 生成目标按难度爬到设置的上限(zombieAliveTarget), 不是每波都直接补到 AI 上限。
 rule "[ai]: Create AI Bot":
@@ -12,8 +13,8 @@ rule "[ai]: Create AI Bot":
     @Condition getNumberOfPlayers(Team.1) < zombieAliveTarget()
 
     while getNumberOfPlayers(Team.1) < zombieAliveTarget():
-        # 进攻阶段的补齐间隔与原实现一致。
-        wait(AI_PRELOAD_INTERVAL if Is_Attack_Phase == false else 0.16, Wait.ABORT_WHEN_FALSE)
+        # 准备阶段与进攻阶段补齐用同一间隔。
+        wait(AI_PRELOAD_INTERVAL, Wait.ABORT_WHEN_FALSE)
         if getNumberOfPlayers(Team.1) == 0:
             createDummy(Hero.BRIGITTE, Team.1, -1, Zombie_Spawn_Positions[0].getPosition(), Brain_Positions[0])
         else:
