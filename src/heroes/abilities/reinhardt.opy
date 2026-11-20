@@ -1,20 +1,4 @@
 #!mainFile "../../main.opy"
 
-rule "[Reinhardt]: Rocket Hammer stun":
-    @Event playerDealtDamage
-    @Team 2
-    @Hero reinhardt
-    @Condition eventAbility == Button.PRIMARY_FIRE
-
-    victim.setStatusEffect(attacker, Status.STUNNED, 0.5)
-    wait(0.496)
-
-
-rule "[Reinhardt]: Earthshatter":
-    @Event playerDealtFinalBlow
-    @Team 2
-    @Hero reinhardt
-    @Condition eventAbility == Button.ULTIMATE
-
-    eventPlayer.setUltCharge(100)
-    wait(0.5)
+# 火箭锤主攻击眩晕已移除, 不再作为英雄免费效果提供。
+# 大招击杀满充能已合并为费斯卡科技"终极循环往复"(src/player/feska/tech/ultloop.opy)。

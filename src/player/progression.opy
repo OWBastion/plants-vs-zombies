@@ -426,6 +426,8 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/radiant.opy"
 #!include "feska/tech/reactive.opy"
 #!include "feska/tech/ignite.opy"
+#!include "feska/tech/crit.opy"
+#!include "feska/tech/ultloop.opy"
 
 
 rule "Feska - Upgrade catalog":
@@ -471,7 +473,9 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_CRUSADER,
         UPGRADE_ROW_REACTIVE,
         UPGRADE_ROW_BERSERK,
-        UPGRADE_ROW_IGNITE
+        UPGRADE_ROW_IGNITE,
+        UPGRADE_ROW_CRIT,
+        UPGRADE_ROW_ULTIMATE_LOOP
     ]
     Tech_Catalog_Indexes = []
     Stat_Catalog_Indexes = []

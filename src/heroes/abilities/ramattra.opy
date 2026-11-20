@@ -1,14 +1,6 @@
 #!mainFile "../../main.opy"
 
-rule "[Ramattra]: Pain endures":
-    @Event playerDealtFinalBlow
-    @Team 2
-    @Hero ramattra
-    @Condition eventPlayer.isUsingUltimate() == true
-    @Condition eventAbility == Button.ULTIMATE
-
-    eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 25)
-    wait(0.3)
+# 大招击杀 +25% 充能已合并为费斯卡科技"终极循环往复"(src/player/feska/tech/ultloop.opy)。
 
 
 rule "[Ramattra]: Nemesis Form":

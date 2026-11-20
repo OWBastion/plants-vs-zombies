@@ -1,10 +1,3 @@
 #!mainFile "../../main.opy"
 
-rule "[Baptiste]: headshot damage":
-    @Event playerDealtDamage
-    @Team 2
-    @Hero baptiste
-    @Condition eventWasCriticalHit == true
-    @Condition eventAbility == Button.PRIMARY_FIRE
-
-    damage(victim, attacker, ceil(eventDamage / 4))
+# 爆头额外伤害已合并为费斯卡科技"会心一击"(src/player/feska/tech/crit.opy)。

@@ -483,7 +483,6 @@ settings {
                 "ability2Cooldown%": 28,
                 "ability1Cooldown%": 350,
                 "ability1Kb%": 125,
-                "health%": 50,
                 "movementGravity%": 60,
                 "passiveUltGen%": 95,
                 "selfDestructKb%": 125
@@ -503,7 +502,6 @@ settings {
                 "damageDealt%": 90,
                 "damageReceived%": 500,
                 "combatUltGen%": 105,
-                "health%": 100,
                 "ultGen%": 105,
                 "passiveUltGen%": 105,
                 "ability1Cooldown%": 0
@@ -514,7 +512,6 @@ settings {
                 "ammoClipSize%": 400,
                 "combatUltGen%": 95,
                 "ability1Cooldown%": 250,
-                "health%": 100,
                 "ultGen%": 95
             },
             "lucio": {
@@ -522,7 +519,6 @@ settings {
                 "damageReceived%": 325,
                 "projectileSpeed%": 200,
                 "enableInfiniteAmmo": true,
-                "health%": 100,
                 "enableSpawningWithUlt": true,
                 "secondaryFireKb%": 150
             },
@@ -541,7 +537,6 @@ settings {
                 "damageDealt%": 95,
                 "damageReceived%": 150,
                 "combatUltGen%": 125,
-                "health%": 100,
                 "ability2Cooldown%": 67,
                 "ultGen%": 125,
                 "ultDuration%": 200,
@@ -553,7 +548,6 @@ settings {
                 "damageReceived%": 500,
                 "combatUltGen%": 120,
                 "enableInfiniteAmmo": true,
-                "health%": 150,
                 "ultGen%": 120,
                 "passiveUltGen%": 120,
                 "ability2Cooldown%": 8
@@ -563,7 +557,6 @@ settings {
                 "projectileSpeed%": 130,
                 "ability1Cooldown%": 150,
                 "enableInfiniteAmmo": true,
-                "health%": 50,
                 "secondaryFireCooldown%": 50
             },
             "ana": {
@@ -571,7 +564,6 @@ settings {
                 "damageReceived%": 500,
                 "ammoClipSize%": 200,
                 "combatUltGen%": 130,
-                "health%": 100,
                 "ability2Cooldown%": 150,
                 "ultGen%": 130,
                 "passiveUltGen%": 130,
@@ -582,7 +574,6 @@ settings {
                 "damageReceived%": 330,
                 "enableInfiniteAmmo": true,
                 "healingDealt%": 50,
-                "health%": 150,
                 "ultGen%": 120
             },
             "brigitte": {
@@ -592,7 +583,6 @@ settings {
                 "secondaryFireCooldown%": 100,
                 "combatUltGen%": 165,
                 "ability1Kb%": 125,
-                "health%": 200,
                 "ultGen%": 165,
                 "passiveUltGen%": 165,
                 "shieldBashKb%": 300,
@@ -612,7 +602,6 @@ settings {
                 "projectileGravity%": 200,
                 "ability2Cooldown%": 40,
                 "ability2Duration%": 200,
-                "health%": 200,
                 "movementSpeed%": 135,
                 "movementGravity%": 80,
                 "ultGen%": 165,
@@ -635,7 +624,6 @@ settings {
                 "enableInfiniteAmmo": true,
                 "secondaryFireCooldown%": 120,
                 "secondaryFireKb%": 120,
-                "health%": 120,
                 "ultGen%": 125,
                 "ultDuration%": 50,
                 "passiveUltGen%": 125,
@@ -655,7 +643,6 @@ settings {
                 "combatUltGen%": 155,
                 "ability2Cooldown%": 89,
                 "enableInfiniteAmmo": true,
-                "health%": 200,
                 "ability1Cooldown%": 73,
                 "ultGen%": 155,
                 "passiveUltGen%": 160
@@ -668,7 +655,6 @@ settings {
                 "enableInfiniteAmmo": true,
                 "ability2Cooldown%": 125,
                 "healingDealt%": 105,
-                "health%": 200,
                 "ultGen%": 140,
                 "passiveUltGen%": 140
             },
@@ -678,7 +664,6 @@ settings {
                 "ability2Cooldown%": 50,
                 "primaryFireIgniteDamage": 166,
                 "primaryFireIgniteDuration": 150,
-                "health%": 50,
                 "终极技能持续时间无限": "开启",
                 "enableAbility1": false
             },
@@ -690,14 +675,12 @@ settings {
                 "enableAbility1": false,
                 "enableInfiniteAmmo": true,
                 "primaryFireKb%": 75,
-                "health%": 150,
                 "ability2Cooldown%": 200
             },
             "junkerQueen": {
                 "damageDealt%": 125,
                 "damageReceived%": 90,
                 "ability1Cooldown%": 67,
-                "health%": 200,
                 "secondaryFireKb%": 0
             },
             "winston": {
@@ -710,7 +693,6 @@ settings {
                 "ability2Cooldown%": 75,
                 "combatUltGen%": 125,
                 "enableInfiniteAmmo": true,
-                "health%": 60,
                 "ultGen%": 125,
                 "passiveUltGen%": 125
             },
@@ -719,7 +701,6 @@ settings {
                 "projectileSpeed%": 225,
                 "ability1Cooldown%": 150,
                 "enableInfiniteAmmo": true,
-                "health%": 200,
                 "ultDuration%": 134,
                 "ability2Cooldown%": 50
             },
@@ -731,7 +712,6 @@ settings {
                 "ability2Cooldown%": 200,
                 "enableInfiniteAmmo": true,
                 "primaryFireKb%": 75,
-                "health%": 150,
                 "movementGravity%": 110,
                 "ultGen%": 95,
                 "ultDuration%": 50,
@@ -743,7 +723,6 @@ settings {
                 "damageReceived%": 500,
                 "ammoClipSize%": 250,
                 "enableInfiniteAmmo": true,
-                "health%": 200,
                 "ability2Cooldown%": 275,
                 "ability1Cooldown%": 450
             },
@@ -760,7 +739,6 @@ settings {
                 "ability1Kb%": 150,
                 "combatUltGen%": 125,
                 "enableInfiniteAmmo": true,
-                "health%": 50,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
                 "ability3Cooldown%": 30,
@@ -771,7 +749,6 @@ settings {
                 "projectileSpeed%": 200,
                 "combatUltGen%": 125,
                 "enableInfiniteAmmo": true,
-                "health%": 200,
                 "ultGen%": 125,
                 "passiveUltGen%": 125
             },
@@ -784,7 +761,6 @@ settings {
                 "ammoClipSize%": 120,
                 "combatUltGen%": 125,
                 "enableInfiniteAmmo": true,
-                "health%": 100,
                 "movementGravity%": 75,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
@@ -811,7 +787,6 @@ settings {
                 "enableInfiniteAmmo": true,
                 "ultFreezeRate%": 120,
                 "ultFreezeMinimum%": 40,
-                "health%": 200,
                 "ultGen%": 125,
                 "passiveUltGen%": 145
             },
@@ -837,7 +812,6 @@ settings {
                 "ability2Cooldown%": 75,
                 "ability2MaxHealing%": 200,
                 "primaryFireRechargeRate%": 500,
-                "health%": 200,
                 "ultGen%": 165,
                 "passiveUltGen%": 155
             },
@@ -859,7 +833,6 @@ settings {
                 "damageDealt%": 130,
                 "ability1Cooldown%": 0,
                 "damageReceived%": 500,
-                "health%": 70,
                 "enableUlt": false,
                 "ability2Cooldown%": 150
             },
@@ -873,7 +846,6 @@ settings {
                 "combatUltGen%": 165,
                 "enableInfiniteAmmo": true,
                 "healingDealt%": 50,
-                "health%": 100,
                 "ultGen%": 165,
                 "passiveUltGen%": 165,
                 "ability1Cooldown%": 55,
@@ -893,8 +865,7 @@ settings {
                 "尖刺墙生命值": "400%",
                 "尖刺护体资源恢复": "200%",
                 "尖刺护体资源消耗": "50%",
-                "ability1Cooldown%": 134,
-                "health%": 150
+                "ability1Cooldown%": 134
             },
             "sombra": {
                 "damageDealt%": 95,
@@ -903,7 +874,6 @@ settings {
                 "combatUltGen%": 125,
                 "projectileGravity%": 120,
                 "enableInfiniteAmmo": true,
-                "health%": 150,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
                 "secondaryFireCooldown%": 250

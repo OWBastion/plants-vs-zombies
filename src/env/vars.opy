@@ -101,6 +101,8 @@ enum Tech_Id:
     REACTIVE = 37
     BERSERK = 38
     IGNITE = 39
+    CRIT = 40
+    ULTIMATE_LOOP = 41
 
 # 属性强化在 Upgrade_Catalog 中的行号。数值是历史索引, 不可重排。
 enum Stat_Upgrade_Id:
@@ -155,11 +157,6 @@ playervar Repair_Pack_Pending
 playervar Repair_Pack_Health_Pool
 playervar Rally_Armor_Pool_Ids
 playervar Knockback_Direction
-playervar Shot_Distance
-playervar Raw_Damage_Before_Falloff
-playervar Observed_Falloff_Ratio
-playervar Target_Falloff_Ratio
-playervar Recalculated_Damage
 playervar Visible_Target_Candidates
 playervar Orbital_Ray_Affected_Players
 playervar Last_Progress_Position
