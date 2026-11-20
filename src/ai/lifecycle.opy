@@ -21,17 +21,3 @@ rule "[ai]: Create AI Bot":
         # 准备阶段玩家可以提前开火, 僵尸必须不可伤害, 否则波次没开始就少人。
         if Is_Attack_Phase == false:
             getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, Wave_Prep_Time_Left)
-
-
-# 出生与重生都补满生命值。
-# settings 的 health% 与 setMaxHealth 只抬上限不回血: 重生时上限按 settings 重新写入,
-# 当前生命却从上一条命继承, 僵尸会带残血复活被玩家直接秒掉。
-# 上限写入不在出生当帧完成, 因此等 6 帧再读 getMaxHealth, 拿到的才是最终上限。
-rule "[ai]: Refill health on spawn":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-
-    wait(0.1, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.setHealth(eventPlayer.getMaxHealth())
