@@ -18,23 +18,9 @@ rule "Initialize global variables":
     Wave_Prep_Duration = createWorkshopSettingInt("模式", "攻击波间隔时间", 30, 15, 60, 14)
     Wave_Prep_Time_Left = Wave_Prep_Duration
     Wave_Attack_Time_Left = Wave_Attack_Duration
-    Anti_Crash_Load_Activate = createWorkshopSettingInt("Anti Crash", "激活阈值", 230, 0, 250)
-    Anti_Crash_Hold_Seconds = createWorkshopSettingFloat("Anti Crash", "激活持续时间", 8, 0, 20, 1)
-    Anti_Crash_Load_Deactivate = createWorkshopSettingInt("Anti Crash", "停用阈值", 180, 0, 250, 2)
     Hero_Pool_Size_By_Role[0] = createWorkshopSettingInt("英雄池", "随机英雄池：重装", 4, 1, 6, 11)
     Hero_Pool_Size_By_Role[1] = createWorkshopSettingInt("英雄池", "随机英雄池：输出", 8, 1, 12, 12)
     Hero_Pool_Size_By_Role[2] = createWorkshopSettingInt("英雄池", "随机英雄池：支援", 4, 1, 6, 13)
-
-
-rule "[Anti Crash]: Activate anti crash":
-    @Condition getServerLoad() > Anti_Crash_Load_Activate
-
-    wait(Anti_Crash_Hold_Seconds, Wait.ABORT_WHEN_FALSE)
-    smallMessage(getAllPlayers(), "  服务器过载  ")
-    setSlowMotion(1)
-    wait(0.5)
-    waitUntil(getServerLoad() < Anti_Crash_Load_Deactivate, 999999986991104)
-    setSlowMotion(100)
 
 
 rule "[Global]Setup N":

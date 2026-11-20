@@ -17,9 +17,6 @@ globalvar Zombie_Hero_Pool
 globalvar Tank_Hero_Pool
 globalvar Damage_Hero_Pool
 globalvar Support_Hero_Pool
-globalvar Anti_Crash_Load_Activate
-globalvar Anti_Crash_Hold_Seconds
-globalvar Anti_Crash_Load_Deactivate
 globalvar Hero_Pool_Size_By_Role
 globalvar Finished_Wave_Count
 globalvar Upgrade_Catalog
