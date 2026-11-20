@@ -6,10 +6,8 @@
 # 当前阶段剩余时间的比例(0-100): 进攻期按进攻计时, 准备期按准备计时, 条随时间缩短。
 #!define hudWaveRemaining() 100 * (Wave_Attack_Time_Left / Wave_Attack_Duration if Is_Attack_Phase else Wave_Prep_Time_Left / Wave_Prep_Duration)
 #!define hudWaveNumber() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
-#!define hudTechIcon(p, i) (Upgrade_Catalog[p.Owned_Tech_Ids[i]][UPGRADE_COLUMN_ICON] if len(p.Owned_Tech_Ids) > i else iconString(Icon.RING_THIN))
-# 左侧队伍科技栏: 每个玩家一行, 文本由全局数组 Team_Tech_Rows 预先拼好; 槽位无人时整行不可见。
-#!define hudTechIconText(p) "{0}{1}{2}{3}".format(hudTechIcon(p, 0), hudTechIcon(p, 1), hudTechIcon(p, 2), hudTechIcon(p, 3))
-#!define hudTechRow(slot) hudSubtext(getAllPlayers() if len(Team_Tech_Rows) > slot else [], Team_Tech_Rows[slot], HudPosition.LEFT, slot + 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+# 左侧列出当前玩家自己已选的科技名称, 每个槽位一行, 未选的槽位不显示。
+#!define hudTechRow(slot) hudSubtext(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_NAME], HudPosition.LEFT, slot + 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 
 
 # 属性栏图标; 属性强化没有对应技能, 取含义相近的英雄技能。
@@ -44,21 +42,12 @@ rule "Players - HUD - Show round":
     progressBarHud(getAllPlayers(), hudWaveRemaining(), "第 {0}/{1} 波  {2} {3}s".format(hudWaveNumber(), Total_Wave_Count, "进攻" if Is_Attack_Phase else "准备", ceil(Wave_Attack_Time_Left if Is_Attack_Phase else Wave_Prep_Time_Left)), HudPosition.TOP, 1, Color.RED if Is_Attack_Phase else Color.GREEN, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR)
 
 
-rule "Players - HUD - Build team tech rows":
-    Team_Tech_Rows = [ "{0} {1}  {2}".format(heroIcon(p.getHero()), p, p.Tech_Icon_Text) for p in getPlayers(Team.2) ]
-    wait(0.5)
-    if RULE_CONDITION:
-        goto RULE_START
-
-
-rule "Players - HUD - Show team tech":
+rule "Players - HUD - Show own tech":
     hudSubheader(getPlayers(Team.2), "费斯卡科技 {0}/{1}".format(len(localPlayer.Owned_Tech_Ids), MAX_TECH_COUNT), HudPosition.LEFT, 0, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
     hudTechRow(0)
     hudTechRow(1)
     hudTechRow(2)
     hudTechRow(3)
-    hudTechRow(4)
-    hudTechRow(5)
 
 
 # 个人属性放在屏幕下方: HUD 文本无法直接贴底, 与 Bastion 一样用开头的换行把内容挤到底部。第三行是持有对应科技时的当前成长值。

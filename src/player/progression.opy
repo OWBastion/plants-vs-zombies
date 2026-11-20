@@ -95,7 +95,6 @@ rule "Feska - Initialize player":
     @Condition not eventPlayer.Is_Initialized
 
     eventPlayer.Owned_Tech_Ids = []
-    eventPlayer.Tech_Icon_Text = hudTechIconText(eventPlayer)
     eventPlayer.Bonus_By_Stat = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     # 首次生成时没有任何本模式生命池与 setMaxHealth 修改, 读取到的就是英雄原始最大生命。
     eventPlayer.Base_Max_Health = eventPlayer.getMaxHealth()
@@ -258,7 +257,6 @@ rule "Feska - Confirm card":
             eventPlayer.Is_Choice_Locked = false
             return
         eventPlayer.Owned_Tech_Ids.append(eventPlayer.Chosen_Upgrade_Id)
-        eventPlayer.Tech_Icon_Text = hudTechIconText(eventPlayer)
     else:
         if eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.ULTIMATE_CHARGE and Tech_Id.NO_ULTIMATE in eventPlayer.Owned_Tech_Ids:
             smallMessage(eventPlayer, "与已持有的科技冲突")
