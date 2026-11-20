@@ -84,7 +84,6 @@ settings {
                 "enablePrimaryFire": false,
                 "damageDealt%": 130,
                 "jumpVerticalSpeed%": 90,
-                "enableAbility2": false,
                 "health%": 200,
                 "movementSpeed%": 50,
                 "enableUlt": false,

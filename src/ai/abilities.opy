@@ -21,6 +21,89 @@ rule "[ai]: Base Melee":
         loop()
 
 
+rule "[ai]: Zarya Use Barrier":
+    @Event eachPlayer
+    @Team 1
+    @Hero zarya
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.Chase_Target_Player != null
+    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
+
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
+rule "[ai]: Orisa Use Fortify":
+    @Event eachPlayer
+    @Team 1
+    @Hero orisa
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.Chase_Target_Player != null
+    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
+
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
+rule "[ai]: Cassidy Use Roll":
+    @Event eachPlayer
+    @Team 1
+    @Hero cassidy
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.Chase_Target_Player != null
+    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) > 4
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 10
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
+
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
+rule "[ai]: Lucio Speed Song":
+    @Event eachPlayer
+    @Team 1
+    @Hero lucio
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+
+    eventPlayer.forceButtonPress(Button.ABILITY_1)
+    waitUntil(not eventPlayer.isAlive() or not Is_Attack_Phase, 999999986991104)
+
+
+rule "[ai]: Lucio Amp":
+    @Event eachPlayer
+    @Team 1
+    @Hero lucio
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
+    @Condition len(getPlayersInRadius(eventPlayer, 12, Team.1, LosCheck.SURFACES).filter(lambda player: player.isAlive() and player != eventPlayer)) >= 2
+
+    eventPlayer.forceButtonPress(Button.ABILITY_2)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
 rule "[ai]: venture Use Ability 1":
     @Event eachPlayer
     @Team 1
