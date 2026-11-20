@@ -921,6 +921,7 @@ subroutine stuckCheck 7
 #!postCompileHook "../postCompileHook.js"
 
 #!include "mode/init.opy"
+#!include "mode/difficulty.opy"
 #!include "mode/map.opy"
 #!include "ui/hud.opy"
 #!include "mode/rounds.opy"

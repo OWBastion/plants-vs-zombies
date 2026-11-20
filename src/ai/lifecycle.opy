@@ -4,13 +4,14 @@
 # 间隔要保证 AI 上限(最多 16)在最短准备时间(15 秒)内生成完。
 #!define AI_PRELOAD_INTERVAL 0.8
 
+# 生成目标按难度爬到设置的上限(zombieAliveTarget), 不是每波都直接补到 AI 上限。
 rule "[ai]: Create AI Bot":
     @Condition isGameInProgress() == true
     # 准备阶段预生成; 进攻阶段只在前段补齐减员, 波次末尾不再补人。
     @Condition (Is_Attack_Phase == false and isAssemblingHeroes() == false) or (Is_Attack_Phase == true and Wave_Attack_Time_Left > 10)
-    @Condition getNumberOfPlayers(Team.1) < Zombie_Alive_Limit
+    @Condition getNumberOfPlayers(Team.1) < zombieAliveTarget()
 
-    while getNumberOfPlayers(Team.1) < Zombie_Alive_Limit:
+    while getNumberOfPlayers(Team.1) < zombieAliveTarget():
         # 进攻阶段的补齐间隔与原实现一致。
         wait(AI_PRELOAD_INTERVAL if Is_Attack_Phase == false else 0.16, Wait.ABORT_WHEN_FALSE)
         if getNumberOfPlayers(Team.1) == 0:

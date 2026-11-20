@@ -30,6 +30,11 @@ globalvar Player_List
 globalvar Ready_Ability_Buttons
 globalvar Reroll_Candidates
 globalvar Blocked_Player_Names
+# 动态难度: 上次生效的玩家数与波次(变化时重算僵尸伤害修正), 以及两个伤害修正句柄。
+globalvar Difficulty_Applied_Player_Count
+globalvar Difficulty_Applied_For_Wave
+globalvar Zombie_Received_Modification_Id
+globalvar Zombie_Damage_Modification_Id
 
 # 目录每行的列下标。3 为唯一性标志(仅光子护盾为 1, 判定仍按 Tech_Id), 8 图标, 9 英雄池。
 #!define UPGRADE_COLUMN_NAME 0
@@ -140,6 +145,21 @@ enum Stat_Upgrade_Id:
 #!define feskaDamagePercent(p) (100 + p.Bonus_By_Stat[Stat_Bonus.DAMAGE] + (20 if p.Is_Alone else 0))
 #!define feskaReceivedPercent(p) ((100 - p.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION]) * (0.85 if p.Is_Alone else 1))
 
+# 动态难度: 难度预设给出三项基准百分比, 玩家数每多 1 人在基准上叠加。下标为 Difficulty_Level(简单/困难/专家/苦难)。
+# 三项依次是僵尸生命值、僵尸承受伤害(越低越减伤)、僵尸造成伤害。
+#!define DIFFICULTY_HEALTH_PERCENT [100, 130, 160, 200]
+#!define DIFFICULTY_MITIGATION_PERCENT [0, 5, 10, 15]
+#!define DIFFICULTY_DAMAGE_PERCENT [100, 115, 130, 150]
+#!define DIFFICULTY_PLAYER_COUNT() max(getNumberOfPlayers(Team.2), 1)
+#!define zombieHealthPercent() (DIFFICULTY_HEALTH_PERCENT[Difficulty_Level] + 20 * (DIFFICULTY_PLAYER_COUNT() - 1))
+#!define zombieDamageReceivedPercent() (100 - DIFFICULTY_MITIGATION_PERCENT[Difficulty_Level] - 3 * (DIFFICULTY_PLAYER_COUNT() - 1))
+#!define zombieDamagePercent() (DIFFICULTY_DAMAGE_PERCENT[Difficulty_Level] + 10 * (DIFFICULTY_PLAYER_COUNT() - 1))
+# AI 数量按难度爬到「AI 上限」: 简单整局线性, 困难第 6 波, 专家第 4 波, 苦难第 1 波。
+#!define DIFFICULTY_RAMP_WAVE() [Total_Wave_Count, 6, 4, 1][Difficulty_Level]
+# 准备阶段 Current_Wave 还没加一, 用即将进攻的波次计算, 与预生成目标保持一致。
+#!define ZOMBIE_WAVE_INDEX() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
+#!define zombieAliveTarget() min(Zombie_Alive_Limit, max(1, ceil(Zombie_Alive_Limit * min(ZOMBIE_WAVE_INDEX(), DIFFICULTY_RAMP_WAVE()) / DIFFICULTY_RAMP_WAVE())))
+
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
 
 # 僵尸 AI 与英雄机制状态。布尔量统一 Is_ 前缀。
@@ -190,3 +210,5 @@ playervar Reactive_Armor_Health_Pool
 playervar Is_Berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
 playervar Is_Berserk_Guard_Armed
+# 动态难度给僵尸加的生命值池, 存放句柄以便重生时先清旧池再加。
+playervar Zombie_Health_Pool
