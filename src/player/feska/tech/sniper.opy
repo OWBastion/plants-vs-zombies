@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_SNIPER ["老练狙神", "对 15 米外敌人造成伤害时\n返还该技能 70% 剩余冷却", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.WIDOWMAKER, Button.PRIMARY_FIRE)]
+#!define UPGRADE_ROW_SNIPER ["老练狙神", "对 15 米外敌人造成伤害时\n返还该技能 70% 剩余冷却", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.WIDOWMAKER, Button.PRIMARY_FIRE), []]
 
 rule "Feska - Sniper":
     @Event playerDealtDamage

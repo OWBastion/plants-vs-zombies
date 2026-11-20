@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_THORNS ["反甲", "最大生命值 +20%\n向攻击自己的僵尸返还所受伤害的 50%", UPGRADE_KIND_TECH, 0, 1, 0, 20, 0, abilityIconString(Hero.ZARYA, Button.ULTIMATE)]
+#!define UPGRADE_ROW_THORNS ["反甲", "最大生命值 +20%\n向攻击自己的僵尸返还所受伤害的 50%", UPGRADE_KIND_TECH, 0, 1, 0, 20, 0, abilityIconString(Hero.ZARYA, Button.ULTIMATE), []]
 
 rule "Feska - Thorns health":
     @Event eachPlayer

@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_BRUTAL ["残暴之力", "造成的伤害 +35%", UPGRADE_KIND_TECH, 0, 1, 35, 0, 0, abilityIconString(Hero.DOOMFIST, Button.ULTIMATE)]
+#!define UPGRADE_ROW_BRUTAL ["残暴之力", "造成的伤害 +35%", UPGRADE_KIND_TECH, 0, 1, 35, 0, 0, abilityIconString(Hero.DOOMFIST, Button.ULTIMATE), []]
 
 rule "Feska - Brutal":
     @Event eachPlayer

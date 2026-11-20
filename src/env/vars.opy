@@ -32,9 +32,10 @@ globalvar Loop_Index
 globalvar Player_List
 globalvar Ready_Ability_Buttons
 globalvar Reroll_Candidates
+globalvar Ignite_Source_Index
 globalvar Blocked_Player_Names
 
-# 目录每行的列下标。3 为历史保留位, 不使用。
+# 目录每行的列下标。3 为唯一性标志(仅光子护盾为 1, 判定仍按 Tech_Id), 8 图标, 9 英雄池。
 #!define UPGRADE_COLUMN_NAME 0
 #!define UPGRADE_COLUMN_DESCRIPTION 1
 #!define UPGRADE_COLUMN_KIND 2
@@ -42,11 +43,15 @@ globalvar Blocked_Player_Names
 #!define UPGRADE_COLUMN_DAMAGE 5
 #!define UPGRADE_COLUMN_HEALTH 6
 #!define UPGRADE_COLUMN_HEALING 7
-# 仅科技行有图标列; 属性强化行不显示在科技栏。
+# 仅科技行有图标列; 属性强化行填 0。
 #!define UPGRADE_COLUMN_ICON 8
+# 技能强化的适配英雄池, 只有 UPGRADE_KIND_SKILL 行有内容, 其他行填空数组。
+#!define UPGRADE_COLUMN_HERO_POOL 9
 
 #!define UPGRADE_KIND_TECH 1
 #!define UPGRADE_KIND_STAT 2
+# 技能强化占用科技槽位与选择节奏, 但只对第 10 列英雄池里的英雄入池。
+#!define UPGRADE_KIND_SKILL 3
 #!define MAX_TECH_COUNT 4
 
 # 属性强化的累加槽位, 下标即 Bonus_By_Stat[Stat_Bonus.*]。
@@ -96,6 +101,7 @@ enum Tech_Id:
     CRUSADER = 36
     REACTIVE = 37
     BERSERK = 38
+    IGNITE = 39
 
 # 属性强化在 Upgrade_Catalog 中的行号。数值是历史索引, 不可重排。
 enum Stat_Upgrade_Id:
@@ -159,6 +165,9 @@ playervar Visible_Target_Candidates
 playervar Orbital_Ray_Affected_Players
 playervar Last_Progress_Position
 playervar No_Progress_Count
+# 技能强化·灼蚀: 在本僵尸身上施加灼烧的玩家及各自到期时间(同下标), 用于防止同源叠层。
+playervar Ignite_Sources
+playervar Ignite_Expire_Times
 
 # 成长状态属于玩家, 跨波次/死亡/换英雄保留, 离场清理伤害调整句柄与生命池。
 playervar Is_Initialized

@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_REACTIVE ["反应装甲", "获得 100+自身最大生命值 10% 的可恢复护甲\n僵尸未击穿护甲时, 眩晕攻击者 1.2 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ORISA, Button.ULTIMATE)]
+#!define UPGRADE_ROW_REACTIVE ["反应装甲", "获得 100+自身最大生命值 10% 的可恢复护甲\n僵尸未击穿护甲时, 眩晕攻击者 1.2 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ORISA, Button.ULTIMATE), []]
 
 rule "Feska - Reactive armor":
     @Event playerTookDamage

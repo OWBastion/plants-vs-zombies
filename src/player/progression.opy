@@ -58,6 +58,8 @@ def feskaBuildPool():
 
     if Target_Player.Current_Choice_Kind == Choice_Kind.TECH:
         Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids or Target_Player.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] > 0)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
+        # 技能强化只对英雄池内的当前英雄入池; 其他行的英雄池是空数组, 不会被选中。
+        Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: Upgrade_Catalog[upgrade][UPGRADE_COLUMN_KIND] != UPGRADE_KIND_SKILL or Target_Player.getHero() in Upgrade_Catalog[upgrade][UPGRADE_COLUMN_HERO_POOL])
         if len(shieldTechHolders()) > 0:
             Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.SHIELD)
     else:
@@ -423,6 +425,7 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/berserk.opy"
 #!include "feska/tech/radiant.opy"
 #!include "feska/tech/reactive.opy"
+#!include "feska/tech/ignite.opy"
 
 
 rule "Feska - Upgrade catalog":
@@ -436,12 +439,12 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_THORNS,
         UPGRADE_ROW_PRESSURE_COOKER,
         UPGRADE_ROW_GLASS_CANNON,
-        ["属性强化：伤害", "伤害加成 +8%", UPGRADE_KIND_STAT, 0, 1, 8, 0, 0],
-        ["属性强化：生命", "最大生命值加成 +12%", UPGRADE_KIND_STAT, 0, 1, 0, 12, 0],
-        ["属性强化：治疗", "造成的治疗加成 +12%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 12],
-        ["属性强化：均衡", "伤害加成 +4%\n最大生命值加成 +6%", UPGRADE_KIND_STAT, 0, 1, 4, 6, 0],
-        ["属性强化：共鸣", "伤害加成 +4%\n造成的治疗加成 +6%", UPGRADE_KIND_STAT, 0, 1, 4, 0, 6],
-        ["属性强化：养护", "最大生命值加成 +6%\n造成的治疗加成 +6%", UPGRADE_KIND_STAT, 0, 1, 0, 6, 6],
+        ["属性强化：伤害", "伤害加成 +8%", UPGRADE_KIND_STAT, 0, 1, 8, 0, 0, 0, []],
+        ["属性强化：生命", "最大生命值加成 +12%", UPGRADE_KIND_STAT, 0, 1, 0, 12, 0, 0, []],
+        ["属性强化：治疗", "造成的治疗加成 +12%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 12, 0, []],
+        ["属性强化：均衡", "伤害加成 +4%\n最大生命值加成 +6%", UPGRADE_KIND_STAT, 0, 1, 4, 6, 0, 0, []],
+        ["属性强化：共鸣", "伤害加成 +4%\n造成的治疗加成 +6%", UPGRADE_KIND_STAT, 0, 1, 4, 0, 6, 0, []],
+        ["属性强化：养护", "最大生命值加成 +6%\n造成的治疗加成 +6%", UPGRADE_KIND_STAT, 0, 1, 0, 6, 6, 0, []],
         UPGRADE_ROW_SOUL_PURGE,
         UPGRADE_ROW_ICE,
         UPGRADE_ROW_NO_ULTIMATE,
@@ -456,28 +459,30 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_VICTORY_WILL,
         UPGRADE_ROW_ULTIMATE_CHARGE,
         UPGRADE_ROW_LONE_WOLF,
-        ["属性强化：护甲", "永久增加 25 点可治疗的护甲", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0],
-        ["属性强化：减伤", "额外获得 3% 伤害减免", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0],
-        ["属性强化：再生", "进攻期间每秒额外恢复\n0.3% 最大生命值", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0],
-        ["属性强化：受疗", "受到的治疗加成 +10%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0],
-        ["属性强化：充能", "进攻期间每秒额外获得\n0.2% 终极技能充能", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0],
-        ["属性强化：抗击退", "额外获得 10% 击退抵抗, 上限 80%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0],
+        ["属性强化：护甲", "永久增加 25 点可治疗的护甲", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        ["属性强化：减伤", "额外获得 3% 伤害减免", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        ["属性强化：再生", "进攻期间每秒额外恢复\n0.3% 最大生命值", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        ["属性强化：受疗", "受到的治疗加成 +10%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        ["属性强化：充能", "进攻期间每秒额外获得\n0.2% 终极技能充能", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        ["属性强化：抗击退", "额外获得 10% 击退抵抗, 上限 80%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
         # 索引 34..38 由 vars.opy 的 Tech_Id.FIRST_AID_KIT..Tech_Id.BERSERK 固定, 必须排在属性强化之后。
         UPGRADE_ROW_FIRST_AID_KIT,
         UPGRADE_ROW_RADIANT,
         UPGRADE_ROW_CRUSADER,
         UPGRADE_ROW_REACTIVE,
-        UPGRADE_ROW_BERSERK
+        UPGRADE_ROW_BERSERK,
+        UPGRADE_ROW_IGNITE
     ]
     Tech_Catalog_Indexes = []
     Stat_Catalog_Indexes = []
     for Loop_Index in range(len(Upgrade_Catalog)):
         if Upgrade_Catalog[Loop_Index][UPGRADE_COLUMN_ENABLED] != 1:
             continue
-        if Upgrade_Catalog[Loop_Index][UPGRADE_COLUMN_KIND] == UPGRADE_KIND_TECH:
-            Tech_Catalog_Indexes.append(Loop_Index)
-        else:
+        if Upgrade_Catalog[Loop_Index][UPGRADE_COLUMN_KIND] == UPGRADE_KIND_STAT:
             Stat_Catalog_Indexes.append(Loop_Index)
+        else:
+            # 科技与技能强化共用同一抽池; 技能强化再按英雄池过滤。
+            Tech_Catalog_Indexes.append(Loop_Index)
 
 
 rule "Feska - Selection HUD":

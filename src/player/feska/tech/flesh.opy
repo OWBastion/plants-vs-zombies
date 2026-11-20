@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_FLESH_REGENERATION ["血肉再生", "每 10 秒获得临时生命值\n数值为成长固定值 + 自身最大生命值的 5%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MOIRA, Button.ULTIMATE)]
+#!define UPGRADE_ROW_FLESH_REGENERATION ["血肉再生", "每 10 秒获得临时生命值\n数值为成长固定值 + 自身最大生命值的 5%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MOIRA, Button.ULTIMATE), []]
 
 rule "Feska - Blood regeneration":
     @Event eachPlayer

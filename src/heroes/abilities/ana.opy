@@ -1,14 +1,6 @@
 #!mainFile "../../main.opy"
 
-rule "[Ana] Biotic Grenade Hit":
-    @Event playerTookDamage
-    @Team 1
-    @Condition eventAbility == Button.ABILITY_2
-    @Condition attacker.getHero() == Hero.ANA == true
-
-    eventPlayer.setStatusEffect(attacker, Status.BURNING, 3)
-    eventPlayer.startDamageOverTime(attacker, 3, ceil(0.15 * victim.getMaxHealth()))
-    wait(3)
+# 手雷灼烧已迁移为费斯卡技能强化"灼蚀"(src/player/feska/tech/ignite.opy), 原生手雷保留。
 
 
 rule "[ana/init.opy]: Initialize Ana ammo":

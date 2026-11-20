@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_NO_ULTIMATE ["回归基本功", "禁用终极技能\n伤害、最大生命值、造成的治疗 +50%", UPGRADE_KIND_TECH, 0, 1, 50, 50, 50, abilityIconString(Hero.SOLDIER, Button.PRIMARY_FIRE)]
+#!define UPGRADE_ROW_NO_ULTIMATE ["回归基本功", "禁用终极技能\n伤害、最大生命值、造成的治疗 +50%", UPGRADE_KIND_TECH, 0, 1, 50, 50, 50, abilityIconString(Hero.SOLDIER, Button.PRIMARY_FIRE), []]
 
 rule "Feska - Back to basics":
     @Event eachPlayer

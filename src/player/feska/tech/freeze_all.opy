@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_FREEZE_ALL ["绝对零度", "施放终极技能时\n冰冻所有存活僵尸 2.5 秒\n两次触发至少间隔 2.5 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MEI, Button.ULTIMATE)]
+#!define UPGRADE_ROW_FREEZE_ALL ["绝对零度", "施放终极技能时\n冰冻所有存活僵尸 2.5 秒\n两次触发至少间隔 2.5 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MEI, Button.ULTIMATE), []]
 
 rule "Feska - Absolute zero":
     @Event eachPlayer
