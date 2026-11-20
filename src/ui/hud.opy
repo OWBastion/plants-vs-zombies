@@ -6,9 +6,11 @@
 # 当前阶段剩余时间的比例(0-100): 进攻期按进攻计时, 准备期按准备计时, 条随时间缩短。
 #!define hudWaveRemaining() 100 * (Wave_Attack_Time_Left / Wave_Attack_Duration if Is_Attack_Phase else Wave_Prep_Time_Left / Wave_Prep_Duration)
 #!define hudWaveNumber() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
-# 左侧列出当前玩家已选的科技: 名称与描述都用子标题, 保证同样靠左对齐; 描述去掉手动换行, 单行显示。
-#!define hudTechName(slot) hudSubheader(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_NAME], HudPosition.LEFT, 2 * slot + 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-#!define hudTechDescription(slot) hudSubheader(localPlayer if len(localPlayer.Owned_Tech_Ids) > slot else [], "{0}".format(Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_DESCRIPTION]).replace("\n", ""), HudPosition.LEFT, 2 * slot + 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+# 左侧把标题和当前玩家已选的科技合并进同一个 HUD 文本, 用换行逐行排列。
+# 首行末尾的 100 个全角空格(同 HEX.ow 的 TxT)把文本块撑得比左侧可用宽度更宽, 块被钉在屏幕左缘, 各行靠左对齐。
+# 描述去掉手动换行, 单行显示; 选牌卡片仍使用带换行的原描述。
+#!define HUD_LEFT_PAD "　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　"
+#!define hudTechEntry(slot) ("【{0}】\n{1}\n".format(Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_NAME], "{0}".format(Upgrade_Catalog[localPlayer.Owned_Tech_Ids[slot]][UPGRADE_COLUMN_DESCRIPTION]).replace("\n", "")) if len(localPlayer.Owned_Tech_Ids) > slot else "")
 
 
 # 属性栏图标; 属性强化没有对应技能, 取含义相近的英雄技能。
@@ -44,15 +46,7 @@ rule "Players - HUD - Show round":
 
 
 rule "Players - HUD - Show own tech":
-    hudSubheader(getPlayers(Team.2), "费斯卡科技 {0}/{1}".format(len(localPlayer.Owned_Tech_Ids), MAX_TECH_COUNT), HudPosition.LEFT, 0, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
-    hudTechName(0)
-    hudTechDescription(0)
-    hudTechName(1)
-    hudTechDescription(1)
-    hudTechName(2)
-    hudTechDescription(2)
-    hudTechName(3)
-    hudTechDescription(3)
+    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/{1}{2}\n{3}{4}{5}{6}".format(len(localPlayer.Owned_Tech_Ids), MAX_TECH_COUNT, HUD_LEFT_PAD, hudTechEntry(0), hudTechEntry(1), hudTechEntry(2), hudTechEntry(3)), HudPosition.LEFT, 0, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
 
 
 # 个人属性放在屏幕下方: HUD 文本无法直接贴底, 与 Bastion 一样用开头的换行把内容挤到底部。第三行是持有对应科技时的当前成长值。
