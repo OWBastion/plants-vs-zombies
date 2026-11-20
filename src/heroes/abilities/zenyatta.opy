@@ -4,7 +4,7 @@ def knockBack():
     @Name "[Zenyatta] Sub Knockback"
 
     wait()
-    eventPlayer.applyImpulse(eventPlayer.knockback_direction, 22.5, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    eventPlayer.applyImpulse(eventPlayer.Knockback_Direction, 22.5, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     eventPlayer.applyImpulse(Vector.UP, 22.5 * 0.3, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 
 
@@ -14,7 +14,7 @@ rule "[Zenyatta] Snap Kick (enemy)":
     @Condition eventAbility == Button.MELEE
     @Condition attacker.getHero() == Hero.ZENYATTA == true
 
-    eventPlayer.knockback_direction = directionFromAngles(attacker.getHorizontalFacingAngle(), -10)
+    eventPlayer.Knockback_Direction = directionFromAngles(attacker.getHorizontalFacingAngle(), -10)
     eventPlayer.startForcingThrottle(0, 0, 0, 0, 0, 0.5)
     knockBack()
     wait()

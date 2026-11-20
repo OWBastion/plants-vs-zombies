@@ -1,12 +1,12 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_SNIPER ["老练狙神", "对 15 米外敌人造成伤害时\n返还该技能 70% 剩余冷却", 1, 0, 1, 0, 0, 0]
+#!define UPGRADE_ROW_SNIPER ["老练狙神", "对 15 米外敌人造成伤害时\n返还该技能 70% 剩余冷却", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0]
 
 rule "Feska - Sniper":
     @Event playerDealtDamage
     @Team 2
     @Condition victim.getTeam() == Team.1
-    @Condition TechId.SNIPER in eventPlayer.tech
+    @Condition Tech_Id.SNIPER in eventPlayer.Owned_Tech_Ids
     @Condition eventAbility in [Button.ABILITY_1, Button.ABILITY_2, Button.SECONDARY_FIRE]
     @Condition distance(eventPlayer, victim) >= 15
 

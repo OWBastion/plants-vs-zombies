@@ -6,10 +6,10 @@ rule "[ai]: Base Melee":
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == true
     @Condition isGameInProgress() == true
-    @Condition Under_Attack == true
-    @Condition eventPlayer.BotTarget != null
-    @Condition eventPlayer.BotTarget.isAlive() == true
-    @Condition distance(eventPlayer, eventPlayer.BotTarget) <= 3.5
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.Chase_Target_Player != null
+    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 3.5
     @Condition eventPlayer.isUsingAbility1() != true
     @Condition eventPlayer.isUsingAbility2() != true
     @Condition eventPlayer.isUsingUltimate() != true
@@ -28,7 +28,7 @@ rule "[ai]: venture Use Ability 1":
     @Condition eventPlayer.isAlive() == true
     @Condition isGameInProgress() == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
-    @Condition Under_Attack == true
+    @Condition Is_Attack_Phase == true
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -45,7 +45,7 @@ rule "[ai]: brig Use ult":
     @Condition eventPlayer.isAlive() == true
     @Condition isGameInProgress() == true
     @Condition eventPlayer.getUltCharge() == 100
-    @Condition Under_Attack == true
+    @Condition Is_Attack_Phase == true
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
@@ -62,7 +62,7 @@ rule "[ai]: ram Use Ability 1":
     @Condition isGameInProgress() == true
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
     @Condition eventPlayer.isUsingAbility1() != true
-    @Condition Under_Attack == true
+    @Condition Is_Attack_Phase == true
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -80,7 +80,7 @@ rule "[ai]: Pharah Use Ability 1":
     @Condition eventPlayer.isAlive() == true
     @Condition isGameInProgress() == true
     @Condition eventPlayer.isInAir() != true
-    @Condition Under_Attack == true
+    @Condition Is_Attack_Phase == true
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)

@@ -70,57 +70,57 @@ rule "[ai]: Set Bot Name":
 def refreshTarget():
     @Name "//AI Refresh Target"
 
-    eventPlayer.scan_candidates = getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: player.hasSpawned())
-    eventPlayer.scan_candidates = eventPlayer.scan_candidates.filter(lambda player: player.getPosition().y - eventPlayer.getPosition().y <= 5.5 and distance(player.getPosition(), Brain_Points[0].getPosition()) < distance(eventPlayer.getPosition(), Brain_Points[0].getPosition()))
-    eventPlayer.scan_candidates = eventPlayer.scan_candidates.filter(lambda player: isInLoS(eventPlayer.getEyePosition(), player))
-    if len(eventPlayer.scan_candidates) > 0:
-        eventPlayer.BotTarget = sorted(eventPlayer.scan_candidates, lambda player: distance(eventPlayer, player))[0]
+    eventPlayer.Visible_Target_Candidates = getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: player.hasSpawned())
+    eventPlayer.Visible_Target_Candidates = eventPlayer.Visible_Target_Candidates.filter(lambda player: player.getPosition().y - eventPlayer.getPosition().y <= 5.5 and distance(player.getPosition(), Brain_Positions[0].getPosition()) < distance(eventPlayer.getPosition(), Brain_Positions[0].getPosition()))
+    eventPlayer.Visible_Target_Candidates = eventPlayer.Visible_Target_Candidates.filter(lambda player: isInLoS(eventPlayer.getEyePosition(), player))
+    if len(eventPlayer.Visible_Target_Candidates) > 0:
+        eventPlayer.Chase_Target_Player = sorted(eventPlayer.Visible_Target_Candidates, lambda player: distance(eventPlayer, player))[0]
     else:
-        eventPlayer.BotTarget = null
+        eventPlayer.Chase_Target_Player = null
 
 
 def AITarget():
     @Name "//AI Target"
 
-    if eventPlayer.BotTarget == null or eventPlayer.BotTarget.isAlive() != true or eventPlayer.BotTarget.hasSpawned() != true or eventPlayer.BotTarget.getPosition().y - eventPlayer.getPosition().y > 5.5 or eventPlayer.TTK == 6:
-        eventPlayer.TTK = 0
+    if eventPlayer.Chase_Target_Player == null or eventPlayer.Chase_Target_Player.isAlive() != true or eventPlayer.Chase_Target_Player.hasSpawned() != true or eventPlayer.Chase_Target_Player.getPosition().y - eventPlayer.getPosition().y > 5.5 or eventPlayer.Target_Refresh_Time == 6:
+        eventPlayer.Target_Refresh_Time = 0
         refreshTarget()
-        chaseAtRate(eventPlayer.TTK, 6, 1)
+        chaseAtRate(eventPlayer.Target_Refresh_Time, 6, 1)
 
 
 def AIMove():
     @Name "//AI Move"
 
-    if eventPlayer.BotTarget == null or eventPlayer.BotTarget.isAlive() != true:
-        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), Brain_Points[0].getPosition()), 270)
-        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, Brain_Points[0].getPosition()), 1, Relativity.TO_WORLD)
+    if eventPlayer.Chase_Target_Player == null or eventPlayer.Chase_Target_Player.isAlive() != true:
+        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), Brain_Positions[0].getPosition()), 270)
+        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, Brain_Positions[0].getPosition()), 1, Relativity.TO_WORLD)
     else:
-        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.BotTarget.getEyePosition() - vect(0, 0.3, 0)), 270)
-        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.BotTarget), 1, Relativity.TO_WORLD)
+        eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.Chase_Target_Player.getEyePosition() - vect(0, 0.3, 0)), 270)
+        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.Chase_Target_Player), 1, Relativity.TO_WORLD)
 
 
 def stuckCheck():
     @Name "//AI Stuck Recovery"
 
-    if (eventPlayer.BotTarget != null and eventPlayer.BotTarget.isAlive() and distance(eventPlayer, eventPlayer.BotTarget) <= 3.5) or distance(eventPlayer, Brain_Points[0]) <= 2.5:
-        eventPlayer.stuck_count = 0
-        eventPlayer.stuck_last_pos = eventPlayer.getPosition()
+    if (eventPlayer.Chase_Target_Player != null and eventPlayer.Chase_Target_Player.isAlive() and distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 3.5) or distance(eventPlayer, Brain_Positions[0]) <= 2.5:
+        eventPlayer.No_Progress_Count = 0
+        eventPlayer.Last_Progress_Position = eventPlayer.getPosition()
         return
     if eventPlayer.hasStatus(Status.STUNNED) or eventPlayer.hasStatus(Status.ROOTED) or eventPlayer.hasStatus(Status.FROZEN) or eventPlayer.hasStatus(Status.KNOCKED_DOWN):
         return
     if eventPlayer.isUsingAbility1() or eventPlayer.isUsingAbility2() or eventPlayer.isUsingUltimate():
         return
     # 持续无位置进展时刷新目标并跳跃，不因卡住击杀僵尸
-    if distance(eventPlayer.getPosition(), eventPlayer.stuck_last_pos) >= 1.5:
-        eventPlayer.stuck_count = 0
-        eventPlayer.stuck_last_pos = eventPlayer.getPosition()
+    if distance(eventPlayer.getPosition(), eventPlayer.Last_Progress_Position) >= 1.5:
+        eventPlayer.No_Progress_Count = 0
+        eventPlayer.Last_Progress_Position = eventPlayer.getPosition()
     else:
-        eventPlayer.stuck_count += 1
-        if eventPlayer.stuck_count >= 3:
-            eventPlayer.stuck_count = 0
-            eventPlayer.stuck_last_pos = eventPlayer.getPosition()
-            eventPlayer.BotTarget = null
-            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), Brain_Points[0].getPosition()), 270)
+        eventPlayer.No_Progress_Count += 1
+        if eventPlayer.No_Progress_Count >= 3:
+            eventPlayer.No_Progress_Count = 0
+            eventPlayer.Last_Progress_Position = eventPlayer.getPosition()
+            eventPlayer.Chase_Target_Player = null
+            eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), Brain_Positions[0].getPosition()), 270)
             eventPlayer.forceButtonPress(Button.JUMP)
 
 
@@ -129,7 +129,7 @@ rule "//AI Move":
     @Team 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == true
-    @Condition Under_Attack == true
+    @Condition Is_Attack_Phase == true
 
     wait(eventPlayer.getSlot() * 0.016, Wait.ABORT_WHEN_FALSE)
     AITarget()

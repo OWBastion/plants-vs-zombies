@@ -5,20 +5,20 @@ rule "[Hazard]: Mov speed penalty":
     @Team 2
     @Hero hazard
     @Condition eventAbility == Button.SECONDARY_FIRE
-    @Condition victim.mov_speed_penalty != true
+    @Condition victim.Is_Hazard_Slowed != true
 
-    victim.mov_speed_penalty = true
+    victim.Is_Hazard_Slowed = true
     wait(1)
-    victim.mov_speed_penalty = false
+    victim.Is_Hazard_Slowed = false
 
 
 rule "[Hazard]: Mov speed penalty":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.mov_speed_penalty == true
+    @Condition eventPlayer.Is_Hazard_Slowed == true
 
     eventPlayer.startForcingThrottle(0, 0.5, 0, 0.5, 0, 0.5)
-    waitUntil(not eventPlayer.mov_speed_penalty, 1)
+    waitUntil(not eventPlayer.Is_Hazard_Slowed, 1)
     eventPlayer.stopForcingThrottle()
-    eventPlayer.mov_speed_penalty = false
+    eventPlayer.Is_Hazard_Slowed = false

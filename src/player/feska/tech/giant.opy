@@ -1,11 +1,11 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_GIANT ["歌利亚巨人", "最大生命值 +40%", 1, 0, 1, 0, 40, 0]
+#!define UPGRADE_ROW_GIANT ["歌利亚巨人", "最大生命值 +40%", UPGRADE_KIND_TECH, 0, 1, 0, 40, 0]
 
 rule "Feska - Giant":
     @Event eachPlayer
     @Team 2
-    @Condition TechId.GIANT in eventPlayer.tech
+    @Condition Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids
 
-    eventPlayer.bonus[FeskaBonus.HEALTH] += Upgrades[TechId.GIANT][UPGRADE_COL_HEALTH]
+    eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALTH] += Upgrade_Catalog[Tech_Id.GIANT][UPGRADE_COLUMN_HEALTH]
     feskaApplyUpgradeStats()

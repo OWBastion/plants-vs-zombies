@@ -2,7 +2,7 @@
 
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     @Condition isGameInProgress() == true
-    @Condition Current_Round >= 2
+    @Condition Current_Wave >= 2
 
     wait(5)
     setMatchTime(900)
@@ -10,49 +10,49 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
 
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     @Condition isGameInProgress() == true
-    @Condition Under_Attack == true
-    @Condition Current_Round == Config_Total_Round
+    @Condition Is_Attack_Phase == true
+    @Condition Current_Wave == Total_Wave_Count
 
     wait(1)
-    setMatchTime(Config_Round_Attack_Time + Config_Round_Lead_Time)
+    setMatchTime(Wave_Attack_Duration + Wave_Prep_Duration)
 
 
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     disableScoring()
     disableGamemodeCompletion()
     if getCurrentMap() == Map.LIJIANG_NIGHT_MARKET:
-        Bot_Respawn_Points = [vect(32, 0, -21.75), vect(42.35, 6, -46), vect(30, 6, -14.18), vect(40, 2, -41.8)]
-        Brain_Points = [vect(88.5, 4.5, -25.5)]
+        Zombie_Spawn_Positions = [vect(32, 0, -21.75), vect(42.35, 6, -46), vect(30, 6, -14.18), vect(40, 2, -41.8)]
+        Brain_Positions = [vect(88.5, 4.5, -25.5)]
     elif getCurrentMap() == Map.LIJIANG_CONTROL_CENTER:
-        Bot_Respawn_Points = [vect(31.21, 267, 312), vect(20, 270, 347.29), vect(24, 267, 327.17)]
-        Brain_Points = [vect(67.71, 267.45, 349.43)]
+        Zombie_Spawn_Positions = [vect(31.21, 267, 312), vect(20, 270, 347.29), vect(24, 267, 327.17)]
+        Brain_Positions = [vect(67.71, 267.45, 349.43)]
     elif getCurrentMap() == Map.LIJIANG_CONTROL_CENTER:
-        Bot_Respawn_Points = [vect(31.21, 267, 312), vect(20, 270, 347.29), vect(24, 267, 327.17)]
-        Brain_Points = [vect(67.71, 267.45, 349.43)]
+        Zombie_Spawn_Positions = [vect(31.21, 267, 312), vect(20, 270, 347.29), vect(24, 267, 327.17)]
+        Brain_Positions = [vect(67.71, 267.45, 349.43)]
     elif getCurrentMap() == Map.ILIOS_LIGHTHOUSE:
-        Bot_Respawn_Points = [vect(355, -24.66, 1.66), vect(324, -24.7, -0.04), vect(332.12, -20.74, 11.47), vect(336.38, -16.26, 8.63)]
-        Brain_Points = [vect(320, -23.97, 46.25)]
+        Zombie_Spawn_Positions = [vect(355, -24.66, 1.66), vect(324, -24.7, -0.04), vect(332.12, -20.74, 11.47), vect(336.38, -16.26, 8.63)]
+        Brain_Positions = [vect(320, -23.97, 46.25)]
     elif getCurrentMap() == Map.ILIOS_RUINS:
-        Bot_Respawn_Points = [vect(-28.86, 58.37, -156.1), vect(-18.58, 59.39, -143.9), vect(-22.15, 58.37, -170.63), vect(-26.53, 67.62, -179.83)]
-        Brain_Points = [vect(-80.12, 63.04, -160.04)]
+        Zombie_Spawn_Positions = [vect(-28.86, 58.37, -156.1), vect(-18.58, 59.39, -143.9), vect(-22.15, 58.37, -170.63), vect(-26.53, 67.62, -179.83)]
+        Brain_Positions = [vect(-80.12, 63.04, -160.04)]
     elif getCurrentMap() == Map.ILIOS_WELL:
-        Bot_Respawn_Points = [vect(-185.28, 5.03, -42.68), vect(-186.79, 3.78, -56.12), vect(-163.67, 4.86, -38.01)]
-        Brain_Points = [vect(-148.32, -3.41, -93.48)]
+        Zombie_Spawn_Positions = [vect(-185.28, 5.03, -42.68), vect(-186.79, 3.78, -56.12), vect(-163.67, 4.86, -38.01)]
+        Brain_Positions = [vect(-148.32, -3.41, -93.48)]
     elif getCurrentMap() == Map.NEPAL_VILLAGE:
-        Bot_Respawn_Points = [vect(-169.79, -95.24, -33.05), vect(-199.72, -97.33, -54.5), vect(-163.22, -89.21, -28.77)]
-        Brain_Points = [vect(-157.45, -97.52, -80.77)]
+        Zombie_Spawn_Positions = [vect(-169.79, -95.24, -33.05), vect(-199.72, -97.33, -54.5), vect(-163.22, -89.21, -28.77)]
+        Brain_Positions = [vect(-157.45, -97.52, -80.77)]
     elif getCurrentMap() == Map.NEPAL_SHRINE:
-        Bot_Respawn_Points = [vect(-47.22, 19, -48.04), vect(-23.7, 22, -57.43), vect(-56.61, 15, -61.61)]
-        Brain_Points = [vect(-43.18, 16.38, -88.26)]
+        Zombie_Spawn_Positions = [vect(-47.22, 19, -48.04), vect(-23.7, 22, -57.43), vect(-56.61, 15, -61.61)]
+        Brain_Positions = [vect(-43.18, 16.38, -88.26)]
     elif getCurrentMap() == Map.NEPAL_SANCTUM:
-        Bot_Respawn_Points = [vect(81.12, 131.88, -34.95), vect(66.36, 127.8, -42.32), vect(106.84, 141.85, -52.18)]
-        Brain_Points = [vect(81.03, 130.03, -84.94)]
+        Zombie_Spawn_Positions = [vect(81.12, 131.88, -34.95), vect(66.36, 127.8, -42.32), vect(106.84, 141.85, -52.18)]
+        Brain_Positions = [vect(81.03, 130.03, -84.94)]
     else:
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Bot_Respawn_Points[0], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Bot_Respawn_Points[1], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Bot_Respawn_Points[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Bot_Respawn_Points[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Points[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[0], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[1], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Positions[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 
 rule "Player Resurrect - Disable Built-in Respawn":
@@ -69,13 +69,13 @@ rule "[Mode]: Spawn Teleport":
     @Event eachPlayer
     @Condition eventPlayer.isAlive() == true
     @Condition (not eventPlayer.isDummy() or isGameInProgress()) == true
-    @Condition len(Brain_Points) > 0
+    @Condition len(Brain_Positions) > 0
 
     if eventPlayer.isDummy():
-        eventPlayer.teleport(random.choice(Bot_Respawn_Points))
-        eventPlayer.Spawned_At = getTotalTimeElapsed()
-        eventPlayer.stuck_count = 0
-        eventPlayer.stuck_last_pos = eventPlayer.getPosition()
+        eventPlayer.teleport(random.choice(Zombie_Spawn_Positions))
+        eventPlayer.Spawn_Time = getTotalTimeElapsed()
+        eventPlayer.No_Progress_Count = 0
+        eventPlayer.Last_Progress_Position = eventPlayer.getPosition()
         # 重生后清除上一条命残留的移动锁定: 僵尸死亡时能力/锁定规则留下的强制油门、ROOTED、减速
         # 会跟着玩家槽位存活, 新命会原地不动并被卡死看门狗击杀
         eventPlayer.stopForcingThrottle()
@@ -83,9 +83,9 @@ rule "[Mode]: Spawn Teleport":
         # 与 [ai]: Create AI Bot 的基准速度一致; 能力残留的 setMoveSpeed 同样跨死亡保留
         eventPlayer.setMoveSpeed(90)
         # 实测请求值比实际复活等待多约 2 秒: 10 -> 约 8 秒, 6 -> 约 4 秒
-        eventPlayer.setRespawnTime(6 if Current_Round == Config_Total_Round else 10)
+        eventPlayer.setRespawnTime(6 if Current_Wave == Total_Wave_Count else 10)
     else:
-        eventPlayer.teleport(Brain_Points[0])
+        eventPlayer.teleport(Brain_Positions[0])
 
 
 # 开赛前选英雄不会触发重生, 换英雄后需要再传送一次
@@ -94,11 +94,11 @@ rule "[Mode]: Hero Change Teleport":
     @Team 2
     @Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.getHero() != eventPlayer.Teleported_Hero
-    @Condition len(Brain_Points) > 0
+    @Condition eventPlayer.getHero() != eventPlayer.Last_Teleported_Hero
+    @Condition len(Brain_Positions) > 0
 
-    eventPlayer.Teleported_Hero = eventPlayer.getHero()
-    eventPlayer.teleport(Brain_Points[0])
+    eventPlayer.Last_Teleported_Hero = eventPlayer.getHero()
+    eventPlayer.teleport(Brain_Positions[0])
 
 
 rule "Player Resurrect - Respawn at Brain Points":
@@ -107,6 +107,6 @@ rule "Player Resurrect - Respawn at Brain Points":
     @Condition isGameInProgress() == true
     @Condition eventPlayer.isAlive() != true
 
-    eventPlayer.teleport(Brain_Points[0])
-    waitUntil(not Under_Attack and ((Current_Round == 4 or Current_Round == 6 or Current_Round == 8 or Current_Round == 10) == true), 999999986991104)
+    eventPlayer.teleport(Brain_Positions[0])
+    waitUntil(not Is_Attack_Phase and ((Current_Wave == 4 or Current_Wave == 6 or Current_Wave == 8 or Current_Wave == 10) == true), 999999986991104)
     eventPlayer.resurrect()

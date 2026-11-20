@@ -7,35 +7,35 @@ rule "【布丽吉塔】恢复包选中目标":
     @Condition eventPlayer.isUsingAbility2() == true
     @Condition distance(eventPlayer, eventPlayer.getPlayerClosestToReticle(eventPlayer.getTeam())) <= 20.25
 
-    sorted(getLivingPlayers(eventPlayer.getTeam()), lambda player: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getPosition(), player.getPosition())))[0].brig_repair_pack[0] = true
+    sorted(getLivingPlayers(eventPlayer.getTeam()), lambda player: angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getPosition(), player.getPosition())))[0].Repair_Pack_Pending = true
 
 
 rule "【布丽吉塔】恢复包提供护甲":
     @Event eachPlayer
     @Team 2
     @Condition eventPlayer.getHero() != Hero.BRIGITTE
-    @Condition (eventPlayer.isAlive() and eventPlayer.brig_repair_pack[0]) == true
+    @Condition (eventPlayer.isAlive() and eventPlayer.Repair_Pack_Pending) == true
 
-    eventPlayer.brig_repair_pack[0] = false
-    if eventPlayer.brig_repair_pack[1] == null:
+    eventPlayer.Repair_Pack_Pending = false
+    if eventPlayer.Repair_Pack_Health_Pool == null:
         goto lbl_0
-    removeHealthPool(eventPlayer.brig_repair_pack[1])
+    removeHealthPool(eventPlayer.Repair_Pack_Health_Pool)
     lbl_0:
     eventPlayer.addHealthPool(Health.ARMOR, 150, false, false)
     smallMessage(eventPlayer, "  {0} 获得来自 {1} 的护甲".format(abilityIconString(Hero.BRIGITTE, Button.ABILITY_2), Hero.BRIGITTE))
-    eventPlayer.brig_repair_pack[1] = getLastCreatedHealthPool()
+    eventPlayer.Repair_Pack_Health_Pool = getLastCreatedHealthPool()
 
 
 rule "[Brigitte]: Rally provides permanent armor to self":
     @Event eachPlayer
     @Team 2
-    @Condition len(eventPlayer.brig_rally_armor_id) == 13
+    @Condition len(eventPlayer.Rally_Armor_Pool_Ids) == 13
 
-    waitUntil(not getPlayersOnHero(Hero.BRIGITTE, eventPlayer.getTeam()).isUsingUltimate() and eventPlayer.brig_rally_armor_id != [], 30)
+    waitUntil(not getPlayersOnHero(Hero.BRIGITTE, eventPlayer.getTeam()).isUsingUltimate() and eventPlayer.Rally_Armor_Pool_Ids != [], 30)
     wait(4)
-    removeHealthPool(eventPlayer.brig_rally_armor_id[0])
-    eventPlayer.brig_rally_armor_id.remove(eventPlayer.brig_rally_armor_id[0])
-    if len(eventPlayer.brig_rally_armor_id) != 0:
+    removeHealthPool(eventPlayer.Rally_Armor_Pool_Ids[0])
+    eventPlayer.Rally_Armor_Pool_Ids.remove(eventPlayer.Rally_Armor_Pool_Ids[0])
+    if len(eventPlayer.Rally_Armor_Pool_Ids) != 0:
         loop()
 
 
@@ -44,10 +44,10 @@ rule "[Brigitte]Rally provides permanent armor to self":
     @Team 2
     @Hero brigitte
     @Condition eventPlayer.isUsingUltimate() == true
-    @Condition len(eventPlayer.brig_rally_armor_id) < 13
+    @Condition len(eventPlayer.Rally_Armor_Pool_Ids) < 13
 
     getLivingPlayers(eventPlayer.getTeam()).addHealthPool(Health.ARMOR, 25, false, false)
-    getLivingPlayers(eventPlayer.getTeam()).brig_rally_armor_id.append(getLastCreatedHealthPool())
+    getLivingPlayers(eventPlayer.getTeam()).Rally_Armor_Pool_Ids.append(getLastCreatedHealthPool())
     wait(0.5)
     if ruleCondition:
         loop()

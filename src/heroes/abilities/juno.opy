@@ -18,13 +18,13 @@ rule "[Juno]: 41":
 
     wait(0.496, Wait.ABORT_WHEN_FALSE)
     # 固化受影响名单: 结束还原时若按当时的存活/LoS 重算, 中途死亡或离开视线的僵尸会永久保留 15% 速度与零重力
-    eventPlayer.juno_ray_targets = getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)
-    eventPlayer.juno_ray_targets.setEnvironmentalKillCreditor(eventPlayer)
-    eventPlayer.juno_ray_targets.setMoveSpeed(15)
-    eventPlayer.juno_ray_targets.setGravity(0)
-    eventPlayer.juno_ray_targets.applyImpulse(vect(0, 1, 0), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+    eventPlayer.Orbital_Ray_Affected_Players = getLivingPlayers(getOppositeTeam(eventPlayer.getTeam())).filter(lambda player: isInLoS(eventPlayer, player) == true)
+    eventPlayer.Orbital_Ray_Affected_Players.setEnvironmentalKillCreditor(eventPlayer)
+    eventPlayer.Orbital_Ray_Affected_Players.setMoveSpeed(15)
+    eventPlayer.Orbital_Ray_Affected_Players.setGravity(0)
+    eventPlayer.Orbital_Ray_Affected_Players.applyImpulse(vect(0, 1, 0), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
     waitUntil(not eventPlayer.isUsingUltimate(), 8)
-    eventPlayer.juno_ray_targets.setGravity(100)
+    eventPlayer.Orbital_Ray_Affected_Players.setGravity(100)
     # 还原到僵尸基准速度, 与 [ai]: Create AI Bot 和重生归一化一致
-    eventPlayer.juno_ray_targets.setMoveSpeed(90)
-    eventPlayer.juno_ray_targets = []
+    eventPlayer.Orbital_Ray_Affected_Players.setMoveSpeed(90)
+    eventPlayer.Orbital_Ray_Affected_Players = []

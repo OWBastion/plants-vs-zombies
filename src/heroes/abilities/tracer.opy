@@ -8,21 +8,21 @@ rule "[Tracer]: Blink explosion target":
     @Condition eventDamage >= 70
     @Condition len(getPlayersInRadius(eventPlayer, 25, eventPlayer.getTeam(), LosCheck.SURFACES)) != 0
 
-    damage(eventPlayer, eventPlayer.tracer_buff[1], ceil(eventPlayer.getMaxHealth() * 0.1))
+    damage(eventPlayer, eventPlayer.Blink_Owner, ceil(eventPlayer.getMaxHealth() * 0.1))
     wait(0.5)
-    getPlayersInRadius(eventPlayer, 25, eventPlayer.getTeam(), LosCheck.SURFACES).tracer_buff[0] = true
-    getPlayersInRadius(eventPlayer, 25, eventPlayer.getTeam(), LosCheck.SURFACES).tracer_buff[1] = attacker
+    getPlayersInRadius(eventPlayer, 25, eventPlayer.getTeam(), LosCheck.SURFACES).Blink_Detonation_Pending = true
+    getPlayersInRadius(eventPlayer, 25, eventPlayer.getTeam(), LosCheck.SURFACES).Blink_Owner = attacker
 
 
 rule "[Tracer]: Blink explosion":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.tracer_buff[0] == true
+    @Condition eventPlayer.Blink_Detonation_Pending == true
     @Condition eventPlayer.isAlive() == true
 
     playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_1, eventPlayer, 200)
     playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.WHITE, eventPlayer, 200)
-    damage(eventPlayer, eventPlayer.tracer_buff[1], ceil(eventPlayer.getMaxHealth() * 0.08))
+    damage(eventPlayer, eventPlayer.Blink_Owner, ceil(eventPlayer.getMaxHealth() * 0.08))
     wait(0.16)
-    eventPlayer.tracer_buff[0] = false
-    eventPlayer.tracer_buff[1] = null
+    eventPlayer.Blink_Detonation_Pending = false
+    eventPlayer.Blink_Owner = null

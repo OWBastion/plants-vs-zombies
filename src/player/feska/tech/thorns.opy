@@ -1,21 +1,21 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_THORNS ["反甲", "最大生命值 +20%\n向攻击自己的僵尸返还所受伤害的 50%", 1, 0, 1, 0, 20, 0]
+#!define UPGRADE_ROW_THORNS ["反甲", "最大生命值 +20%\n向攻击自己的僵尸返还所受伤害的 50%", UPGRADE_KIND_TECH, 0, 1, 0, 20, 0]
 
 rule "Feska - Thorns health":
     @Event eachPlayer
     @Team 2
-    @Condition TechId.THORNS in eventPlayer.tech
+    @Condition Tech_Id.THORNS in eventPlayer.Owned_Tech_Ids
 
-    eventPlayer.bonus[FeskaBonus.HEALTH] += Upgrades[TechId.THORNS][UPGRADE_COL_HEALTH]
+    eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALTH] += Upgrade_Catalog[Tech_Id.THORNS][UPGRADE_COLUMN_HEALTH]
     feskaApplyUpgradeStats()
 
 rule "Feska - Thorns":
     @Event playerTookDamage
     @Team 2
-    @Condition Under_Attack
+    @Condition Is_Attack_Phase
     @Condition attacker.getTeam() == Team.1
-    @Condition TechId.THORNS in eventPlayer.tech
-    @Condition eventPlayer.chain != true
+    @Condition Tech_Id.THORNS in eventPlayer.Owned_Tech_Ids
+    @Condition eventPlayer.Is_Spawning_Derived_Damage != true
 
     damage(attacker, eventPlayer, eventDamage * 0.5)
