@@ -72,7 +72,7 @@ def feskaDealCards():
     Target_Player.Selected_Card_Index = 0
     Target_Player.Card_Rerolled_Flags = [false, false, false]
     Target_Player.Is_Card_Panel_Visible = true
-    if len(Target_Player.Owned_Tech_Ids) < MAX_TECH_COUNT and len(Target_Player.Owned_Tech_Ids) < floor(Finished_Wave_Count / 2):
+    if len(Target_Player.Owned_Tech_Ids) < MAX_TECH_COUNT and len(Target_Player.Owned_Tech_Ids) < feskaTechAllowance():
         Target_Player.Current_Choice_Kind = Choice_Kind.TECH
     elif len(Target_Player.Owned_Tech_Ids) == MAX_TECH_COUNT and Target_Player.Pending_Stat_Upgrade_Count > 0:
         Target_Player.Current_Choice_Kind = Choice_Kind.STAT_UPGRADE
@@ -162,7 +162,7 @@ rule "Feska - Offer upgrade":
     @Condition not Is_Attack_Phase
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind == Choice_Kind.NONE
-    @Condition (len(eventPlayer.Owned_Tech_Ids) < MAX_TECH_COUNT and len(eventPlayer.Owned_Tech_Ids) < floor(Finished_Wave_Count / 2)) or (len(eventPlayer.Owned_Tech_Ids) == MAX_TECH_COUNT and eventPlayer.Pending_Stat_Upgrade_Count > 0)
+    @Condition (len(eventPlayer.Owned_Tech_Ids) < MAX_TECH_COUNT and len(eventPlayer.Owned_Tech_Ids) < feskaTechAllowance()) or (len(eventPlayer.Owned_Tech_Ids) == MAX_TECH_COUNT and eventPlayer.Pending_Stat_Upgrade_Count > 0)
 
     Target_Player = eventPlayer
     feskaDealCards()

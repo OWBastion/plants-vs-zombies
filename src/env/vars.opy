@@ -123,6 +123,8 @@ enum Stat_Upgrade_Id:
 #!define feskaPreviewProgress() min(max(((Current_Wave if Is_Attack_Phase else Finished_Wave_Count + 1) - 1) / max(Total_Wave_Count - 1, 1), 0), 1)
 #!define feskaGrowthHeartsteel() feskaGrowthAt(feskaProgressRatio(), 1, 24)
 #!define feskaPoolGrowthValue() feskaGrowthAt(feskaProgressRatio(), 50, 200)
+# 可持有的科技数上限: 开局第 0 波(首轮准备阶段)即可选第 1 项, 之后每完成 2 波进攻再开一项。
+#!define feskaTechAllowance() (floor(Finished_Wave_Count / 2) + 1)
 
 # setMaxHealth 只接受百分比(相对英雄原始最大生命)。可计入最大生命值是绝对点数:
 # 英雄原始最大生命×(100+生命加成)% + 心之钢永久增量 + 护甲强化。
