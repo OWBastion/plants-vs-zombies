@@ -105,6 +105,7 @@
 
 - 顺带清理因衰减补偿失效的 5 个玩家变量：`Shot_Distance`、`Raw_Damage_Before_Falloff`、`Observed_Falloff_Ratio`、`Target_Falloff_Ratio`、`Recalculated_Damage`。
 - `heroes.team1`（僵尸）的 `health%` 未改动。
+- 只含注释的空英雄文件已删除：`reinhardt`、`baptiste`、`kiriko`、`ramattra`、`doomfist`、`hazard`、`brigitte`、`zenyatta`；`src/heroes/abilities.opy` 的对应 `#!include` 一并去掉。`cassidy.opy` 仍有副武器倍率规则，保留。
 
 ## 4. 属性强化目录（12 项）
 允许重复选择，不占四个科技槽，持续到本局结束。12 项均已实现并进池（A07～A12 在 `progression.opy` 选牌处累加，无独立目录文件）。以下沿用上一轮清单初值；减伤、再生和充能叠加上限不是已经确认的需求。已实现的实现口径：A08 上限 50%，A12 上限 80%，A09 与 A11 复用 `repair.opy`、`battery.opy` 的定时规则。

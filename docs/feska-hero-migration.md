@@ -16,7 +16,7 @@
 
 ### 2026-11-20 第二轮删除
 
-按用户确认，以下英雄免费效果直接移除、不补卡：末日铁拳技能 1 抛举（`doomfist.opy`）、骇灾右键减速（`hazard.opy`）、布丽吉塔恢复包 150 护甲与集结 25 护甲（`brigitte.opy`）、禅雅塔飞踢冲量（`zenyatta.opy`）、拉玛刹复仇形态与大招冲量（`ramattra.opy`）、路霸钩子拉拽（`roadhog.opy` 仅保留眩晕）、朱诺轨道射线移速/零重力/上抛（`juno.opy` 仅保留鱼雷附伤）。朱诺大招不死与奥丽莎 Fortify 减伤、全队无敌已在 `8d86a68` 删除。对应 6 个孤立 `playervar` 一并清理。
+按用户确认，以下英雄免费效果直接移除、不补卡：末日铁拳技能 1 抛举（`doomfist.opy`）、骇灾右键减速（`hazard.opy`）、布丽吉塔恢复包 150 护甲与集结 25 护甲（`brigitte.opy`）、禅雅塔飞踢冲量（`zenyatta.opy`）、拉玛刹复仇形态与大招冲量（`ramattra.opy`）、路霸钩子拉拽（`roadhog.opy` 仅保留眩晕）、朱诺轨道射线移速/零重力/上抛（`juno.opy` 仅保留鱼雷附伤）。朱诺大招不死与奥丽莎 Fortify 减伤、全队无敌已在 `8d86a68` 删除。对应 6 个孤立 `playervar` 一并清理。清空后的 `doomfist`、`hazard`、`brigitte`、`zenyatta`、`ramattra`、`reinhardt`、`baptiste`、`kiriko` 文件已删除，`abilities.opy` 不再 include。
 
 ## 2. 本轮确认的五项
 
