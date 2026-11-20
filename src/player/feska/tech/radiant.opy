@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_RADIANT ["神圣光辉", "每 10 秒为 15 米内的全体友方\n提供 2.5 秒无敌效果", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MERCY, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_RADIANT ["神圣光辉", "每 10 秒为 15 米内的全体友方提供 2.5 秒无敌效果", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MERCY, Button.ULTIMATE), []]
 
 rule "Feska - Radiant light":
     @Event eachPlayer

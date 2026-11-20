@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_SELF_REPAIR ["自我修复", "进攻期间，每秒恢复 2% 最大生命值", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ZENYATTA, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_SELF_REPAIR ["自我修复", "每秒恢复 2% 最大生命值", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ZENYATTA, Button.ULTIMATE), []]
 
 rule "Feska - Regeneration":
     @Event eachPlayer

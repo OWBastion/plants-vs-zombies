@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_ULTIMATE_CHARGE ["我按Q辣", "进攻期间，\n每秒额外获得 0.8% 终极技能充能", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ROADHOG, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_ULTIMATE_CHARGE ["我按Q辣", "每秒额外获得 0.8% 终极技能充能", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ROADHOG, Button.ULTIMATE), []]
 
 rule "Feska - Ultimate charge":
     @Event eachPlayer
