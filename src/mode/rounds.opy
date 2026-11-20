@@ -6,6 +6,8 @@ rule "Players - Round Lead Time Start":
     @Condition Is_Attack_Phase == false
 
     waitUntil(not isAssemblingHeroes() and isGameInProgress(), 999999986991104)
+    # 上一波的僵尸已死亡但仍占着槽位, 准备阶段一开始就清空, 由 [ai]: Create AI Bot 重新预生成。
+    destroyAllDummies()
     getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, 999999986991104)
     chaseOverTime(Wave_Prep_Time_Left, 0, Wave_Prep_Duration, ChaseTimeReeval.NONE)
     bigMessage(getAllPlayers(), "第 {0} 波即将开始".format(Current_Wave + 1))
@@ -17,7 +19,6 @@ rule "Players - Round Lead Time End":
     @Condition Is_Attack_Phase == false
 
     waitUntil(Wave_Prep_Time_Left == 0, Wave_Prep_Duration)
-    destroyAllDummies()
     Current_Wave++
     Wave_Attack_Time_Left = Wave_Attack_Duration
     Wave_Prep_Time_Left = 0
