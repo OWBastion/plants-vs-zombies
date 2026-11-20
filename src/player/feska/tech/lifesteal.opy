@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_LIFESTEAL ["吸血习性", "每参与消灭一只僵尸恢复 5% 最大生命值", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0]
+#!define UPGRADE_ROW_LIFESTEAL ["吸血习性", "每参与消灭一只僵尸恢复 5% 最大生命值", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.REAPER, Button.PRIMARY_FIRE)]
 
 rule "Feska - Lifesteal on elimination":
     @Event playerEarnedElimination

@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_HEALING_TOWER ["治疗光塔 ProMax", "每 2 秒治疗全体存活队友\n数值为持有者最大生命值的 2%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0]
+#!define UPGRADE_ROW_HEALING_TOWER ["治疗光塔 ProMax", "每 2 秒治疗全体存活队友\n数值为持有者最大生命值的 2%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.LUCIO, Button.ULTIMATE)]
 
 rule "Feska - Healing tower":
     @Event eachPlayer

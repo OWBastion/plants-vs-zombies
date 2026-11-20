@@ -947,6 +947,8 @@ settings {
     }
 }
 
+# 颜色/贴图标签(<fg...>, <TX...>)需要它; 编译器会生成一条开局规则, 临时生成并移除一个机器人以取得未转义的 "<"。
+#!setupTags
 #!include "env/vars.opy"
 
 subroutine AITarget 1

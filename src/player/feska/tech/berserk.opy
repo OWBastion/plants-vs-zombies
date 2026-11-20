@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_BERSERK ["狂战士之魂", "生命值降到 25% 时获得 2000% 额外生命值\n无法被治疗, 每秒损失 10% 最大生命值\n可以自由移动", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0]
+#!define UPGRADE_ROW_BERSERK ["狂战士之魂", "生命值降到 25% 时获得 2000% 额外生命值\n无法被治疗, 每秒损失 10% 最大生命值\n可以自由移动", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.RAMATTRA, Button.ULTIMATE)]
 
 rule "Feska - Berserk guard":
     @Event eachPlayer

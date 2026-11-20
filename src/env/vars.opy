@@ -42,6 +42,8 @@ globalvar Blocked_Player_Names
 #!define UPGRADE_COLUMN_DAMAGE 5
 #!define UPGRADE_COLUMN_HEALTH 6
 #!define UPGRADE_COLUMN_HEALING 7
+# 仅科技行有图标列; 属性强化行不显示在科技栏。
+#!define UPGRADE_COLUMN_ICON 8
 
 #!define UPGRADE_KIND_TECH 1
 #!define UPGRADE_KIND_STAT 2

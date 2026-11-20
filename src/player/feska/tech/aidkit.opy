@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_FIRST_AID_KIT ["急救用具", "造成的治疗 +35%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 35]
+#!define UPGRADE_ROW_FIRST_AID_KIT ["急救用具", "造成的治疗 +35%", UPGRADE_KIND_TECH, 0, 1, 0, 0, 35, abilityIconString(Hero.MERCY, Button.PRIMARY_FIRE)]
 
 rule "Feska - Aid kit":
     @Event eachPlayer
