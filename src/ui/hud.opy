@@ -46,7 +46,7 @@ rule "Players - HUD - Show round":
 
 
 rule "Players - HUD - Show own tech":
-    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/{1}{2}\n{3}{4}{5}{6}".format(len(localPlayer.Owned_Tech_Ids), MAX_TECH_COUNT, HUD_LEFT_PAD, hudTechEntry(0), hudTechEntry(1), hudTechEntry(2), hudTechEntry(3)), HudPosition.LEFT, 0, Color.YELLOW, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getPlayers(Team.2), "费斯卡科技 {0}/{1}{2}\n{3}{4}{5}{6}".format(len(localPlayer.Owned_Tech_Ids), MAX_TECH_COUNT, HUD_LEFT_PAD, hudTechEntry(0), hudTechEntry(1), hudTechEntry(2), hudTechEntry(3)), HudPosition.LEFT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 
 
 # 个人属性放在屏幕下方: HUD 文本无法直接贴底, 与 Bastion 一样用开头的换行把内容挤到底部。第三行是持有对应科技时的当前成长值。
