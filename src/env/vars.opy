@@ -100,6 +100,7 @@ enum Tech_Id:
     IGNITE = 39
     CRIT = 40
     ULTIMATE_LOOP = 41
+    EXECUTE = 42
 
 # 属性强化在 Upgrade_Catalog 中的行号。数值是历史索引, 不可重排。
 enum Stat_Upgrade_Id:
