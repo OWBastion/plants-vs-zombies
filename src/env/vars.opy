@@ -210,5 +210,5 @@ playervar Reactive_Armor_Health_Pool
 playervar Is_Berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
 playervar Is_Berserk_Guard_Armed
-# 动态难度给僵尸加的生命值池, 存放句柄以便重生时先清旧池再加。
-playervar Zombie_Health_Pool
+# 动态难度改写僵尸最大生命前, 先暂存出生时(含 health%)的最大生命。
+playervar Zombie_Base_Max_Health

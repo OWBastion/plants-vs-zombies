@@ -1,6 +1,6 @@
 #!mainFile "../main.opy"
 
-# 动态难度: 生命值在僵尸生成时按当前百分比补生命池(见下一条规则), 减伤与伤害用伤害修正实现。
+# 动态难度: 生命值用设置最大生命值, 减伤与伤害用伤害修正。
 # 伤害修正与 settings 里的 damageReceived%/damageDealt% 相乘, 不会覆盖各英雄已有的属性设置。
 rule "Difficulty - Apply zombie damage scaling":
     @Condition isGameInProgress() == true
@@ -19,18 +19,20 @@ rule "Difficulty - Apply zombie damage scaling":
     Zombie_Damage_Modification_Id = getLastDamageModification()
 
 
-rule "Difficulty - Zombie health pool":
+rule "Difficulty - Zombie max health":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.isDummy() == true
+    @Condition zombieHealthPercent() != 100
 
-    # 英雄的 health% 设置在出生时生效, 等一帧再读, 读到的是含设置的当前最大生命。
+    # setMaxHealth 的百分比以英雄原始最大生命为基准, 会把 settings 里该英雄的 health% 顶掉。
+    # 先记下出生时(含 health%)的最大生命, 归一到 100% 读出原始值, 再按 难度×玩家数 的倍率写回。
     wait(0.016, Wait.ABORT_WHEN_FALSE)
-    # 生命池是否跨死亡保留没有文档保证: 先按句柄清旧池, 再按当前难度补足, 避免重生叠层。
-    if eventPlayer.Zombie_Health_Pool != null:
-        removeHealthPool(eventPlayer.Zombie_Health_Pool)
-        eventPlayer.Zombie_Health_Pool = null
-    if zombieHealthPercent() > 100:
-        eventPlayer.addHealthPool(Health.NORMAL, ceil(eventPlayer.getMaxHealth() * (zombieHealthPercent() - 100) / 100), false, false)
-        eventPlayer.Zombie_Health_Pool = getLastCreatedHealthPool()
+    eventPlayer.Zombie_Base_Max_Health = eventPlayer.getMaxHealth()
+    eventPlayer.setMaxHealth(100)
+    # 等 100% 写入后再读, 下面的分母就是原始最大生命。
+    wait(0.016, Wait.ABORT_WHEN_FALSE)
+    eventPlayer.setMaxHealth(eventPlayer.Zombie_Base_Max_Health * zombieHealthPercent() / eventPlayer.getMaxHealth() * 100)
+    # 归一时当前生命被压到新的最大值, 写回后补满, 保证出生即满血。
+    eventPlayer.setHealth(eventPlayer.getMaxHealth())
