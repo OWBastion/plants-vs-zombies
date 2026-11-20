@@ -88,15 +88,19 @@ def AITarget():
         chaseAtRate(eventPlayer.Target_Refresh_Time, 6, 1)
 
 
+# 英雄移动速度设置下限是 50%, 更慢只能靠油门系数: 实际速度 = 设置速度 × 油门。
+#!define AI_THROTTLE 0.85
+
+
 def AIMove():
     @Name "//AI Move"
 
     if eventPlayer.Chase_Target_Player == null or eventPlayer.Chase_Target_Player.isAlive() != true:
         eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), Brain_Positions[0].getPosition()), 270)
-        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, Brain_Positions[0].getPosition()), 1, Relativity.TO_WORLD)
+        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, Brain_Positions[0].getPosition()), AI_THROTTLE, Relativity.TO_WORLD)
     else:
         eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.Chase_Target_Player.getEyePosition() - vect(0, 0.3, 0)), 270)
-        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.Chase_Target_Player), 1, Relativity.TO_WORLD)
+        eventPlayer.startThrottleInDirection(directionTowards(eventPlayer, eventPlayer.Chase_Target_Player), AI_THROTTLE, Relativity.TO_WORLD)
 
 
 def stuckCheck():
