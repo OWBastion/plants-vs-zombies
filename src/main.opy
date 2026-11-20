@@ -86,6 +86,7 @@ settings {
                 "jumpVerticalSpeed%": 90,
                 "enableAbility2": false,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "enableUlt": false,
                 "enableSecondaryFire": false
             },
@@ -94,6 +95,7 @@ settings {
                 "damageDealt%": 400,
                 "jumpVerticalSpeed%": 150,
                 "health%": 250,
+                "movementSpeed%": 50,
                 "ultDuration%": 25
             },
             "soldier": {
@@ -102,6 +104,7 @@ settings {
                 "healingDealt%": 150,
                 "health%": 140,
                 "ability2Cooldown%": 67,
+                "movementSpeed%": 45,
                 "enableUlt": false,
                 "enableSecondaryFire": false
             },
@@ -109,6 +112,7 @@ settings {
                 "damageDealt%": 120,
                 "weaponsEnabled": "staff",
                 "health%": 150,
+                "movementSpeed%": 55,
                 "enableUlt": false,
                 "ability2Cooldown%": 120
             },
@@ -118,6 +122,7 @@ settings {
                 "ability1Cooldown%": 100,
                 "enableAbility2": false,
                 "health%": 100,
+                "movementSpeed%": 45,
                 "enableSecondaryFire": false
             },
             "ana": {
@@ -127,6 +132,7 @@ settings {
                 "healingDealt%": 175,
                 "health%": 150,
                 "ability2Cooldown%": 180,
+                "movementSpeed%": 50,
                 "ultGen%": 130,
                 "passiveUltGen%": 140,
                 "ability1Cooldown%": 190
@@ -137,6 +143,7 @@ settings {
                 "ability1Cooldown%": 300,
                 "healingDealt%": 175,
                 "health%": 250,
+                "movementSpeed%": 50,
                 "ultGen%": 140,
                 "ability2Cooldown%": 240
             },
@@ -146,6 +153,7 @@ settings {
                 "combatUltGen%": 110,
                 "enableAbility1": false,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "ultGen%": 110,
                 "passiveUltGen%": 110,
                 "shieldBashCooldown%": 400,
@@ -162,6 +170,7 @@ settings {
                 "ability2Cooldown%": 35,
                 "ability2Duration%": 25,
                 "health%": 325,
+                "movementSpeed%": 50,
                 "ultGen%": 10,
                 "ultDuration%": 25,
                 "passiveUltGen%": 0,
@@ -187,6 +196,7 @@ settings {
                 "secondaryFireCooldown%": 0,
                 "secondaryFireKb%": 0,
                 "health%": 220,
+                "movementSpeed%": 45,
                 "movementGravity%": 60,
                 "enableUlt": false,
                 "enableAbility2": false
@@ -205,6 +215,7 @@ settings {
                 "projectileSpeed%": 125,
                 "ability2Cooldown%": 75,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "ability1Cooldown%": 75,
                 "enableUlt": false,
                 "enableSecondaryFire": false
@@ -216,6 +227,7 @@ settings {
                 "ability2Cooldown%": 140,
                 "healingDealt%": 35,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "enableUlt": false
             },
             "mauga": {
@@ -233,6 +245,7 @@ settings {
                 "enablePassiveUnlimitedFuel": true,
                 "primaryFireKb%": 75,
                 "health%": 100,
+                "movementSpeed%": 45,
                 "enableUlt": false,
                 "enableAbility2": false,
                 "ability2Kb%": 25
@@ -242,6 +255,7 @@ settings {
                 "damageDealt%": 325,
                 "ability1Cooldown%": 67,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "secondaryFireKb%": 0,
                 "锯齿利刃（格雷西）": "关闭"
             },
@@ -254,6 +268,7 @@ settings {
                 "ability1Acceleration%": 35,
                 "ability2Cooldown%": 175,
                 "combatUltGen%": 130,
+                "movementSpeed%": 45,
                 "movementGravity%": 110,
                 "ultGen%": 130,
                 "ultDuration%": 75,
@@ -267,6 +282,7 @@ settings {
                 "enableAbility1": false,
                 "combatUltGen%": 180,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "ultGen%": 180,
                 "ultDuration%": 175,
                 "passiveUltGen%": 180,
@@ -293,6 +309,7 @@ settings {
                 "combatUltGen%": 300,
                 "projectileGravity%": 200,
                 "health%": 500,
+                "movementSpeed%": 45,
                 "ultGen%": 300,
                 "passiveUltGen%": 300,
                 "enableSpawningWithUlt": true,
@@ -312,6 +329,7 @@ settings {
                 "enableAbility2": false,
                 "combatUltGen%": 0,
                 "health%": 130,
+                "movementSpeed%": 45,
                 "ultGen%": 10,
                 "ultDuration%": 500,
                 "passiveUltGen%": 50,
@@ -322,6 +340,7 @@ settings {
                 "enableAbility2": false,
                 "damageDealt%": 400,
                 "health%": 150,
+                "movementSpeed%": 45,
                 "enableSecondaryFire": false,
                 "enableSpawningWithUlt": true
             },
@@ -342,6 +361,7 @@ settings {
                 "damageDealt%": 400,
                 "damageReceived%": 100,
                 "health%": 140,
+                "movementSpeed%": 45,
                 "充能射击": "关闭"
             },
             "mei": {
@@ -353,6 +373,7 @@ settings {
                 "ability1Cooldown%": 500,
                 "ultFreezeRate%": 120,
                 "health%": 400,
+                "movementSpeed%": 45,
                 "enableUlt": false,
                 "enableSecondaryFire": false
             },
@@ -390,6 +411,7 @@ settings {
                 "secondaryFireRechargeRate%": 75,
                 "enableAbility2": false,
                 "health%": 50,
+                "movementSpeed%": 45,
                 "enableUlt": false
             },
             "sigma": {
@@ -399,6 +421,7 @@ settings {
                 "secondaryFireCooldown%": 300,
                 "projectileSpeed%": 50,
                 "health%": 125,
+                "movementSpeed%": 50,
                 "enableUlt": false,
                 "ability2Cooldown%": 200
             },
@@ -407,6 +430,7 @@ settings {
                 "damageDealt%": 400,
                 "healingReceived%": 85,
                 "health%": 200,
+                "movementSpeed%": 45,
                 "enableUlt": false,
                 "enableAbility1": false
             },
@@ -438,14 +462,14 @@ settings {
                 "ability1Cooldown%": 200,
                 "projectileGravity%": 80,
                 "health%": 140,
+                "movementSpeed%": 45,
                 "ultDuration%": 300,
                 "enableSpawningWithUlt": true
             },
             "general": {
                 "damageDealt%": 400,
                 "jumpVerticalSpeed%": 190,
-                # 僵尸移动速度: 基准 5.5 m/s 的 85%
-                "movementSpeed%": 85,
+                "movementSpeed%": 45,
                 "movementGravity%": 90,
                 "ultGen%": 180,
                 "passiveUltGen%": 180
@@ -921,7 +945,6 @@ subroutine stuckCheck 7
 #!postCompileHook "../postCompileHook.js"
 
 #!include "mode/init.opy"
-#!include "mode/difficulty.opy"
 #!include "mode/map.opy"
 #!include "ui/hud.opy"
 #!include "mode/rounds.opy"
