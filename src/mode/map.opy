@@ -1,5 +1,9 @@
 #!mainFile "../main.opy"
 
+# 玩家落点。脑子坐标贴着地面或嵌在地形里, 直接传送会穿模掉出地图, 因此抬高 1.5 米再落到地面。
+# 只用于玩家传送: Brain_Positions 本身仍是僵尸寻路目标与吃脑判定点。
+#!define PLAYER_SPAWN_POSITION() (Brain_Positions[0] + vect(0, 1.5, 0))
+
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     @Condition isGameInProgress() == true
     @Condition Current_Wave >= 2
@@ -85,7 +89,7 @@ rule "[Mode]: Spawn Teleport":
         # 实测请求值比实际复活等待多约 2 秒: 10 -> 约 8 秒, 6 -> 约 4 秒
         eventPlayer.setRespawnTime(6 if Current_Wave == Total_Wave_Count else 10)
     else:
-        eventPlayer.teleport(Brain_Positions[0])
+        eventPlayer.teleport(PLAYER_SPAWN_POSITION())
 
 
 # 开赛前选英雄不会触发重生, 换英雄后需要再传送一次
@@ -98,7 +102,7 @@ rule "[Mode]: Hero Change Teleport":
     @Condition len(Brain_Positions) > 0
 
     eventPlayer.Last_Teleported_Hero = eventPlayer.getHero()
-    eventPlayer.teleport(Brain_Positions[0])
+    eventPlayer.teleport(PLAYER_SPAWN_POSITION())
 
 
 rule "Player Resurrect - Respawn at Brain Points":
@@ -107,6 +111,6 @@ rule "Player Resurrect - Respawn at Brain Points":
     @Condition isGameInProgress() == true
     @Condition eventPlayer.isAlive() != true
 
-    eventPlayer.teleport(Brain_Positions[0])
+    eventPlayer.teleport(PLAYER_SPAWN_POSITION())
     waitUntil(not Is_Attack_Phase and ((Current_Wave == 4 or Current_Wave == 6 or Current_Wave == 8 or Current_Wave == 10) == true), 999999986991104)
     eventPlayer.resurrect()
