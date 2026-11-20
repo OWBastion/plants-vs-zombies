@@ -13,10 +13,38 @@ rule "[ai]: Base Melee":
     @Condition eventPlayer.isUsingAbility1() != true
     @Condition eventPlayer.isUsingAbility2() != true
     @Condition eventPlayer.isUsingUltimate() != true
+    @Condition eventPlayer.getHero() != Hero.REINHARDT or eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) != true
 
     wait(0.15, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.MELEE)
     wait(0.5)
+    if ruleCondition:
+        loop()
+
+
+rule "[ai]: Use Hero Abilities":
+    @Event eachPlayer
+    @Team 1
+    @Condition eventPlayer.isDummy() == true
+    @Condition eventPlayer.isAlive() == true
+    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.getHero() in [Hero.DVA, Hero.MAUGA, Hero.WINSTON, Hero.REINHARDT, Hero.HAZARD, Hero.ECHO, Hero.BASTION, Hero.SOLDIER, Hero.FREJA, Hero.REAPER, Hero.GENJI, Hero.TRACER, Hero.SOJOURN, Hero.ILLARI, Hero.BAPTISTE, Hero.JUNO, Hero.SIGMA]
+
+    if not eventPlayer.isUsingAbility1() and not eventPlayer.isUsingAbility2() and not eventPlayer.isUsingUltimate():
+        if eventPlayer.getHero() != Hero.SIGMA and eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0:
+            if eventPlayer.getHero() == Hero.SOLDIER:
+                eventPlayer.startForcingButton(Button.ABILITY_1)
+                waitUntil(not eventPlayer.isAlive() or not Is_Attack_Phase, 4)
+                eventPlayer.stopForcingButton(Button.ABILITY_1)
+            else:
+                eventPlayer.forceButtonPress(Button.ABILITY_1)
+        elif eventPlayer.getHero() in [Hero.ILLARI, Hero.BAPTISTE, Hero.JUNO, Hero.MAUGA] and eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0:
+            eventPlayer.forceButtonPress(Button.ABILITY_2)
+        elif eventPlayer.getHero() in [Hero.SIGMA, Hero.REINHARDT] and eventPlayer.getAbilityCooldown(Button.SECONDARY_FIRE) == 0:
+            eventPlayer.startForcingButton(Button.SECONDARY_FIRE)
+            waitUntil(not eventPlayer.isAlive() or not Is_Attack_Phase, 4)
+            eventPlayer.stopForcingButton(Button.SECONDARY_FIRE)
+    wait(1, Wait.ABORT_WHEN_FALSE)
     if ruleCondition:
         loop()
 

@@ -56,7 +56,6 @@ settings {
             "illari": {
                 "enablePrimaryFire": false,
                 "enableInfiniteAmmo": true,
-                "enableAbility1": false,
                 "health%": 200,
                 "enableUlt": false
             },
@@ -222,7 +221,6 @@ settings {
             "reaper": {
                 "enablePrimaryFire": false,
                 "damageDealt%": 400,
-                "enableAbility1": false,
                 "ability2Cooldown%": 140,
                 "healingDealt%": 35,
                 "health%": 200,
@@ -278,7 +276,6 @@ settings {
                 "enablePrimaryFire": false,
                 "damageDealt%": 500,
                 "damageReceived%": 95,
-                "enableAbility1": false,
                 "combatUltGen%": 180,
                 "health%": 200,
                 "movementSpeed%": 50,
@@ -312,8 +309,7 @@ settings {
                 "ultGen%": 300,
                 "passiveUltGen%": 300,
                 "enableSpawningWithUlt": true,
-                "ability2Cooldown%": 125,
-                "enableAbility1": false
+                "ability2Cooldown%": 125
             },
             "lifeweaver": {
                 "weaponsEnabled": "healingBlossom",
