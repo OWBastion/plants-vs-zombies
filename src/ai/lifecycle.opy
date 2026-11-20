@@ -18,7 +18,10 @@ rule "[ai]: Create AI Bot":
         if getNumberOfPlayers(Team.1) == 0:
             createDummy(Hero.BRIGITTE, Team.1, -1, Zombie_Spawn_Positions[0].getPosition(), Brain_Positions[0])
         else:
-            createDummy(Zombie_Hero_Pool.filter(lambda x: getNumberOfHeroes(x, Team.1) <= 3), Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
+            createDummy(
+                random.choice(Zombie_Hero_Pool.filter(lambda hero: getNumberOfHeroes(hero, Team.1) == 0)),
+                Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0]
+            )
         # 准备阶段玩家可以提前开火, 僵尸必须不可伤害, 否则波次没开始就少人。
         if Is_Attack_Phase == false:
             getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, Wave_Prep_Time_Left)
