@@ -171,6 +171,8 @@ playervar Damage_Modification_Id
 playervar Damage_Modification_Percent
 playervar Received_Modification_Id
 playervar Received_Modification_Percent
+# 亮出你的剑: 把 7 米外僵尸受伤压到 0 的伤害调整句柄。
+playervar Sword_Range_Modification_Id
 playervar Card_Upgrade_Ids
 playervar Candidate_Upgrade_Ids
 playervar Selected_Card_Index

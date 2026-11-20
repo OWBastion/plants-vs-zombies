@@ -121,6 +121,7 @@ rule "Feska - Initialize player":
     eventPlayer.Is_Berserk_Guard_Armed = false
     eventPlayer.Damage_Modification_Id = null
     eventPlayer.Received_Modification_Id = null
+    eventPlayer.Sword_Range_Modification_Id = null
     eventPlayer.Damage_Modification_Percent = 0
     eventPlayer.Received_Modification_Percent = 100
     feskaRefreshMods()
@@ -136,8 +137,11 @@ rule "Feska - Release player modifier":
         stopDamageModification(eventPlayer.Damage_Modification_Id)
     if eventPlayer.Received_Modification_Id != null:
         stopDamageModification(eventPlayer.Received_Modification_Id)
+    if eventPlayer.Sword_Range_Modification_Id != null:
+        stopDamageModification(eventPlayer.Sword_Range_Modification_Id)
     eventPlayer.Damage_Modification_Id = null
     eventPlayer.Received_Modification_Id = null
+    eventPlayer.Sword_Range_Modification_Id = null
     if Tech_Id.SHIELD in eventPlayer.Owned_Tech_Ids:
         # 持有者离场则科技失效: 清掉其他玩家身上本来源的护盾池, 不留常驻残血池。
         Player_List = getPlayers(Team.2)
