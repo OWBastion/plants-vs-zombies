@@ -40,7 +40,6 @@ def feskaStopBerserk():
         Target_Player.Is_Berserk = false
         Target_Player.setMaxHealth(feskaHealthPercent(Target_Player))
         Target_Player.setHealingReceived(100 + 10 * Target_Player.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
-        Target_Player.setKnockbackReceived(100 - 10 * Target_Player.Bonus_By_Stat[Stat_Bonus.KNOCKBACK_RESISTANCE])
 
 
 def feskaRefreshShields():
@@ -95,7 +94,7 @@ rule "Feska - Initialize player":
     @Condition not eventPlayer.Is_Initialized
 
     eventPlayer.Owned_Tech_Ids = []
-    eventPlayer.Bonus_By_Stat = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    eventPlayer.Bonus_By_Stat = [0, 0, 0, 0, 0, 0, 0, 0]
     # 首次生成时没有任何本模式生命池与 setMaxHealth 修改, 读取到的就是英雄原始最大生命。
     eventPlayer.Base_Max_Health = eventPlayer.getMaxHealth()
     eventPlayer.Card_Upgrade_Ids = []
@@ -294,9 +293,6 @@ rule "Feska - Confirm card":
         eventPlayer.setHealingReceived(100 + 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
     elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.ULTIMATE_CHARGE:
         eventPlayer.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] += 1
-    elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.KNOCKBACK_RESISTANCE:
-        eventPlayer.Bonus_By_Stat[Stat_Bonus.KNOCKBACK_RESISTANCE] = min(eventPlayer.Bonus_By_Stat[Stat_Bonus.KNOCKBACK_RESISTANCE] + 1, 8)
-        eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.KNOCKBACK_RESISTANCE])
     Target_Player = eventPlayer
     smallMessage(eventPlayer, "已选择：{0}".format(Upgrade_Catalog[eventPlayer.Chosen_Upgrade_Id][UPGRADE_COLUMN_NAME]))
     eventPlayer.Card_Upgrade_Ids = []
@@ -352,7 +348,6 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.setHealingDealt(100 + eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING])
     # 重生/换英雄会清掉英雄属性修改, 这里按累计状态无条件重放, 不能只在有堆叠时恢复。
     eventPlayer.setHealingReceived(100 + 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
-    eventPlayer.setKnockbackReceived(100 - 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.KNOCKBACK_RESISTANCE])
     if Tech_Id.NO_ULTIMATE in eventPlayer.Owned_Tech_Ids:
         eventPlayer.setUltEnabled(false)
     Target_Player = eventPlayer
@@ -468,7 +463,7 @@ rule "Feska - Upgrade catalog":
         ["属性强化：再生", "进攻期间，每秒恢复 0.3% 最大生命值", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
         ["属性强化：受疗", "受到的治疗效果提高 10%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
         ["属性强化：充能", "进攻期间，每秒额外获得 0.2% 终极技能充能", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
-        ["属性强化：抗击退", "获得 10% 击退抗性（上限 80%）", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, []], # 保留索引 33。
         # 索引 34..38 由 vars.opy 的 Tech_Id.FIRST_AID_KIT..Tech_Id.BERSERK 固定, 必须排在属性强化之后。
         UPGRADE_ROW_FIRST_AID_KIT,
         UPGRADE_ROW_RADIANT,

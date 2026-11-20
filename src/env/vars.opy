@@ -65,7 +65,6 @@ enum Stat_Bonus:
     REGENERATION
     HEALING_RECEIVED
     ULTIMATE_CHARGE
-    KNOCKBACK_RESISTANCE
 
 # 选牌界面当前展示哪一类候选。
 enum Choice_Kind:
@@ -120,7 +119,6 @@ enum Stat_Upgrade_Id:
     REGENERATION = 30
     HEALING_RECEIVED = 31
     ULTIMATE_CHARGE = 32
-    KNOCKBACK_RESISTANCE = 33
 
 #!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgressRatio() min(max((Current_Wave - 1) / max(Total_Wave_Count - 1, 1), 0), 1)

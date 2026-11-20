@@ -7,7 +7,7 @@
 | 范围 | 状态 |
 | --- | --- |
 | 27 项目录 + 3 项迁移合并卡 | 30 项 `enabled=1`，全部进池 |
-| 12 项属性强化 | 全部实现并进池 |
+| 11 项属性强化 | 全部实现并进池 |
 | 技能强化与迁移合并卡 | 灼蚀、会心一击、终极循环往复、铁血无情已实现 |
 | 选择流程、波次奖励、HUD、唯一性 | 已实现 |
 | 生命口径（百分比 / 生命点数） | 已分离实现 |
@@ -19,12 +19,12 @@
 ## 1. 当前代码与任务边界
 
 - 最新已核对提交：`5ad18df refactor: 统一变量、枚举与宏的命名`。标识符已统一为 `Tech_Id` / `Stat_Upgrade_Id` / `Owned_Tech_Ids` / `Is_Attack_Phase` / `UPGRADE_*` 等新命名，本文与源码一致。
-- `src/player/progression.opy` 已有 27 项科技目录（全部启用）和 12 项属性强化目录。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
+- `src/player/progression.opy` 已有 27 项科技目录（全部启用）和 11 项属性强化目录。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
 - 入口：`src/main.opy` include 成长模块；变量与宏位于 `src/env/vars.opy`。目录列已含类型、唯一性、启用列，候选池由目录过滤生成，无硬编码区间。
 - 波次接入：`src/mode/rounds.opy` 的 `Players - Round Attack End` 先给已持有四项科技的玩家 `Pending_Stat_Upgrade_Count += 1`，再更新 `Finished_Wave_Count`；条件是 `Current_Wave < Total_Wave_Count`，最终波不发放。
 - 生命口径已分离：`feskaHealthPercent(p)` 是 `setMaxHealth` 用的百分比，`feskaMaxHealth(p)` 是实际生命点数（原始生命 × 加成% ＋ 心之钢 ＋ 护甲强化），不含本来源光盾/血肉/反应装甲池。前置单位问题已修正。
 - 狂战士自由移动已接入 `src/player/movement.opy`（`berserk != true` 才施加进攻定点约束）。
-- 目标 27 项科技与 12 项属性强化均已有代码。T23 与 T03 效果重叠，仍未合并，等用户决定。
+- 目标 27 项科技与 11 项属性强化均已有代码。T23 与 T03 效果重叠，仍未合并，等用户决定。
 - 英雄效果已迁移 4 项（灼蚀、会心一击、终极循环往复、铁血无情），其余英雄脚本效果按用户确认全部删除，`src/heroes/abilities/` 目录已移除。全部游戏内验证仍未开始。
 
 开始实施前读取 `AGENTS.md` 及 `docs/agents/{gameplay,state-and-lifecycle,performance,tooling-and-validation}.md`。玩家是队伍 2，僵尸是队伍 1。进攻时保持玩家定点约束，普通僵尸保持原有近战行为。
@@ -125,8 +125,8 @@
 - 一并清理 4 个孤立 `playervar`：`Zarya_Barrier_Pending`、`Zarya_Barrier_Health_Pool`、`Blink_Detonation_Pending`、`Blink_Owner`。
 - 后果：英雄回到原生强度。安娜、黑百合弹夹恢复原生；卡西迪、渣客女王、死神失去倍率加成；僵尸不再被眩晕、冰冻、击倒；查莉娅屏障只剩原生无敌；猎空大招不再连锁。
 
-## 4. 属性强化目录（12 项）
-允许重复选择，不占四个科技槽，持续到本局结束。12 项均已实现并进池（A07～A12 在 `progression.opy` 选牌处累加，无独立目录文件）。以下沿用上一轮清单初值；减伤、再生和充能叠加上限不是已经确认的需求。已实现的实现口径：A08 上限 50%，A12 上限 80%，A09 与 A11 复用 `repair.opy`、`battery.opy` 的定时规则。
+## 4. 属性强化目录（11 项）
+允许重复选择，不占四个科技槽，持续到本局结束。11 项均已实现并进池（A07～A11 在 `progression.opy` 选牌处累加，无独立目录文件）。以下沿用上一轮清单初值；减伤、再生和充能叠加上限不是已经确认的需求。已实现的实现口径：A08 上限 50%，A09 与 A11 复用 `repair.opy`、`battery.opy` 的定时规则。
 
 | 编号 | 游戏内名称 | 每次效果 |
 | --- | --- | --- |
@@ -141,7 +141,6 @@
 | A09 | 属性强化：再生 | 进攻期间每秒额外恢复最大生命值的 0.3%。 |
 | A10 | 属性强化：受疗 | 受到的治疗加成＋10%。 |
 | A11 | 属性强化：充能 | 进攻期间每秒额外获得 0.2% 终极技能充能。 |
-| A12 | 属性强化：抗击退 | 额外获得 10% 击退抵抗，上限 80%。 |
 
 ## 5. 波次成长与属性计算
 
