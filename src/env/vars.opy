@@ -211,3 +211,4 @@ playervar Is_Berserk
 playervar Is_Berserk_Guard_Armed
 # 动态难度改写僵尸最大生命前, 先暂存出生时(含 health%)的最大生命。
 playervar Zombie_Base_Max_Health
+playervar Heartsteel_Stacks
