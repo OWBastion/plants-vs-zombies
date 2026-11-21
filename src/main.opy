@@ -584,7 +584,7 @@ settings {
             "juno": {
                 "damageDealt%": 130,
                 "enableInfiniteAmmo": false,
-                "secondaryFireCooldown%": 60,
+                "secondaryFireCooldown%": 120,
                 "ability2Cooldown%": 20
             },
             "zarya": {
