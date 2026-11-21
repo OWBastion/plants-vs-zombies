@@ -1,6 +1,6 @@
 # 费斯卡科技：近战与前排设计稿 v10
 
-状态：**设计稿，未实现**。等确认后落地。编号仅用于讨论，不是代码 ID。落地时从 `Tech_Id 47` 起追加。
+状态：**设计稿，未实现**。等确认后落地。编号仅用于讨论，不是代码 ID。落地时从 `Tech_Id 43` 起追加（现有目录 43 行，编号 0–42）。
 
 ## 保留的 10 项
 
@@ -120,7 +120,7 @@ rule "Feska - Dharma orb":
 
 | 文件 | 改动 |
 | --- | --- |
-| `src/env/vars.opy` | `Tech_Id.DHARMA = 47`；`globalvar Dharma_Mod_Id`、`Dharma_Mod_Owner`、`Dharma_Orb_Next_At`；`playervar Dharma_Orb_Id` |
+| `src/env/vars.opy` | `Tech_Id.DHARMA`（首批第 7 项，编号 49）；`globalvar Dharma_Mod_Id`、`Dharma_Mod_Owner`、`Dharma_Orb_Next_At`；`playervar Dharma_Orb_Id` |
 | `src/player/feska/tech/dharma.opy` | 新建：目录行（第 3 列写 1）、`feskaDharmaHolders()`、`feskaDharmaHolder()`、`feskaTakenUniqueTechIds()`、光环规则、特效规则 |
 | `src/player/progression.opy` | 追加 `#!include`；目录末尾追加行；`feskaBuildPool()` 加唯一过滤；`Feska - Replace taken unique card` 改为按 `feskaTakenUniqueTechIds()` 判定 |
 
