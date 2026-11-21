@@ -11,7 +11,7 @@ rule "Feska - Unyielding":
     @Condition Tech_Id.UNYIELDING in eventPlayer.Owned_Tech_Ids
     @Condition eventDamage > 0
     @Condition eventPlayer.isAlive()
-    @Condition eventPlayer.Is_Berserk != true
-    @Condition eventPlayer.Is_Spawning_Derived_Damage != true
+    @Condition not eventPlayer.Is_Berserk
+    @Condition not eventPlayer.Is_Spawning_Derived_Damage
 
     heal(eventPlayer, null, eventDamage * feskaMissingHealthPercent(eventPlayer) / 100)

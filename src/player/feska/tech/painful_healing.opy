@@ -5,8 +5,8 @@
 # 实现时的关键约束: 每次受击各建一条记录, 同时存在的记录数要封顶, 避免高攻速受击把
 # 玩家身上的生命池数量堆到不可控; 多条小池与一条大池的收益差别可以忽略。
 # 做法: Temp_Pool_Tag = Temp_Pool_Id.PAINFUL_HEALING、Temp_Pool_Amount = 伤害 × 12%、
-# Temp_Pool_Expire = getTotalTimeElapsed() + 8, 调 feskaAddTempPool(); 记录数用
-# feskaTempPoolCount(eventPlayer, Temp_Pool_Id.PAINFUL_HEALING) 判断, 到上限就不再追加。
+# Temp_Pool_Expire = getTotalTimeElapsed() + 8, 调 feskaAddTempPool()。
+# 统计 Temp_Pool_Ids 中 PAINFUL_HEALING 标签的记录数, 到上限就不再追加。
 # 完成后把目录行第 5 列改回 1。
 #!define FESKA_PAINFUL_SHARE 0.12
 #!define FESKA_PAINFUL_SECONDS 8

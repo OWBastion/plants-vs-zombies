@@ -19,7 +19,7 @@ rule "Feska - Death dance":
     @Condition eventDamage > 0
     @Condition attacker != null
     @Condition attacker.getTeam() == Team.1
-    @Condition eventPlayer.Is_Berserk != true
+    @Condition not eventPlayer.Is_Berserk
 
     Bleed_Amount = min(eventDamage * FESKA_DEATH_DANCE_SHARE, eventPlayer.getMaxHealth() - eventPlayer.getHealth())
     if Bleed_Amount > 0:
@@ -32,6 +32,6 @@ rule "Feska - Death dance final blow":
     @Team 2
     @Condition victim.getTeam() == Team.1
     @Condition Tech_Id.DEATH_DANCE in eventPlayer.Owned_Tech_Ids
-    @Condition eventPlayer.Is_Berserk != true
+    @Condition not eventPlayer.Is_Berserk
 
     heal(eventPlayer, null, feskaGrowthAt(feskaProgressRatio(), 25, 50) + feskaMaxHealth(eventPlayer) * 0.05)

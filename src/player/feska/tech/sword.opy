@@ -35,6 +35,6 @@ rule "Feska - Draw sword lifesteal":
     # 只算武器/近战命中, 与冰寒之刃同口径。
     @Condition eventAbility in [Button.PRIMARY_FIRE, Button.SECONDARY_FIRE, Button.MELEE]
     # 范围外伤害已压到 0, 不会产生吸血; 狂战士禁疗。
-    @Condition eventPlayer.Is_Berserk != true
+    @Condition not eventPlayer.Is_Berserk
 
     heal(eventPlayer, null, eventDamage * 0.15)

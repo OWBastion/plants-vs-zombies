@@ -9,7 +9,7 @@ rule "Feska - Lifesteal on elimination":
     @Condition eventPlayer.isAlive()
     @Condition victim.getTeam() == Team.1
     # 狂战士禁疗。
-    @Condition eventPlayer.Is_Berserk != true
+    @Condition not eventPlayer.Is_Berserk
     @Condition Tech_Id.LIFESTEAL in eventPlayer.Owned_Tech_Ids
 
     if eventPlayer.getHealth() < eventPlayer.getMaxHealth():

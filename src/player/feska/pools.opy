@@ -19,9 +19,6 @@
 #    外层的计数改掉, 外层只剩第一个玩家被处理, 后续玩家漏处理甚至越界。
 #    池表子程序因此改用自己的 Pool_Index, 与业务循环彻底分开。
 
-#!define feskaTempPoolCount(p, tag) len(p.Temp_Pool_Ids.filter(lambda value: value == tag))
-
-
 def feskaAddTempPool():
     @Name "Feska - add temp pool"
 

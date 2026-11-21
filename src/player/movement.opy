@@ -2,13 +2,13 @@
 
 # 进攻阶段仍可自由移动的英雄: 托比昂与狮音。
 # 定点规则与重生后的移动恢复共用这一份名单, 避免两处各写一套导致复活后被重新定点。
-#!define freeMoveHero() (eventPlayer.getHero() in [Hero.TORBJORN, Hero.SHION])
+#!define FREE_MOVE_HEROES [Hero.TORBJORN, Hero.SHION]
 
 rule "[Player]: Stop move when under attack":
     @Event eachPlayer
     @Team 1
-    @Condition Debug_Enabled != true
-    @Condition Is_Attack_Phase != true
+    @Condition not Debug_Enabled
+    @Condition not Is_Attack_Phase
 
     eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
     eventPlayer.setStatusEffect(null, Status.ROOTED, 999999986991104)
@@ -20,9 +20,9 @@ rule "[Player]: Stop move when under attack":
 rule "[Player]: Stop move when under attack":
     @Event eachPlayer
     @Team 2
-    @Condition Debug_Enabled != true
-    @Condition Is_Attack_Phase == true
-    @Condition freeMoveHero() != true
+    @Condition not Debug_Enabled
+    @Condition Is_Attack_Phase
+    @Condition eventPlayer.getHero() not in FREE_MOVE_HEROES
 
     smallMessage(eventPlayer, "  无法移动，正在防御中")
     eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
@@ -35,12 +35,12 @@ rule "[Player]: Stop move when under attack":
 rule "[Player]: ult reset":
     @Event eachPlayer
     @Team 2
-    @Condition Debug_Enabled != true
-    @Condition Is_Attack_Phase == true
-    @Condition eventPlayer.isUsingUltimate() == true
-    @Condition eventPlayer.getHero() in [Hero.DOOMFIST, Hero.BASTION, Hero.REAPER] == true
+    @Condition not Debug_Enabled
+    @Condition Is_Attack_Phase
+    @Condition eventPlayer.isUsingUltimate()
+    @Condition eventPlayer.getHero() in [Hero.DOOMFIST, Hero.BASTION, Hero.REAPER]
     # 狂战士之魂激活期间保持自由移动, 不因大招的移动恢复路径重新上定点油门。
-    @Condition eventPlayer.Is_Berserk != true
+    @Condition not eventPlayer.Is_Berserk
 
     eventPlayer.stopForcingThrottle()
     waitUntil(not eventPlayer.isUsingUltimate(), 10)

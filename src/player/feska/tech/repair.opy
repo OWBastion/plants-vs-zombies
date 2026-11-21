@@ -8,7 +8,7 @@ rule "Feska - Regeneration":
     @Condition Is_Attack_Phase
     @Condition eventPlayer.isAlive()
     # 狂战士禁疗: 自我修复与再生强化都不回血。
-    @Condition eventPlayer.Is_Berserk != true
+    @Condition not eventPlayer.Is_Berserk
     @Condition (Tech_Id.SELF_REPAIR in eventPlayer.Owned_Tech_Ids) or eventPlayer.Bonus_By_Stat[Stat_Bonus.REGENERATION] > 0
 
     wait(1, Wait.ABORT_WHEN_FALSE)

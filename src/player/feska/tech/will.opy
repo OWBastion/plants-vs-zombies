@@ -9,8 +9,8 @@ rule "Feska - Victory will":
     @Condition eventPlayer.isAlive()
     @Condition Tech_Id.VICTORY_WILL in eventPlayer.Owned_Tech_Ids
     # 狂战士优先: 激活期间胜利意志不触发, 避免禁疗状态被回血和无敌覆盖。
-    @Condition eventPlayer.Is_Berserk != true
-    @Condition eventPlayer.Victory_Will_Used_This_Wave != true
+    @Condition not eventPlayer.Is_Berserk
+    @Condition not eventPlayer.Victory_Will_Used_This_Wave
     @Condition eventPlayer.getHealth() <= feskaMaxHealth(eventPlayer) * 0.25
 
     eventPlayer.Victory_Will_Used_This_Wave = true

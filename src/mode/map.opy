@@ -52,7 +52,7 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
 rule "Player Resurrect - Disable Built-in Respawn":
     @Event eachPlayer
     @Team 2
-    @Condition eventPlayer.isDummy() == false
+    @Condition not eventPlayer.isDummy()
 
     eventPlayer.disableRespawn()
 
@@ -61,8 +61,8 @@ rule "Player Resurrect - Disable Built-in Respawn":
 # 僵尸只在比赛进行中传送到刷新点; 玩家无论是否开赛, 每次出生或被复活都落在脑子旁。
 rule "[Mode]: Spawn Teleport":
     @Event eachPlayer
-    @Condition eventPlayer.isAlive() == true
-    @Condition (not eventPlayer.isDummy() or isGameInProgress()) == true
+    @Condition eventPlayer.isAlive()
+    @Condition not eventPlayer.isDummy() or isGameInProgress()
     @Condition len(Brain_Positions) > 0
 
     if eventPlayer.isDummy():
@@ -84,8 +84,8 @@ rule "[Mode]: Spawn Teleport":
 rule "[Mode]: Hero Change Teleport":
     @Event eachPlayer
     @Team 2
-    @Condition eventPlayer.isDummy() == false
-    @Condition eventPlayer.isAlive() == true
+    @Condition not eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
     @Condition eventPlayer.getHero() != eventPlayer.Last_Teleported_Hero
     @Condition len(Brain_Positions) > 0
 
@@ -96,8 +96,8 @@ rule "[Mode]: Hero Change Teleport":
 rule "Player Resurrect - Respawn at Brain Points":
     @Event playerDied
     @Team 2
-    @Condition isGameInProgress() == true
-    @Condition eventPlayer.isAlive() != true
+    @Condition isGameInProgress()
+    @Condition not eventPlayer.isAlive()
 
     eventPlayer.teleport(PLAYER_SPAWN_POSITION())
     waitUntil(not Is_Attack_Phase and ((Current_Wave == 4 or Current_Wave == 6 or Current_Wave == 8 or Current_Wave == 10) == true), 999999986991104)

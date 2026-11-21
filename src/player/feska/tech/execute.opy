@@ -11,8 +11,8 @@ rule "Feska - Execute":
     @Team 2
     @Condition victim.getTeam() == Team.1
     @Condition Tech_Id.EXECUTE in eventPlayer.Owned_Tech_Ids
-    @Condition eventPlayer.Is_Spawning_Derived_Damage != true
-    @Condition victim.isAlive() == true
+    @Condition not eventPlayer.Is_Spawning_Derived_Damage
+    @Condition victim.isAlive()
     @Condition victim.getHealth() <= victim.getMaxHealth() * FESKA_EXECUTE_THRESHOLD / 100
 
     eventPlayer.Is_Spawning_Derived_Damage = true

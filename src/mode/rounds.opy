@@ -1,9 +1,9 @@
 #!mainFile "../main.opy"
 
 rule "Players - Round Lead Time Start":
-    @Condition (isAssemblingHeroes() or isGameInProgress()) == true
+    @Condition isAssemblingHeroes() or isGameInProgress()
     @Condition Current_Wave < Total_Wave_Count
-    @Condition Is_Attack_Phase == false
+    @Condition not Is_Attack_Phase
 
     waitUntil(not isAssemblingHeroes() and isGameInProgress(), 999999986991104)
     # 上一波残留的 dummy 与「禁止复活」状态都要清掉, 否则新一波的僵尸死一次就再也不回来。
@@ -15,9 +15,9 @@ rule "Players - Round Lead Time Start":
 
 
 rule "Players - Round Lead Time End":
-    @Condition isGameInProgress() == true
+    @Condition isGameInProgress()
     @Condition Current_Wave < Total_Wave_Count
-    @Condition Is_Attack_Phase == false
+    @Condition not Is_Attack_Phase
 
     waitUntil(Wave_Prep_Time_Left == 0, Wave_Prep_Duration)
     # 准备时间到点后仍然等本波配额发完再开波(16 只按 0.16 秒间隔约 2.6 秒)。
@@ -30,9 +30,9 @@ rule "Players - Round Lead Time End":
 
 
 rule "Players - Round Attack Start":
-    @Condition isGameInProgress() == true
+    @Condition isGameInProgress()
     @Condition Current_Wave <= Total_Wave_Count
-    @Condition Is_Attack_Phase == true
+    @Condition Is_Attack_Phase
 
     getPlayers(Team.1).enableRespawn()
     getPlayers(Team.1).clearStatusEffect(Status.INVINCIBLE)
@@ -41,9 +41,9 @@ rule "Players - Round Attack Start":
 
 
 rule "Players - Round Attack End":
-    @Condition isGameInProgress() == true
+    @Condition isGameInProgress()
     @Condition Current_Wave < Total_Wave_Count
-    @Condition Is_Attack_Phase == true
+    @Condition Is_Attack_Phase
 
     waitUntil(Wave_Attack_Time_Left == 0, Wave_Attack_Duration)
     # 铃响后停止补位: 额度没放完也不再放, 把残余僵尸交给玩家清场收尾。
@@ -61,8 +61,8 @@ rule "Players - Round Attack End":
 # 最后一波没有「进攻结束」规则, 铃响后必须在这里停掉补位:
 # 额度没放完的僵尸会一直按 3~5 秒复活, Barrier - Win 的「存活数量 == 0」就永远不成立。
 rule "Players - Final Wave Stop Respawn":
-    @Condition isGameInProgress() == true
-    @Condition Is_Attack_Phase == true
+    @Condition isGameInProgress()
+    @Condition Is_Attack_Phase
     @Condition Current_Wave == Total_Wave_Count
     @Condition Wave_Attack_Time_Left == 0
     @Condition getNumberOfLivingPlayers(Team.1) > 0

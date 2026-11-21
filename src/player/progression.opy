@@ -184,7 +184,10 @@ rule "Feska - Offer upgrade":
     @Condition not Is_Attack_Phase
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind == Choice_Kind.NONE
-    @Condition (len(eventPlayer.Owned_Tech_Ids) < MAX_TECH_COUNT and len(eventPlayer.Owned_Tech_Ids) < feskaTechAllowance()) or (len(eventPlayer.Owned_Tech_Ids) == MAX_TECH_COUNT and eventPlayer.Pending_Stat_Upgrade_Count > 0)
+    @Condition (
+        len(eventPlayer.Owned_Tech_Ids) < min(MAX_TECH_COUNT, feskaTechAllowance())
+        or (len(eventPlayer.Owned_Tech_Ids) == MAX_TECH_COUNT and eventPlayer.Pending_Stat_Upgrade_Count > 0)
+    )
 
     Target_Player = eventPlayer
     feskaDealCards()
@@ -237,8 +240,10 @@ rule "Feska - Replace taken unique card":
     @Team 2
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind == Choice_Kind.TECH
-    @Condition len(feskaDharmaHolders()) > 0 or len(shieldTechHolders()) > 0
-    @Condition (Tech_Id.SHIELD in eventPlayer.Card_Upgrade_Ids and len(shieldTechHolders()) > 0) or (Tech_Id.DHARMA in eventPlayer.Card_Upgrade_Ids and len(feskaDharmaHolders()) > 0)
+    @Condition (
+        (Tech_Id.SHIELD in eventPlayer.Card_Upgrade_Ids and len(shieldTechHolders()) > 0)
+        or (Tech_Id.DHARMA in eventPlayer.Card_Upgrade_Ids and len(feskaDharmaHolders()) > 0)
+    )
 
     # 唯一科技被其他玩家先选走后, 在场候选也要换掉, 不能只在抽取时过滤。
     Target_Player = eventPlayer
@@ -372,7 +377,7 @@ rule "Feska - Restore stats on hero change or respawn":
     Target_Player = eventPlayer
     feskaStopBerserk()
     # 托比昂/狮音在进攻阶段本就自由移动, 重生后要解除油门而不是重新定点, 否则会原地卡死。
-    if freeMoveHero() == true:
+    if eventPlayer.getHero() in FREE_MOVE_HEROES:
         eventPlayer.clearStatusEffect(Status.ROOTED)
         eventPlayer.stopForcingThrottle()
     elif Is_Attack_Phase:

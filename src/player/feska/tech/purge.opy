@@ -7,7 +7,7 @@ rule "Feska - Soul purge":
     @Team 2
     @Condition victim.getTeam() == Team.1
     @Condition Tech_Id.SOUL_PURGE in eventPlayer.Owned_Tech_Ids
-    @Condition eventPlayer.Is_Spawning_Derived_Damage != true
+    @Condition not eventPlayer.Is_Spawning_Derived_Damage
 
     # 派生伤害期间关闭引爆, 避免连锁爆炸递归。
     eventPlayer.Is_Spawning_Derived_Damage = true

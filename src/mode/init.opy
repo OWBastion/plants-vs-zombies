@@ -35,7 +35,7 @@ rule "[Global]Setup N":
 rule "[Player]Remove Player from N":
     @Event playerJoined
     @Team 2
-    @Condition "{0}".format(eventPlayer) in Blocked_Player_Names == true
+    @Condition "{0}".format(eventPlayer) in Blocked_Player_Names
 
     eventPlayer.removeFromGame()
 

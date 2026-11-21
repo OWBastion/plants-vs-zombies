@@ -146,9 +146,9 @@ def stuckCheck():
 rule "//AI Move":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isAlive()
+    @Condition eventPlayer.isDummy()
+    @Condition Is_Attack_Phase
 
     wait(eventPlayer.getSlot() * 0.016, Wait.ABORT_WHEN_FALSE)
     AITarget()

@@ -20,7 +20,7 @@ rule "Feska - Reactive armor pool":
     @Condition Tech_Id.REACTIVE in eventPlayer.Owned_Tech_Ids
     @Condition eventPlayer.isAlive()
     # 该标签下没有记录即缺池: 选中科技、重生或换英雄后都从这里补建。
-    @Condition feskaTempPoolCount(eventPlayer, Temp_Pool_Id.REACTIVE) == 0
+    @Condition Temp_Pool_Id.REACTIVE not in eventPlayer.Temp_Pool_Ids
 
     Target_Player = eventPlayer
     feskaApplyReactivePool()

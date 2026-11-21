@@ -7,8 +7,8 @@ rule "Feska - Berserk guard":
     @Team 2
     @Condition Is_Attack_Phase
     @Condition Tech_Id.BERSERK in eventPlayer.Owned_Tech_Ids
-    @Condition eventPlayer.Is_Berserk != true
-    @Condition eventPlayer.Is_Berserk_Guard_Armed != true
+    @Condition not eventPlayer.Is_Berserk
+    @Condition not eventPlayer.Is_Berserk_Guard_Armed
     @Condition eventPlayer.isAlive()
 
     # 未激活时不死: 致命伤只把生命压到 1, 玩家不进入死亡结算, 单次爆发伤害也不会越过触发阈值。
@@ -35,7 +35,7 @@ rule "Feska - Berserk drain":
     @Event eachPlayer
     @Team 2
     @Condition Is_Attack_Phase
-    @Condition eventPlayer.Is_Berserk == true
+    @Condition eventPlayer.Is_Berserk
     @Condition eventPlayer.isAlive()
 
     wait(1, Wait.ABORT_WHEN_FALSE)

@@ -3,7 +3,7 @@
 # 动态难度: 减伤与伤害用伤害修正。僵尸生命值只由 settings 决定, 不随难度和人数量调整。
 # 伤害修正与 settings 里的 damageReceived%/damageDealt% 相乘, 不会覆盖各英雄已有的属性设置。
 rule "Difficulty - Apply zombie damage scaling":
-    @Condition isGameInProgress() == true
+    @Condition isGameInProgress()
     @Condition Difficulty_Applied_Player_Count != DIFFICULTY_PLAYER_COUNT() or Difficulty_Applied_For_Wave != Current_Wave
 
     Difficulty_Applied_Player_Count = DIFFICULTY_PLAYER_COUNT()

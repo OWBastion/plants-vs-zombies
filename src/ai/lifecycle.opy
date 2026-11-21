@@ -6,13 +6,13 @@ globalvar Zombie_Count_Before_Spawn
 #!define AI_PRELOAD_INTERVAL 0.16
 
 # 补齐窗口: 准备阶段(集结结束后)到进攻阶段前段。
-#!define zombieSpawnWindow() ((Is_Attack_Phase == false and isAssemblingHeroes() == false) or (Is_Attack_Phase == true and Wave_Attack_Time_Left > 10))
+#!define zombieSpawnWindow() (Wave_Attack_Time_Left > 10 if Is_Attack_Phase else not isAssemblingHeroes())
 # 到配额就不再加人。准备阶段按"已发起的生成次数"算, 进攻阶段按存活数算(死亡补位)。
 # 不用队伍玩家数当循环条件: 它是槽位数, 和"扩展能生成多少只机器人"不是一回事。
-#!define zombieNeedsSpawn() (Zombie_Spawn_Count < zombieWaveQuotaNow() if Is_Attack_Phase == false else getNumberOfLivingPlayers(Team.1) < zombieWaveQuotaNow())
+#!define zombieNeedsSpawn() ((getNumberOfLivingPlayers(Team.1) if Is_Attack_Phase else Zombie_Spawn_Count) < zombieWaveQuotaNow())
 
 rule "[ai]: Create AI Bot":
-    @Condition isGameInProgress() == true
+    @Condition isGameInProgress()
     @Condition zombieSpawnWindow()
     @Condition zombieNeedsSpawn()
 

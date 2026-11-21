@@ -9,7 +9,7 @@ rule "Feska - Critical strike":
     @Team 2
     @Condition victim.getTeam() == Team.1
     @Condition Tech_Id.CRIT in eventPlayer.Owned_Tech_Ids
-    @Condition eventWasCriticalHit == true
+    @Condition eventWasCriticalHit
 
     playEffect(eventPlayer, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION, Color.YELLOW, victim, 0.5)
     damage(victim, eventPlayer, ceil(60 + victim.getMaxHealth() * 0.08))

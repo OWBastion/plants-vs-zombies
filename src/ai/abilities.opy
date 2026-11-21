@@ -3,17 +3,17 @@
 rule "[ai]: Base Melee":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isAlive() == true
-    @Condition eventPlayer.isDummy() == true
-    @Condition isGameInProgress() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isAlive()
+    @Condition eventPlayer.isDummy()
+    @Condition isGameInProgress()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.Chase_Target_Player != null
-    @Condition eventPlayer.Chase_Target_Player.isAlive() == true
+    @Condition eventPlayer.Chase_Target_Player.isAlive()
+    @Condition not eventPlayer.isUsingAbility1()
+    @Condition not eventPlayer.isUsingAbility2()
+    @Condition not eventPlayer.isUsingUltimate()
+    @Condition eventPlayer.getHero() != Hero.REINHARDT or not eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
     @Condition distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 3.5
-    @Condition eventPlayer.isUsingAbility1() != true
-    @Condition eventPlayer.isUsingAbility2() != true
-    @Condition eventPlayer.isUsingUltimate() != true
-    @Condition eventPlayer.getHero() != Hero.REINHARDT or eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) != true
 
     wait(0.15, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.MELEE)
@@ -25,9 +25,9 @@ rule "[ai]: Base Melee":
 rule "[ai]: Use Hero Abilities":
     @Event eachPlayer
     @Team 1
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getHero() in [Hero.DVA, Hero.MAUGA, Hero.WINSTON, Hero.REINHARDT, Hero.HAZARD, Hero.ECHO, Hero.BASTION, Hero.SOLDIER, Hero.FREJA, Hero.REAPER, Hero.GENJI, Hero.TRACER, Hero.SOJOURN, Hero.ILLARI, Hero.BAPTISTE, Hero.JUNO, Hero.SIGMA]
 
     if not eventPlayer.isUsingAbility1() and not eventPlayer.isUsingAbility2() and not eventPlayer.isUsingUltimate():
@@ -53,9 +53,9 @@ rule "[ai]: Zarya Use Barrier":
     @Event eachPlayer
     @Team 1
     @Hero zarya
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -68,9 +68,9 @@ rule "[ai]: Orisa Use Fortify":
     @Event eachPlayer
     @Team 1
     @Hero orisa
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -83,9 +83,9 @@ rule "[ai]: Cassidy Use Roll":
     @Event eachPlayer
     @Team 1
     @Hero cassidy
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -98,9 +98,9 @@ rule "[ai]: Lucio Speed Song":
     @Event eachPlayer
     @Team 1
     @Hero lucio
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
     waitUntil(not eventPlayer.isAlive() or not Is_Attack_Phase, 999999986991104)
@@ -110,9 +110,9 @@ rule "[ai]: Lucio Amp":
     @Event eachPlayer
     @Team 1
     @Hero lucio
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -125,9 +125,9 @@ rule "[ai]: Roadhog Use Breather":
     @Event eachPlayer
     @Team 1
     @Hero roadhog
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getHealth() <= eventPlayer.getMaxHealth() * 0.5
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
 
@@ -141,9 +141,9 @@ rule "[ai]: Junker Queen Use Shout":
     @Event eachPlayer
     @Team 1
     @Hero junker_queen
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -156,9 +156,9 @@ rule "[ai]: Torbjorn Use Overload":
     @Event eachPlayer
     @Team 1
     @Hero torbjorn
-    @Condition eventPlayer.isDummy() == true
-    @Condition eventPlayer.isAlive() == true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
 
     eventPlayer.forceButtonPress(Button.ABILITY_2)
@@ -171,10 +171,10 @@ rule "[ai]: venture Use Ability 1":
     @Event eachPlayer
     @Team 1
     @Hero venture
-    @Condition eventPlayer.isAlive() == true
-    @Condition isGameInProgress() == true
+    @Condition eventPlayer.isAlive()
+    @Condition isGameInProgress()
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
-    @Condition Is_Attack_Phase == true
+    @Condition Is_Attack_Phase
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -188,10 +188,10 @@ rule "[ai]: brig Use ult":
     @Event eachPlayer
     @Team 1
     @Hero brigitte
-    @Condition eventPlayer.isAlive() == true
-    @Condition isGameInProgress() == true
+    @Condition eventPlayer.isAlive()
+    @Condition isGameInProgress()
     @Condition eventPlayer.getUltCharge() == 100
-    @Condition Is_Attack_Phase == true
+    @Condition Is_Attack_Phase
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
@@ -204,11 +204,11 @@ rule "[ai]: ram Use Ability 1":
     @Event eachPlayer
     @Team 1
     @Hero ramattra
-    @Condition eventPlayer.isAlive() == true
-    @Condition isGameInProgress() == true
+    @Condition eventPlayer.isAlive()
+    @Condition isGameInProgress()
     @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0
-    @Condition eventPlayer.isUsingAbility1() != true
-    @Condition Is_Attack_Phase == true
+    @Condition not eventPlayer.isUsingAbility1()
+    @Condition Is_Attack_Phase
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
@@ -223,10 +223,10 @@ rule "[ai]: Pharah Use Ability 1":
     @Event eachPlayer
     @Team 1
     @Hero pharah
-    @Condition eventPlayer.isAlive() == true
-    @Condition isGameInProgress() == true
-    @Condition eventPlayer.isInAir() != true
-    @Condition Is_Attack_Phase == true
+    @Condition eventPlayer.isAlive()
+    @Condition isGameInProgress()
+    @Condition not eventPlayer.isInAir()
+    @Condition Is_Attack_Phase
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
