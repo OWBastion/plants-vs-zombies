@@ -67,6 +67,9 @@ globalvar Bleed_Amount
 # 技能强化的适配英雄池, 只有 UPGRADE_KIND_SKILL 行有内容, 其他行填空数组。
 #!define UPGRADE_COLUMN_HERO_POOL 9
 
+# 英雄是否带弹夹。银质子弹依赖弹夹, 无弹夹英雄(莱因哈特、温斯顿、查莉娅等)不进池。
+#!define feskaHeroHasAmmo(p) (p.getMaxAmmo(0) > 0)
+
 #!define UPGRADE_KIND_TECH 1
 #!define UPGRADE_KIND_STAT 2
 # 技能强化占用科技槽位与选择节奏, 但只对第 10 列英雄池里的英雄入池。

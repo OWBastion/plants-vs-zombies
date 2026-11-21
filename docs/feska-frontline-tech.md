@@ -17,7 +17,7 @@
 | 51 | 屹立不倒 | `tech/unyielding.opy` | 每损失 1% 最大生命，获得 1% 全能吸血，不封顶 |
 | 52 | 死亡之舞 | `tech/death_dance.opy` | 受到伤害的 50% 在 2 秒内以流血扣除；击杀回复 25～75 + 5% 最大生命值 |
 
-两条本轮新定的口径：死亡之舞的 25～75 **按进攻波次线性插值**（`feskaGrowthAt(progress, 25, 50)`）；银质子弹**判第 0 个弹夹**（`getAmmo(0) == 0`）。
+两条本轮新定的口径：死亡之舞的 25～75 **按进攻波次线性插值**（`feskaGrowthAt(progress, 25, 50)`）；银质子弹**判第 0 个弹夹**（`getAmmo(0) == 0`），并且**只发给带弹夹的英雄**——选牌池里按 `getMaxAmmo(0) > 0` 过滤，见第六节。
 
 ## 二、地基一：受击口径 `attacker != null`
 
@@ -86,17 +86,18 @@
 
 光环用状态差分维护单个修改器句柄（`Dharma_Mod_Owner` 变化才 stop + start），0.25 秒重算一次中心，僵尸进出 15 米靠每帧重估，没有延迟。特效是纯视觉：每 0.5 秒给 15 米内存活僵尸挂 `ZENYATTA_ORB_OF_DISCORD_TARGET`，出范围或死亡就销毁并置 `Dharma_Orb_Id = 0`。
 
-## 六、实现过程中确认的两个坑
+## 六、实现过程中确认的三个坑
 
 1. **本版本的 `def` 不支持带返回值的 `return`**。`return X` 与 `return null` 都报 `expected the end of the return statement`。原本“用带返回值的子程序取持有者”的方案作废，改成全局量 `Dharma_Holder` 由规则维护。
 2. **嵌套 `filter` 共用“当前数组元素”**。`数组.filter(lambda x: ... 另一个数组.filter(lambda y: ...))` 会出 `nested-binder-lambda` 告警，结果不可靠。唯一性过滤因此拆成两条独立 filter，条件里改用布尔宏 `feskaUniqueTechTaken()`。
+3. **银质子弹按英雄过滤，不靠“上一发还有子弹”兜底**。判据用 `getMaxAmmo(0) > 0`（无弹夹英雄为 0），选牌时就排除，规则条件里再判一次，兜住“先拿卡、后换到无弹夹英雄”的情况。`Ammo_Before_Hit` 只剩一个职责：区分“打空最后一发”和“弹夹本来就是 0”，以及同一发命中多只僵尸只结算一次。宏 `feskaHeroHasAmmo` 放在 `vars.opy`，因为 `feskaBuildPool` 在 `progression.opy` 第 55 行就用到它，而科技 include 在第 440 行。
 
 ## 七、必须游戏内验证
 
 | 序号 | 待验证 | 失败后果 |
 | --- | --- | --- |
 | 1 | 对已被打空的池调用 `removeHealthPool` 是否安全 | 若报错，到期规则会中断，三张表不同步，之后会移除错误的池 |
-| 2 | 无弹夹英雄（莱因哈特、布丽吉特等）`getAmmo(0)` 的返回值 | 若返回 1 或随机值，银质子弹会误判；“上一发还有子弹”的转换条件目前是唯一防线 |
+| 2 | 无弹夹英雄（莱因哈特、布丽吉特、温斯顿等）`getMaxAmmo(0)` 的返回值 | 若返回 >0，选牌池过滤失效，卡会发给用不上弹夹的英雄。判据已从 `getAmmo` 换成 `getMaxAmmo`，两种英雄的正常值应是 0 与非 0 |
 | 3 | `playerDealtKnockback` / `playerReceivedKnockback` 在本模式的实际触发 | 事件不触发则大运来咯等同空卡 |
 | 4 | `startDamageModification` 的接收者数组是否随每帧重估 | 不重估则佛法自然只在建句柄那一刻对范围内僵尸生效 |
 | 5 | 生命池记录跨死亡是否被引擎清掉 | 若清了，`feskaClearAllTempPools` 会对失效句柄调 `removeHealthPool` |
