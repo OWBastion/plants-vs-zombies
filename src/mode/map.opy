@@ -50,7 +50,7 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     elif getCurrentMap() == Map.OASIS_CITY_CENTER:
         Zombie_Spawn_Positions = [vect(202.94, 17.47, -16.34), vect(154.30, 3.41, 213.54), vect(167.71, 0.69, 205.37)]
         Brain_Positions = [vect(184.930, 0.35, 183.59)]
-    elif getCurrentMap() == Map.EICHENWALDE or getCurrentMap() == Map.EICHENWALDE_HALLOWEEN:
+    elif getCurrentMap() == Map.EICHENWALDE:
         Zombie_Spawn_Positions = [vect(75.47, 10.13, -110.66), vect(63.35, 14.12, -60.61)]
         Brain_Positions = [vect(89.11, 12.68, -64.00)]
     elif getCurrentMap() == Map.TEMPLE_OF_ANUBIS:

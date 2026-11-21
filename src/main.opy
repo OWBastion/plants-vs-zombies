@@ -28,9 +28,7 @@ settings {
                 "blackForestWinter",
                 "oasisCityCenter",
                 "eichenwalde",
-                "eichenwaldeHalloween",
-                "templeOfAnubis",
-                "route66"
+                "templeOfAnubis"
             ]
         },
         "general": {
