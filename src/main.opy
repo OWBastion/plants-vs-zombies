@@ -22,6 +22,7 @@ settings {
                 "nepalVillage",
                 "lijiangNightMarket",
                 "lijiangControlCenter",
+                "lijiangGarden",
                 "hollywood",
                 "hollywoodHalloween",
                 "blackForestWinter",
