@@ -117,7 +117,7 @@ settings {
             },
             "ana": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 65,
+                "damageDealt%": 130,
                 "combatUltGen%": 130,
                 "healingDealt%": 175,
                 "health%": 150,
@@ -189,7 +189,7 @@ settings {
             },
             "juno": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 113,
+                "damageDealt%": 227,
                 "jumpVerticalSpeed%": 150,
                 "enableSecondaryFire": false,
                 "ability2Cooldown%": 20
@@ -214,7 +214,7 @@ settings {
                 "enableUlt": false
             },
             "mauga": {
-                "damageDealt%": 113,
+                "damageDealt%": 227,
                 "enablePrimaryFire": false,
                 "enableSecondaryFire": false,
                 "enableUlt": false,
@@ -222,7 +222,7 @@ settings {
             },
             "pharah": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 113,
+                "damageDealt%": 227,
                 "damageReceived%": 105,
                 "jumpVerticalSpeed%": 80,
                 "enablePassiveUnlimitedFuel": true,
@@ -258,7 +258,7 @@ settings {
             },
             "genji": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 113,
+                "damageDealt%": 227,
                 "damageReceived%": 95,
                 "combatUltGen%": 180,
                 "health%": 200,
@@ -322,7 +322,7 @@ settings {
             "symmetra": {
                 "enablePrimaryFire": false,
                 "enableAbility2": false,
-                "damageDealt%": 85,
+                "damageDealt%": 170,
                 "ability1Cooldown%": 300,
                 "projectileSpeed%": 10,
                 "combatUltGen%": 80,
@@ -433,7 +433,7 @@ settings {
                 "enableSpawningWithUlt": true
             },
             "general": {
-                "damageDealt%": 90,
+                "damageDealt%": 180,
                 "jumpVerticalSpeed%": 190,
                 "movementSpeed%": 50,
                 "movementGravity%": 90,
