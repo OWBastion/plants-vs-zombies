@@ -35,14 +35,6 @@ globalvar Difficulty_Applied_Player_Count
 globalvar Difficulty_Applied_For_Wave
 globalvar Zombie_Received_Modification_Id
 globalvar Zombie_Damage_Modification_Id
-# 共用临时生命池表: 子程序入参与重组数组时的工作变量。
-globalvar Temp_Pool_Tag
-globalvar Temp_Pool_Amount
-globalvar Temp_Pool_Type
-globalvar Temp_Pool_Expire
-globalvar Temp_Pool_Keep_Ids
-globalvar Temp_Pool_Keep_Handles
-globalvar Temp_Pool_Keep_Expire
 # 佛法自然: 光环修改器句柄与中心; 特效扫描节流时间。
 globalvar Dharma_Mod_Id
 globalvar Dharma_Mod_Owner
@@ -149,15 +141,6 @@ enum Stat_Upgrade_Id:
     HEALING_RECEIVED = 31
     ULTIMATE_CHARGE = 32
 
-# 共用临时生命池的来源标签: 一条记录 = 一个池, 同标签可有多条(坚定的每层、痛苦疗愈的每次受击)。
-# refresh 型来源(光子护盾/血肉再生/反应装甲)每次重建前按标签清掉旧记录。
-enum Temp_Pool_Id:
-    SHIELD = 0
-    FLESH_REGENERATION
-    REACTIVE
-    STEADFAST
-    PAINFUL_HEALING
-
 #!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgressRatio() min(max((Current_Wave - 1) / max(Total_Wave_Count - 1, 1), 0), 1)
 # 预览成长按实际结算波次: 进攻阶段用当前波, 准备阶段用即将进攻的下一波, 避免显示与结算错一波。
@@ -247,10 +230,11 @@ playervar Is_Berserk_Guard_Armed
 playervar Heartsteel_Stacks
 playervar Tech_Effect_Ids
 playervar Victory_Will_Effect_End
-# 共用临时生命池表: 三张平行数组, 下标一一对应。到期时间是绝对时间, 0 表示不按时间到期。
-playervar Temp_Pool_Ids
-playervar Temp_Pool_Handles
-playervar Temp_Pool_Expire_At
+# 生命池各由所属科技持一个句柄。共用临时池表已撤除: addHealthPool 的类型与数量走全局变量时
+# 游戏内报错/卡住, 连带 feskaAddTempPool 不可用, 详见 pools.opy 文件头。
+playervar Shield_Health_Pool
+playervar Regeneration_Health_Pool
+playervar Reactive_Armor_Health_Pool
 # 不屈意志: 按缺失生命换算的增伤与减伤百分点, 由低频规则维护。
 playervar Missing_Health_Percent
 # 坚韧: 受击后的 4 秒减伤窗口。

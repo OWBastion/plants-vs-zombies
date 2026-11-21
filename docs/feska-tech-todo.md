@@ -6,7 +6,7 @@
 
 | 范围 | 状态 |
 | --- | --- |
-| 41 项科技目录 | 41 项 `enabled=1`，全部进池 |
+| 41 项科技目录 | 39 项 `enabled=1` 进池；坚定与痛苦疗愈暂时停用 |
 | 11 项属性强化 | 全部实现并进池 |
 | 技能强化与迁移合并卡 | 灼蚀、会心一击、终极循环往复、铁血无情已实现 |
 | 选择流程、波次奖励、HUD、唯一性 | 已实现 |
@@ -19,12 +19,12 @@
 ## 1. 当前代码与任务边界
 
 - 最新已核对提交：`5ad18df refactor: 统一变量、枚举与宏的命名`。标识符已统一为 `Tech_Id` / `Stat_Upgrade_Id` / `Owned_Tech_Ids` / `Is_Attack_Phase` / `UPGRADE_*` 等新命名，本文与源码一致。
-- `src/player/progression.opy` 已有 41 项科技目录（全部启用）和 11 项属性强化目录。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
+- `src/player/progression.opy` 已有 41 项科技目录（39 项启用，坚定与痛苦疗愈因共用池表撤除而关闭）和 11 项属性强化目录。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
 - 入口：`src/main.opy` include 成长模块；变量与宏位于 `src/env/vars.opy`。目录列已含类型、唯一性、启用列，候选池由目录过滤生成，无硬编码区间。
 - 波次接入：`src/mode/rounds.opy` 的 `Players - Round Attack End` 先给已持有四项科技的玩家 `Pending_Stat_Upgrade_Count += 1`，再更新 `Finished_Wave_Count`；条件是 `Current_Wave < Total_Wave_Count`，最终波不发放。
 - 生命口径已分离：`feskaHealthPercent(p)` 是 `setMaxHealth` 用的百分比，`feskaMaxHealth(p)` 是实际生命点数（原始生命 × 加成% ＋ 心之钢 ＋ 护甲强化），不含本来源光盾/血肉/反应装甲池。前置单位问题已修正。
 - 狂战士自由移动已接入 `src/player/movement.opy`（`berserk != true` 才施加进攻定点约束）。
-- 目标 41 项科技与 11 项属性强化均已有代码。T23 与 T03 效果重叠，仍未合并，等用户决定。
+- 目标 41 项科技（39 项启用）与 11 项属性强化均已有代码。T23 与 T03 效果重叠，仍未合并，等用户决定。
 - 英雄效果已迁移 4 项（灼蚀、会心一击、终极循环往复、铁血无情），其余英雄脚本效果按用户确认全部删除，`src/heroes/abilities/` 目录已移除。全部游戏内验证仍未开始。
 
 开始实施前读取 `AGENTS.md` 及 `docs/agents/{gameplay,state-and-lifecycle,performance,tooling-and-validation}.md`。玩家是队伍 2，僵尸是队伍 1。进攻时保持玩家定点约束，普通僵尸保持原有近战行为。
@@ -77,8 +77,8 @@
 | T25 | 十字军铠甲 | 每次受到伤害后恢复 15～80 点生命，恢复量不超过本次伤害（单次伤害最低结算为 0）。 | 已实现：`crusader.opy`，`min(成长值, 事件伤害)` 回补，`enabled=1`。已知缺口：一击致命无法回补。 |
 | T26 | 反应装甲 | 获得 100＋自身最大生命值 10% 的可恢复护甲；僵尸未击穿护甲时，眩晕攻击者 1.2 秒。 | 已实现：`reactive.opy` + `pools.opy`，击穿判定读护甲值是否为 0，护甲池每个准备阶段整池重建，无内置冷却。 |
 | T27 | 狂战士之魂 | 生命值降到 25% 时触发，获得 2000% 额外生命值，无法被治疗，每秒损失 10% 最大生命值，可以自由移动。 | 已实现：`berserk.opy`，未激活时施加不死并等待生命降到 25%，激活后 21 倍生命、禁疗、每秒自损 10%、解除定点油门。待验证：次数与结束结算。 |
-| T28 | 坚定 | 受到伤害时获得 12% 最大生命值的临时护甲，最多 5 层，每层独立持续 5 秒。 | 已实现：`steadfast.opy`，每层一条池表记录、独立 5 秒到期；`attacker != null` 只认僵尸本体伤害。待验证：`removeHealthPool` 打到已被打空的池是否安全。 |
-| T29 | 痛苦疗愈 | 受到伤害的 12% 转换为临时生命值，持续 8 秒。 | 已实现：`painful_healing.opy`，`Health.NORMAL` 池 + 8 秒到期。 |
+| T28 | 坚定 | 受到伤害时获得 12% 最大生命值的临时护甲，最多 5 层，每层独立持续 5 秒。 | **暂停**：`steadfast.opy` 只有目录行，`enabled=0`。原共用池表写法（`addHealthPool` 类型与数量走全局变量）游戏内报错/卡住，已撤除。重做时每层必须单独建池、单独到期，句柄由本科技自己的数组记录。 |
+| T29 | 痛苦疗愈 | 受到伤害的 12% 转换为临时生命值，持续 8 秒。 | **暂停**：`painful_healing.opy` 只有目录行，`enabled=0`。原因同 T28。重做时要封顶同时存在的池数量，句柄由本科技自己的数组记录。 |
 | T30 | 不屈意志 | 每损失 1% 最大生命，获得 1% 伤害减免与 1% 增伤。 | 已实现：`indomitable.opy`，0.25 秒重算 `Missing_Health_Percent`，减伤并入加算总和（90% 封顶），增伤不封顶。 |
 | T31 | 坚韧 | 受到伤害后，接下来 4 秒内受到的伤害降低 40%。 | 已实现：`resolute.opy`，单时间戳窗口，窗口内受击只顺延不叠层。 |
 | T32 | 大运来咯 | 你造成的击退会将敌人击倒 1 秒。 | 已实现：`knockdown.opy`，`playerDealtKnockback` + `playerReceivedKnockback` 按“0.12 秒内 + 12 米”配对，只覆盖击退事件。待验证：两事件在本模式的实际触发时机。 |
