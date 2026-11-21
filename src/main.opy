@@ -871,11 +871,13 @@ subroutine knockBack 5
 subroutine refreshTarget 6
 subroutine stuckCheck 7
 
+# 扩展点数按"禁用的玩家栏位"计算(每格 4 点), 数量有限, 所以把对玩法影响最大的
+# 生成更多机器人(2 点)放第一位, 避免点数不够时被其它视觉扩展挤掉。
+#!extension spawnMoreDummyBots
 #!extension buffStatusEffects
 #!extension debuffStatusEffects
 #!extension buffAndDebuffSounds
 #!extension energyExplosionEffects
-#!extension spawnMoreDummyBots
 #!extension kineticExplosionEffects
 #!extension explosionSounds
 #!extension playMoreEffects

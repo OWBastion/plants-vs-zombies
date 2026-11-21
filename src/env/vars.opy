@@ -13,6 +13,8 @@ globalvar Difficulty_Level
 globalvar Wave_Attack_Time_Left
 globalvar Wave_Prep_Time_Left
 globalvar Zombie_Alive_Limit
+# 本波已经发起的生成次数。按下标补齐到配额, 不用队伍玩家数当循环条件。
+globalvar Zombie_Spawn_Count
 globalvar Zombie_Hero_Pool
 globalvar Tank_Hero_Pool
 globalvar Damage_Hero_Pool
@@ -198,9 +200,15 @@ enum Stat_Upgrade_Id:
 #!define zombieDamagePercent() (DIFFICULTY_DAMAGE_PERCENT[Difficulty_Level] + 10 * (DIFFICULTY_PLAYER_COUNT() - 1))
 # AI 数量按难度爬到「AI 上限」: 简单整局线性, 困难第 6 波, 专家第 4 波, 苦难第 1 波。
 #!define DIFFICULTY_RAMP_WAVE() [Total_Wave_Count, 6, 4, 1][Difficulty_Level]
-# 准备阶段 Current_Wave 还没加一, 用即将进攻的波次计算, 与预生成目标保持一致。
-#!define ZOMBIE_WAVE_INDEX() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
-#!define zombieAliveTarget() min(Zombie_Alive_Limit, max(1, ceil(Zombie_Alive_Limit * min(ZOMBIE_WAVE_INDEX(), DIFFICULTY_RAMP_WAVE()) / DIFFICULTY_RAMP_WAVE())))
+# 单波配额, 按「进攻中的波次」或「即将进攻的波次」现算。
+# 用宏而不是准备阶段写入的全局变量: 那需要依赖波次规则的执行时机,
+# 一旦准备阶段规则还没跑到赋值那行, 生成规则会读到初始值并把整局僵尸数卡死。
+# 数量上限由工坊扩展「生成更多机器人」抬高(基础每队 6 只, 扩展 +12), 所以配额直接按设置发满。
+#!define zombieWaveQuota(wave) min(Zombie_Alive_Limit, max(1, ceil(Zombie_Alive_Limit * min(wave, DIFFICULTY_RAMP_WAVE()) / DIFFICULTY_RAMP_WAVE())))
+#!define zombieCurrentWave() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
+#!define zombieWaveQuotaNow() zombieWaveQuota(zombieCurrentWave())
+# 难度名用于开波提示, 直接显示生效的难度, 改了设置没生效时能一眼看出。
+#!define DIFFICULTY_NAME() ["简单", "困难", "专家", "苦难"][Difficulty_Level]
 
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
 
