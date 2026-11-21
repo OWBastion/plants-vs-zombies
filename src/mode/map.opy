@@ -39,14 +39,24 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
         Zombie_Spawn_Positions = [vect(-47.22, 19, -48.04), vect(-23.7, 22, -57.43), vect(-56.61, 15, -61.61)]
         Brain_Positions = [vect(-43.18, 16.38, -88.26)]
     elif getCurrentMap() == Map.NEPAL_SANCTUM:
-        Zombie_Spawn_Positions = [vect(81.12, 131.88, -34.95), vect(66.36, 127.8, -42.32), vect(106.84, 141.85, -52.18)]
-        Brain_Positions = [vect(81.03, 130.03, -84.94)]
-    else:
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[0], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[1], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Positions[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        Zombie_Spawn_Positions = [vect(81.12, 131.88, -34.95), vect(75.27, 130.42, -42.12), vect(106.84, 141.85, -52.18)]
+        Brain_Positions = [vect(81.03, 132.93, -84.94)]
+    elif getCurrentMap() == Map.HOLLYWOOD_HALLOWEEN or getCurrentMap() == Map.HOLLYWOOD:
+        Zombie_Spawn_Positions = [vect(-2.61, 1.32, -53.50), vect(22.06, 1.48, -26.84), vect(6.88, 12.41, -53.84)]
+        Brain_Positions = [vect(-5.90, 1.25, -9.61)]
+    elif getCurrentMap() == Map.BLACK_FOREST_WINTER:
+        Zombie_Spawn_Positions = [vect(-18.94, 17.47, -16.34), vect(16.27, 12.55, -16.15), vect(-6.83, 17.66, -10.02)]
+        Brain_Positions = [vect(-17.01, 12.52, 23.54)]
+    elif getCurrentMap() == Map.OASIS_CITY_CENTER:
+        Zombie_Spawn_Positions = [vect(202.94, 17.47, -16.34), vect(154.30, 3.41, 213.54), vect(167.71, 0.69, 205.37)]
+        Brain_Positions = [vect(184.930, 0.35, 183.59)]
+    # 刷新点黄球与脑子白光柱只是调试标记, 关闭 Debug 时不生成。
+    if Debug_Enabled:
+        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[0], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[1], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Positions[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 
 rule "Player Resurrect - Disable Built-in Respawn":
