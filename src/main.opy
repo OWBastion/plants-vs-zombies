@@ -21,7 +21,15 @@ settings {
                 "nepalSanctum",
                 "nepalVillage",
                 "lijiangNightMarket",
-                "lijiangControlCenter"
+                "lijiangControlCenter",
+                "hollywood",
+                "hollywoodHalloween",
+                "blackForestWinter",
+                "oasisCityCenter",
+                "eichenwalde",
+                "eichenwaldeHalloween",
+                "templeOfAnubis",
+                "route66"
             ]
         },
         "general": {
