@@ -1,5 +1,7 @@
 #!mainFile "../main.opy"
 
+globalvar Zombie_Count_Before_Spawn
+
 # 逐个生成以分散创建开销, 开波前由波次规则确认存活数量。
 #!define AI_PRELOAD_INTERVAL 0.16
 
@@ -10,12 +12,18 @@ rule "[ai]: Create AI Bot":
     @Condition (Is_Attack_Phase == false and isAssemblingHeroes() == false) or (Is_Attack_Phase == true and Wave_Attack_Time_Left > 10)
     @Condition getNumberOfPlayers(Team.1) < zombieAliveTarget()
 
+    Zombie_Count_Before_Spawn = -1
     while getNumberOfPlayers(Team.1) < zombieAliveTarget():
         # 准备阶段与进攻阶段补齐用同一间隔。
         wait(AI_PRELOAD_INTERVAL, Wait.ABORT_WHEN_FALSE)
         if getNumberOfPlayers(Team.1) == 0:
+            Zombie_Count_Before_Spawn = 0
             createDummy(Hero.BRIGITTE, Team.1, -1, Zombie_Spawn_Positions[0], Brain_Positions[0])
+        elif getNumberOfPlayers(Team.1) == Zombie_Count_Before_Spawn:
+            # 工坊可能拒绝加载新的英雄模型。数量没增加时, 复用已经在场的英雄。
+            createDummy(random.choice(getPlayers(Team.1)).getHero(), Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
         else:
+            Zombie_Count_Before_Spawn = getNumberOfPlayers(Team.1)
             createDummy(
                 random.choice(Zombie_Hero_Pool.filter(lambda hero: getNumberOfHeroes(hero, Team.1) == 0)),
                 Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0]

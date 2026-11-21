@@ -30,6 +30,7 @@ rule "Players - Round Attack Start":
     @Condition Current_Wave <= Total_Wave_Count
     @Condition Is_Attack_Phase == true
 
+    getPlayers(Team.1).enableRespawn()
     getPlayers(Team.1).clearStatusEffect(Status.INVINCIBLE)
     bigMessage(getAllPlayers(), "第 {0} 波进攻".format(Current_Wave))
     chaseOverTime(Wave_Attack_Time_Left, 0, Wave_Attack_Duration, ChaseTimeReeval.NONE)
