@@ -830,6 +830,9 @@ settings {
                 "passiveUltGen%": 500,
                 "enableSpawningWithUlt": true
             },
+            "shion": {
+                "movementSpeed%": 75
+            },
             "enabledHeroes": [
                 "reaper"
             ],

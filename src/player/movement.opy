@@ -19,6 +19,7 @@ rule "[Player]: Stop move when under attack":
     @Condition Debug_Enabled != true
     @Condition Is_Attack_Phase == true
     @Condition eventPlayer.getHero() != Hero.TORBJORN
+    @Condition eventPlayer.getHero() != Hero.SHION
 
     smallMessage(eventPlayer, "  无法移动，正在防御中")
     eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)

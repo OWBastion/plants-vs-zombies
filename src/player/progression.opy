@@ -366,10 +366,12 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.Restored_For_Hero = eventPlayer.getHero()
     eventPlayer.Needs_Stat_Restore = false
     eventPlayer.Is_Choice_Locked = false
-    # 换英雄/重生都结束狂战士; 若仍在进攻阶段, 重新套上定点油门(狂战士之前解除过)。
+    # 换英雄/重生都结束狂战士; 按英雄与波次恢复移动限制。
     Target_Player = eventPlayer
     feskaStopBerserk()
-    if Is_Attack_Phase:
+    if eventPlayer.getHero() == Hero.SHION:
+        eventPlayer.stopForcingThrottle()
+    elif Is_Attack_Phase:
         eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
     # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHealth。
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
