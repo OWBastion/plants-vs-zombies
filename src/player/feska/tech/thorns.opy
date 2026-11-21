@@ -14,6 +14,8 @@ rule "Feska - Thorns":
     @Event playerTookDamage
     @Team 2
     @Condition Is_Attack_Phase
+    # 显式判空: 脚本流血与自损的 attacker 为 null, 不在 null 上调用成员方法。
+    @Condition attacker != null
     @Condition attacker.getTeam() == Team.1
     @Condition Tech_Id.THORNS in eventPlayer.Owned_Tech_Ids
     @Condition eventPlayer.Is_Spawning_Derived_Damage != true

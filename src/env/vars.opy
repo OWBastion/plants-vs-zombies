@@ -35,6 +35,24 @@ globalvar Difficulty_Applied_Player_Count
 globalvar Difficulty_Applied_For_Wave
 globalvar Zombie_Received_Modification_Id
 globalvar Zombie_Damage_Modification_Id
+# 共用临时生命池表: 子程序入参与重组数组时的工作变量。
+globalvar Temp_Pool_Tag
+globalvar Temp_Pool_Amount
+globalvar Temp_Pool_Type
+globalvar Temp_Pool_Expire
+globalvar Temp_Pool_Keep_Ids
+globalvar Temp_Pool_Keep_Handles
+globalvar Temp_Pool_Keep_Expire
+# 佛法自然: 光环修改器句柄与中心; 特效扫描节流时间。
+globalvar Dharma_Mod_Id
+globalvar Dharma_Mod_Owner
+globalvar Dharma_Holder
+globalvar Dharma_Orb_Next_At
+globalvar Effect_Targets
+# 亡语: 阵亡瞬间的坐标(重生会把玩家传送走, 必须先快照)。
+globalvar Death_Rattle_Position
+# 死亡之舞: 本次结算转出的流血总量。
+globalvar Bleed_Amount
 
 # 目录每行的列下标。3 为唯一性标志(仅光子护盾为 1, 判定仍按 Tech_Id), 8 图标, 9 英雄池。
 #!define UPGRADE_COLUMN_NAME 0
@@ -105,6 +123,17 @@ enum Tech_Id:
     CRIT = 40
     ULTIMATE_LOOP = 41
     EXECUTE = 42
+    # 近战与前排批: 43..52 与目录末尾追加顺序一致。
+    STEADFAST = 43
+    PAINFUL_HEALING = 44
+    INDOMITABLE = 45
+    RESOLUTE = 46
+    KNOCKDOWN = 47
+    SILVER_BULLET = 48
+    DHARMA = 49
+    DEATH_RATTLE = 50
+    UNYIELDING = 51
+    DEATH_DANCE = 52
 
 # 属性强化在 Upgrade_Catalog 中的行号。数值是历史索引, 不可重排。
 enum Stat_Upgrade_Id:
@@ -119,6 +148,15 @@ enum Stat_Upgrade_Id:
     REGENERATION = 30
     HEALING_RECEIVED = 31
     ULTIMATE_CHARGE = 32
+
+# 共用临时生命池的来源标签: 一条记录 = 一个池, 同标签可有多条(坚定的每层、痛苦疗愈的每次受击)。
+# refresh 型来源(光子护盾/血肉再生/反应装甲)每次重建前按标签清掉旧记录。
+enum Temp_Pool_Id:
+    SHIELD = 0
+    FLESH_REGENERATION
+    REACTIVE
+    STEADFAST
+    PAINFUL_HEALING
 
 #!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgressRatio() min(max((Current_Wave - 1) / max(Total_Wave_Count - 1, 1), 0), 1)
@@ -140,8 +178,11 @@ enum Stat_Upgrade_Id:
 # setMaxHealth 按英雄原始最大生命的百分比设置且生命池另行叠加, 因此百分比里含生命池的 20 倍补偿。
 #!define feskaBerserkPercent(p) (2100 + 21 * p.Bonus_By_Stat[Stat_Bonus.HEALTH] + 2000 * (p.Heartsteel_Flat_Health + 25 * p.Bonus_By_Stat[Stat_Bonus.ARMOR]) / p.Base_Max_Health)
 #!define feskaBerserkMaxHealth(p) (21 * feskaMaxHealth(p))
-#!define feskaDamagePercent(p) (100 + p.Bonus_By_Stat[Stat_Bonus.DAMAGE] + (20 if p.Is_Alone else 0))
-#!define feskaReceivedPercent(p) ((100 - p.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION]) * (0.85 if p.Is_Alone else 1))
+#!define feskaDamagePercent(p) (100 + p.Bonus_By_Stat[Stat_Bonus.DAMAGE] + (20 if p.Is_Alone else 0) + p.Missing_Health_Percent)
+# 减伤按加算: 属性强化、一夫当关、坚韧、不屈意志相加后统一封顶 90%, 最低仍受 10% 伤害。
+#!define feskaReceivedPercent(p) (100 - min(p.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION] + (15 if p.Is_Alone else 0) + (40 if p.Is_Resolute else 0) + p.Missing_Health_Percent, 90))
+# 缺失生命百分比: 分母用可计入最大生命值, 生命池吸收掉的部分不算失血(护盾挡下的伤害不该给增伤)。
+#!define feskaMissingHealthPercent(p) min(max(100 - 100 * p.getHealth() / max(feskaMaxHealth(p), 1), 0), 100)
 
 # 动态难度: 难度预设给出两项基准百分比, 玩家数每多 1 人在基准上叠加。下标为 Difficulty_Level(简单/困难/专家/苦难)。
 # 两项依次是僵尸承受伤害(越低越减伤)、僵尸造成伤害。僵尸生命值不随难度和人数量调整。
@@ -197,15 +238,27 @@ playervar Armor_Health_Pool
 playervar Elimination_Baseline
 playervar Heartsteel_Flat_Health
 playervar Heartsteel_Health_Pool
-playervar Regeneration_Health_Pool
 playervar Victory_Will_Used_This_Wave
 playervar Is_Alone
 playervar Is_Spawning_Derived_Damage
-playervar Reactive_Armor_Health_Pool
 playervar Is_Berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
 playervar Is_Berserk_Guard_Armed
 playervar Heartsteel_Stacks
-playervar Shield_Health_Pool
 playervar Tech_Effect_Ids
 playervar Victory_Will_Effect_End
+# 共用临时生命池表: 三张平行数组, 下标一一对应。到期时间是绝对时间, 0 表示不按时间到期。
+playervar Temp_Pool_Ids
+playervar Temp_Pool_Handles
+playervar Temp_Pool_Expire_At
+# 不屈意志: 按缺失生命换算的增伤与减伤百分点, 由低频规则维护。
+playervar Missing_Health_Percent
+# 坚韧: 受击后的 4 秒减伤窗口。
+playervar Is_Resolute
+playervar Resolute_Until
+# 银质子弹: 上一次命中时的弹夹余量, 用来识别"最后一发"; 0 表示未记录。
+playervar Ammo_Before_Hit
+# 大运来咯: 打出击退的时间戳。
+playervar Knockback_Dealt_At
+# 佛法自然: 僵尸身上的"乱"特效实体(0 表示没有)。
+playervar Dharma_Orb_Id

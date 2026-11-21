@@ -13,7 +13,8 @@ rule "Feska - Crusader armor":
     @Condition Tech_Id.CRUSADER in eventPlayer.Owned_Tech_Ids
     @Condition eventPlayer.isAlive()
     @Condition eventDamage > 0
-    # 排除自损(狂战士之魂的每秒自损), 否则会抵消该科技的代价。
+    # 只认僵尸本体造成的伤害; 脚本流血(死亡之舞)与环境伤害来源为 null, 不参与回补。
+    @Condition attacker != null
     @Condition attacker != eventPlayer
 
     eventPlayer.setHealth(min(eventPlayer.getHealth() + min(feskaCrusaderFlat(), eventDamage), eventPlayer.getMaxHealth()))

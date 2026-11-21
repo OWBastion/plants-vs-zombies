@@ -1,214 +1,109 @@
-# 费斯卡科技：近战与前排设计稿 v10
+# 费斯卡科技：近战与前排（v11，已落地）
 
-状态：**设计稿，未实现**。等确认后落地。编号仅用于讨论，不是代码 ID。落地时从 `Tech_Id 43` 起追加（现有目录 43 行，编号 0–42）。
+状态：**已在代码中实现**，`pnpm run compile` 结果为 `errors=0`。编号 43–52，与 `Tech_Id` 和 `Upgrade_Catalog` 的末尾 10 行一一对齐。编译通过不等于游戏内验证，第六节列了必须实测的项。
 
-## 保留的 10 项
+## 一、10 项科技
 
-L 组 15 项只留下你要的两项：L04 换成佛法自然（全局唯一），L06 保留死亡之舞但按你的数值重写。其余 13 项全部删除。
-
-| 编号 | 名称 | 效果 |
-| --- | --- | --- |
-| G01 | 坚定 | 受到伤害时获得 12% 最大生命值的临时护甲，最多 5 层；每层独立持续 5 秒。 |
-| G02 | 痛苦疗愈 | 受到的 12% 伤害转换为临时生命值，持续 8 秒。 |
-| G03 | 不屈意志 | 每损失 1% 最大生命，获得 1% 伤害减免与 1% 增伤。 |
-| N11 | 亡语 | 阵亡后造成爆炸，对 25 米范围内的敌人造成你 50% 最大生命值的额外伤害。 |
-| N17 | 坚韧 | 受到伤害后，接下来 4 秒内受到的伤害降低 40%。 |
-| N20 | 屹立不倒 | 每损失 1% 最大生命，获得 1% 全能吸血。 |
-| N30 | 大运来咯 | 你造成的击退会将敌人击倒 1 秒。 |
-| M04 | 银质子弹 | 弹匣的最后一枚子弹额外造成 250% 伤害。 |
-| L04 | 佛法自然〔唯一〕 | 15 米内的僵尸视为易损，受到的伤害增加 25%。 |
-| L06 | 死亡之舞 | 受到的伤害 50% 在 2 秒内以流血形式扣除；击杀僵尸回复 25~75 + 5% 最大生命值。 |
-
-## 已定方案
-
-1. **减伤上限 = 所有减伤相加后不超过 90%**。`feskaReceivedPercent` 改为 `100 - min(减伤总和, 90)`，加算，不再逐层相乘。
-   - 连带改动：一夫当关现在是乘 `0.85`，要改成加算 15% 并入总和。
-   - 风险：改口径后现有配装的实战减伤会变。属性减伤 + 一夫当关 + 坚韧 40% 三项就可能顶到 90 上限。
-2. **全能吸血不设上限**。N20 按缺失生命百分比全额生效。
-3. **共用临时生命池表，并迁移旧池**。玩家级三张平行数组：`Temp_Pool_Ids`、`Temp_Pool_Handles`、`Temp_Pool_Expire_At`。
-   - 两种操作：`register`（追加一条，到期移除）、`refresh`（按 id 删旧条再追加，用于周期重建的池）。
-   - 迁入：光子护盾、血肉再生、反应装甲。坚定、痛苦疗愈走这张表。
-   - 不迁：心之钢与护甲强化是永久池，没有到期时间。
-   - 风险：OverPy 数组操作返回副本，删除必须整体赋回，三表索引必须同步；迁移动四份已验证代码，要逐项回归。
-4. **亡语保持原样**：25 米、50% 最大生命，每次阵亡触发。玩家复活有条件，死亡是稀缺事件，不限次。
-5. **大运来咯只覆盖击退**：只认 `playerReceivedKnockback`，不含钩子拉拽、上勾拳这类非击退位移。
-
-## 一、佛法自然（L04）实现
-
-**机制**：不给每只僵尸单独挂易伤标记，直接改伤害结算倍率。
-
-`startDamageModification(receivers, damagers, damagePercent, reevaluation)` 就是这个用途。第三个参数是百分比，`DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT` 让接收者、施加者、百分比每帧重估。因此接收者写 `getPlayersInRadius(光环中心, 15, Team.1, LosCheck.SURFACES)` 就够了，僵尸走进走出 15 米自动增删，不需要自己扫。
-
-**叠加方式确认为乘算**，与 `src/mode/difficulty.opy` 的难度修改器互不覆盖，最终倍率是「难度系数 × 1.25」。
-
-**改为全局唯一科技**。乘算是两人同拿就是 1.5625，与其在运行时选一个“生效的那份”，不如让它根本不可能被第二个人拿到。项目里已有这套机制，光子护盾就是这么做的，照抄三处：
-
-| 位置 | 光子护盾现状 | 佛法自然照做 |
-| --- | --- | --- |
-| 目录行第 3 列（唯一性标志） | 写 `1` | 同样写 `1` |
-| `feskaBuildPool()` | 有持有者时过滤掉 `Tech_Id.SHIELD` | 加一条同样的过滤 |
-| 规则 `Feska - Replace taken unique card` | 硬编码只处理 `Tech_Id.SHIELD` | 改成按“已占用的唯一科技列表”处理，两张卡都覆盖 |
-
-第三处必须一起改，否则会出现这个缺口：别人刚选了佛法自然，你手里的候选卡还留着它，选中后两人同持。
-
-```
-#!define feskaDharmaHolders() getPlayers(Team.2).filter(lambda p: not p.isDummy() and Tech_Id.DHARMA in p.Owned_Tech_Ids)
-#!define feskaTakenUniqueTechIds() (([Tech_Id.SHIELD] if len(shieldTechHolders()) > 0 else []) + ([Tech_Id.DHARMA] if len(feskaDharmaHolders()) > 0 else []))
-```
-
-规则的条件与替换循环都改成基于 `feskaTakenUniqueTechIds()` 判定，不再出现具体 `Tech_Id`。
-
-**唯一之后，光环中心就是唯一的持有者**，不需要定时挑人，也不需要排序。用一个状态差分规则：持有者变了才 stop + start，中心表达式每帧重估，僵尸进出 15 米自动增删。
-
-```
-rule "Feska - Dharma aura":
-    @Event eachPlayer
-    @Team 2
-    @Condition Is_Attack_Phase
-    @Condition feskaDharmaHolder() != Dharma_Mod_Owner
-
-    if Dharma_Mod_Id != null:
-        stopDamageModification(Dharma_Mod_Id)
-        Dharma_Mod_Id = null
-    Dharma_Mod_Owner = feskaDharmaHolder()
-    if Dharma_Mod_Owner != null:
-        startDamageModification(getPlayersInRadius(Dharma_Mod_Owner, 15, Team.1, LosCheck.SURFACES),
-                                getPlayers(Team.2), 125,
-                                DamageReeval.RECEIVERS_DAMAGERS_AND_DMGPERCENT)
-        Dharma_Mod_Id = getLastDamageModification()
-```
-
-`feskaDharmaHolder()` 取列表第一个，并带 `isAlive()`：持有者死亡期间光环关闭，复活后条件自然变化、规则重新建句柄。持有者离场则 `feskaDharmaHolders()` 为空，句柄被停掉，同时池子里重新放出这张卡。
-
-两点实现约定：
-
-- **唯一性看 `feskaDharmaHolders()`（不过滤存活），光环看 `feskaDharmaHolder()`（过滤存活）**。死亡不丢失科技，若唯一性也过滤存活，持有者死一次别人就能抢同一张卡，会变成两人同持。
-- `feskaDharmaHolder()` 用带返回值的 `def` 写（`if len(...) > 0: return ...` 否则 `return null`），在规则条件里直接调用。这两点都用 `wright check` 验过，`errors=0`。
-
-**为什么不改成加算**：难度减伤走 `zombieDamageReceivedPercent()`，是一个全队共用的宏（`100 - 档位 - 3 × 额外人数`）。把 +25 并进那个宏，只能对全部僵尸生效，做不到“只有 15 米内”。要范围限定就必须用独立修改器，独立修改器之间只有乘算。这就是保留乘算的原因。
-
-**乘算后的实际数值**（苦难难度，难度值 × 1.25）：
-
-| 玩家数 | 难度值 | ×1.25 | 相对 100 基线 |
+| 编号 | 名称 | 文件 | 效果 |
 | --- | --- | --- | --- |
-| 1 | 85 | 106 | +6% |
-| 2 | 82 | 103 | +3% |
-| 3 | 79 | 99 | -1% |
-| 4 | 76 | 95 | -5% |
+| 43 | 坚定 | `tech/steadfast.opy` | 受到伤害时获得 12% 最大生命值的临时护甲，最多 5 层，每层独立 5 秒 |
+| 44 | 痛苦疗愈 | `tech/painful_healing.opy` | 受到伤害的 12% 转换为临时生命值，8 秒后移除 |
+| 45 | 不屈意志 | `tech/indomitable.opy` | 每损失 1% 最大生命，获得 1% 减伤与 1% 增伤 |
+| 46 | 坚韧 | `tech/resolute.opy` | 受到伤害后 4 秒内受到的伤害降低 40% |
+| 47 | 大运来咯 | `tech/knockdown.opy` | 你造成的击退会将敌人击倒 1 秒 |
+| 48 | 银质子弹 | `tech/silver_bullet.opy` | 弹匣最后一枚子弹额外造成 250% 伤害 |
+| 49 | 佛法自然〔唯一〕 | `tech/dharma.opy` | 15 米内的僵尸受到的伤害增加 25% |
+| 50 | 亡语 | `tech/death_rattle.opy` | 阵亡后爆炸，25 米内敌人受到你 50% 最大生命值的伤害 |
+| 51 | 屹立不倒 | `tech/unyielding.opy` | 每损失 1% 最大生命，获得 1% 全能吸血，不封顶 |
+| 52 | 死亡之舞 | `tech/death_dance.opy` | 受到伤害的 50% 在 2 秒内以流血扣除；击杀回复 25～75 + 5% 最大生命值 |
 
-最不利的 1 人苦难也只到 106%，不会出现“15 米内比简单难度还疼”的异常。
+两条本轮新定的口径：死亡之舞的 25～75 **按进攻波次线性插值**（`feskaGrowthAt(progress, 25, 50)`）；银质子弹**判第 0 个弹夹**（`getAmmo(0) == 0`）。
 
-**禅雅塔乱的特效**：`Effect` 枚举里有 `ZENYATTA_ORB_OF_DISCORD_TARGET`，`createEffect` 的 position 可以传 Player 并配 `EffectReeval.POSITION_AND_RADIUS`，效果会跟着僵尸走。唯一科技只有一名持有者，所以扫描只由他一个人跑，用时间戳限流而不是 `wait` 循环：
+## 二、地基一：受击口径 `attacker != null`
 
-```
-rule "Feska - Dharma orb":
-    @Event eachPlayer
-    @Team 2
-    @Condition Is_Attack_Phase
-    @Condition eventPlayer == feskaDharmaHolder()
-    @Condition getTotalTimeElapsed() >= Dharma_Orb_Next_At
-
-    Dharma_Orb_Next_At = getTotalTimeElapsed() + 0.5
-    # 扫 15 米内存活僵尸: 没有 Dharma_Orb_Id 就建, 出范围或死亡就销毁并置空
-```
-
-僵尸侧用一个 `playervar Dharma_Orb_Id` 存实体 id，`destroyEffect` 后就置 `null`。僵尸死亡与回收走同一个清理分支，不依赖僵尸对象被移除的时机。
-
-**特效实体的成本**：`createEffect` 有数量上限，超过就不再创建。僵尸上限在 `Zombie_Alive_Limit`，如果 15 米内可能同时挤进 40 只以上，加一条软上限：超过 30 只只保留伤害加成，不再创建特效。特效是纯视觉，关掉不影响数值。
-
-**改动清单**：
+脚本流血与自损的 `attacker` 为 `null`，会被“受到伤害时”类科技当成一次正常受击。所有受击触发统一要求 `attacker != null`：
 
 | 文件 | 改动 |
 | --- | --- |
-| `src/env/vars.opy` | `Tech_Id.DHARMA`（首批第 7 项，编号 49）；`globalvar Dharma_Mod_Id`、`Dharma_Mod_Owner`、`Dharma_Orb_Next_At`；`playervar Dharma_Orb_Id` |
-| `src/player/feska/tech/dharma.opy` | 新建：目录行（第 3 列写 1）、`feskaDharmaHolders()`、`feskaDharmaHolder()`、`feskaTakenUniqueTechIds()`、光环规则、特效规则 |
-| `src/player/progression.opy` | 追加 `#!include`；目录末尾追加行；`feskaBuildPool()` 加唯一过滤；`Feska - Replace taken unique card` 改为按 `feskaTakenUniqueTechIds()` 判定 |
+| `tech/crusader.opy` | 新增 `attacker != null`，保留 `attacker != eventPlayer` 继续排除狂战士自损 |
+| `tech/thorns.opy` | 新增 `attacker != null`，不再依赖在 `null` 上调用 `getTeam()` |
+| `tech/reactive.opy` | 原本已有，不改 |
+| 新增的坚定、痛苦疗愈、坚韧、死亡之舞 | 直接写这条条件 |
 
-唯一卡替换规则是已实现并经测试的代码，改完要回归光子护盾的并发唯一性：两人同时看到这张卡、一人先选、另一人的在场候选必须被换掉。
-
-## 二、死亡之舞（L06）实现
-
-**结算顺序**：伤害已经发生，工坊无法“延后支付”，只能**先回补再扣回**。
-
-1. `playerTookDamage`，条件是 `attacker != null` 且 `attacker.getTeam() == Team.1`。
-2. 立即回补：`heal(eventPlayer, eventPlayer, 回补量)`。
-3. 起一段 2 秒流血：`startDamageOverTime(null, 2, 回补量 / 2)`。
-
-`startDamageOverTime` 的第三个参数是**每秒伤害**，不是总量（现有 `ignite.opy` 的 5% × 3 秒就是这么写的）。
-
-**回补量必须夹上限**，这是本项唯一的正确性要求：
+## 三、地基二：减伤加算，总和封顶 90%
 
 ```
-min(eventDamage * 0.5, eventPlayer.getMaxHealth() - eventPlayer.getHealth())
+#!define feskaReceivedPercent(p) (100 - min(p.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION] + (15 if p.Is_Alone else 0) + (40 if p.Is_Resolute else 0) + p.Missing_Health_Percent, 90))
 ```
 
-满血时回补会被最大生命截断，但流血的 DOT 不会。如果直接按 50% 起 DOT，满血挨一下就是“回补 0、多扣 50%”，玩家凭空多受伤。夹住之后满血状态等于本项不生效，不亏不赚。
+- 一夫当关的 `×0.85` 改成加算 15 并入总和。
+- 属性强化·减伤原来单项夹在 50%，现在只累加，由总和上限兜住。
+- 不屈意志与坚韧都进这个总和，因此“残血 + 坚韧 + 一夫当关”不会各自夹取上限后绕过封顶。
 
-**流血不触发自身**：DOT 的 damager 传 `null`，`attacker` 为空，上面那条 `attacker != null` 的条件把它排除，不会循环。同一条条件也把流血挡在其他“受到伤害时”类科技之外，见第四节。
+不屈意志的增伤走另一条宏：`feskaDamagePercent` 加上 `Missing_Health_Percent`，不封顶。
 
-**击杀回复**：`playerDealtFinalBlow` 时 `heal(eventPlayer, eventPlayer, 25~75 + 最大生命 * 0.05)`。25~75 我按进攻波次线性插值，写 `25 + 50 * min(Current_Wave / Total_Wave_Count, 1)`；如果你指的是别的口径（比如按缺失生命），告诉我改。
+缺失生命的口径是 `100 - 100 × getHealth() / feskaMaxHealth`，生命池挡下的伤害不算失血，因此不会“被护盾打反而增伤”。
 
-**兜底风险**：回补走的是治疗通道，会被治疗削减（禁疗、狂战士之魂）影响；狂战士期间禁疗则回补为 0，此时必须同步把 DOT 也置 0，否则就是纯多扣。这条要写进实现。
+## 四、地基三：共用临时生命池表
 
-## 三、10 项的实现与风险
+三张玩家级平行数组，下标一一对应：
 
-| 编号 | 名称 | 实现与风险 |
+| 字段 | 内容 |
+| --- | --- |
+| `Temp_Pool_Ids` | 来源标签（`Temp_Pool_Id`：SHIELD / FLESH_REGENERATION / REACTIVE / STEADFAST / PAINFUL_HEALING） |
+| `Temp_Pool_Handles` | `addHealthPool` 返回的池句柄 |
+| `Temp_Pool_Expire_At` | 绝对到期时间，`0` 表示不按时间到期 |
+
+四个操作都在 `pools.opy`，入参走全局量（`Target_Player` + `Temp_Pool_Tag/Type/Amount/Expire`）：
+
+| 子程序 | 用途 |
+| --- | --- |
+| `feskaAddTempPool` | 追加一条记录（register） |
+| `feskaClearTempPoolsByTag` | 按标签删旧记录（refresh 的前半步） |
+| `feskaClearAllTempPools` | 重生/换英雄时全清 |
+| 规则 `Feska - Temp pool expiry` | 每 0.25 秒扫一次，移除到期的记录 |
+
+迁入的三个旧池：光子护盾（SHIELDS）、血肉再生（NORMAL）、反应装甲（ARMOR），都是 `refresh` 语义（整池重建，`Expire = 0`）。心之钢与护甲强化是永久池，不迁。坚定、痛苦疗愈是 `register` 语义（各自到期）。
+
+三个实现约束：
+
+1. **三张表必须同时重组后整体赋回**。OverPy 的数组操作返回副本，只删一张表会让三张表错位，之后会移除错误的池。
+2. **未初始化玩家的数组字段还是默认值 `0`**，`len(0)` 会中断整条规则。所有遍历都先判 `Is_Initialized`。
+3. 到期规则对“已被伤害打空、由引擎自动移除的池”仍会再调一次 `removeHealthPool`。这是本批唯一无法靠编译确认的点，见第六节第 1 条。
+
+## 五、佛法自然的唯一性
+
+复用光子护盾那套机制，三处同时改，缺一处就会两人同持：
+
+| 位置 | 改动 |
+| --- | --- |
+| 目录行第 3 列 | 写 `1`（唯一性标志） |
+| `feskaBuildPool()` | 有持有者时过滤掉该卡（与护盾各一条独立 filter） |
+| `Feska - Replace taken unique card` | 条件与替换循环改成按 `feskaUniqueTechTaken()` 判定，不再出现具体 `Tech_Id` |
+| `Feska - Confirm card` | 同样改成 `feskaUniqueTechTaken()` |
+
+**唯一性判定不过滤存活，光环才过滤存活**：死亡不丢科技，如果唯一性也过滤存活，持有者死一次别人就能抢同一张卡。
+
+光环用状态差分维护单个修改器句柄（`Dharma_Mod_Owner` 变化才 stop + start），0.25 秒重算一次中心，僵尸进出 15 米靠每帧重估，没有延迟。特效是纯视觉：每 0.5 秒给 15 米内存活僵尸挂 `ZENYATTA_ORB_OF_DISCORD_TARGET`，出范围或死亡就销毁并置 `Dharma_Orb_Id = 0`。
+
+## 六、实现过程中确认的两个坑
+
+1. **本版本的 `def` 不支持带返回值的 `return`**。`return X` 与 `return null` 都报 `expected the end of the return statement`。原本“用带返回值的子程序取持有者”的方案作废，改成全局量 `Dharma_Holder` 由规则维护。
+2. **嵌套 `filter` 共用“当前数组元素”**。`数组.filter(lambda x: ... 另一个数组.filter(lambda y: ...))` 会出 `nested-binder-lambda` 告警，结果不可靠。唯一性过滤因此拆成两条独立 filter，条件里改用布尔宏 `feskaUniqueTechTaken()`。
+
+## 七、必须游戏内验证
+
+| 序号 | 待验证 | 失败后果 |
 | --- | --- | --- |
-| G01 | 坚定 | A 级：共用池表，每层一条（id + handle + 到期）。不能整池重建，否则已吸收的护甲会被补回。满层是 60% 最大生命的额外护甲。 |
-| G02 | 痛苦疗愈 | A 级：同一张池表，一条记录，8 秒到期移除。与十字军铠甲的固定回补同时生效，文案要区分。 |
-| G03 | 不屈意志 | A 级：低频重算，写进伤害与受伤两个百分比宏。减伤按加算并入总和，由 90% 上限兜住。 |
-| N11 | 亡语 | B 级：`playerDied` 同帧先快照坐标，再对 `getPlayersInRadius(坐标, 25, Team.1, LosCheck.SURFACES)` 结算。该函数会带上死亡玩家，要按存活过滤。伤害来源用 `null`，不计击杀、不触发吸血链。 |
-| N17 | 坚韧 | A 级：单一时间戳窗口，4 秒内每次受击只刷新时长不叠加。按加算并入减伤总和。 |
-| N20 | 屹立不倒 | B 级：在 `playerDealtDamage` 里按伤害量回血，必须**聚合结算**（0.25 秒合并一次），否则僵尸密集时每帧 heal 会打穿执行预算；派生伤害打标记防递归；狂战士禁疗期间停用。按你的决定不封顶。 |
-| N30 | 大运来咯 | A 级：`playerDealtKnockback` 记录本帧持有者，`playerReceivedKnockback` 在僵尸侧按“本帧 + 12 米”配对，命中后 `setStatusEffect(null, Status.KNOCKED_DOWN, 1)`。AI 已把 `KNOCKED_DOWN` 当行动中止（`src/ai/core.opy:113`）。 |
-| M04 | 银质子弹 | B 级：读开火后的 `getAmmo(0)`，命中后弹药归零即视作最后一发。**需游戏内核对事件与弹药扣减的先后**，若事件早于扣减，改为“命中前弹药为 1”。派生伤害标记防递归。堡垒哨兵与巴蒂斯特榴弹有两个弹夹，需定判哪一夹。 |
-| L04 | 佛法自然 | A 级：全局唯一，照光子护盾的三处机制实现（目录唯一标志、池子过滤、唯一卡替换规则改为通用判定）。光环用状态差分规则维护单个修改器句柄，与难度修改器乘算。特效 0.5 秒限流扫描，超过 30 只降级为无特效。 |
-| L06 | 死亡之舞 | B 级：先回补再起 2 秒 DOT，回补量必须夹当前可恢复生命。挡不住一击致命（伤害先落地）。狂战士禁疗期间回补与 DOT 一起置 0。 |
+| 1 | 对已被打空的池调用 `removeHealthPool` 是否安全 | 若报错，到期规则会中断，三张表不同步，之后会移除错误的池 |
+| 2 | 无弹夹英雄（莱因哈特、布丽吉特等）`getAmmo(0)` 的返回值 | 若返回 1 或随机值，银质子弹会误判；“上一发还有子弹”的转换条件目前是唯一防线 |
+| 3 | `playerDealtKnockback` / `playerReceivedKnockback` 在本模式的实际触发 | 事件不触发则大运来咯等同空卡 |
+| 4 | `startDamageModification` 的接收者数组是否随每帧重估 | 不重估则佛法自然只在建句柄那一刻对范围内僵尸生效 |
+| 5 | 生命池记录跨死亡是否被引擎清掉 | 若清了，`feskaClearAllTempPools` 会对失效句柄调 `removeHealthPool` |
+| 6 | 死亡之舞的流血 DOT 是否计入受击统计 | 若计入，会绕过 `attacker != null` 触发坚定/痛苦疗愈/坚韧 |
 
-## 四、受击口径：`attacker != null`（已定）
+## 八、已作废
 
-死亡之舞的流血是 `null` 来源的伤害，会被其他“受到伤害时”类科技当作一次正常受击：
-
-| 冲突 | 后果 | 处理 |
-| --- | --- | --- |
-| 死亡之舞 × 痛苦疗愈 | 流血的 12% 又转成临时生命，自己吃掉自己的代价 | 触发条件加 `attacker != null` |
-| 死亡之舞 × 坚定 | 流血每跳一层护甲，5 层很快堆满 | 同上 |
-| 死亡之舞 × 坚韧 | 流血刷新 40% 减伤窗口，等于流血帮玩家续减伤 | 同上，这条影响最大 |
-| 死亡之舞 × 佛法自然 | 易损让僵尸打得更疼，死亡之舞延后 50%，两者乘起来接近“免伤 45%” | 数值可接受，放进同一份回归清单一起看 |
-
-规则：**“受到伤害”类科技只在僵尸本体造成伤害时触发**，条件统一加 `attacker != null`。落到现有代码上是三处：
-
-| 文件 | 现状 | 改动 |
-| --- | --- | --- |
-| `tech/crusader.opy` | `attacker != eventPlayer`，null 能通过，所以流血会给十字军回补，正好抵消死亡之舞 | 加 `attacker != null`，保留原条件继续排除狂战士自损 |
-| `tech/thorns.opy` | `attacker.getTeam() == Team.1`，null 时靠条件失败挡住 | 补一条 `attacker != null`，把意图写明，不依赖 null 上的成员调用 |
-| `tech/reactive.opy` | 已有 `attacker != null` | 不改 |
-
-新增的 G01 坚定、G02 痛苦疗愈、N17 坚韧直接写这条条件。
-
-## 五、已作废
-
-- **L 组其余 13 项删除**：L01 石像鬼石板甲、L02 铁板靴、L03 振奋盔甲、L05 斯特拉克、L07 巨型九头蛇、L08 破败王者之刃、L09 黑色切割者、L10 三相之力、L11 不灭之握、L12 余震、L13 骸骨镀层、L14 盾击、L15 生命源泉。
-- N 组其余 26 项删除，只留 N11、N17、N20、N30。
-- M01–M03、M05–M30 作废，只留 M04。
-- P01–P18 全部作废。
-- 更早删掉的：血怒、以痛为盾、血债、战地急救、锁链、战旗、势沉、震退、K 组 7 项。
-
-## 六、建议的首批
-
-| 顺序 | 编号 | 理由 |
-| --- | --- | --- |
-| 1 | G01 坚定 | 共用池表的第一条记录，先验证池表设计。 |
-| 2 | G02 痛苦疗愈 | 同一张表的第二个使用者。 |
-| 3 | G03 不屈意志 | 改两个宏加 90% 加算夹。 |
-| 4 | N17 坚韧 | 单时间戳窗口，前排核心体感。 |
-| 5 | N30 大运来咯 | 复用原生击退事件，零新增扫描。 |
-| 6 | M04 银质子弹 | 只需一处弹药判定。 |
-| 7 | L04 佛法自然 | 叠加方式已确认。唯一性机制已存在，但要改一条已实现的规则，放在最后单独回归。 |
-
-死亡之舞排第二批：它要动 `crusader.opy`、`thorns.opy` 两处已验证代码的受击口径，和 G01/G02/N17 的触发条件一起改才成立，不适合和首批混在一起。
-
-## 七、需要你决定
-
-1. **死亡之舞的 25~75**：按波次线性插值对不对，还是按缺失生命或固定 50 点。
-2. **银质子弹的弹夹**：堡垒哨兵、巴蒂斯特榴弹有两个弹夹，判 `getAmmo(0)` 还是 `getAmmo(1)`。
+- 上版候选 N 组其余 26 项、M 组其余 29 项、L 组其余 13 项、P 组 18 项、更早的 K 组 7 项与血怒/以痛为盾/血债/战地急救/锁链/战旗/势沉/震退，全部删除。
+- 佛法的“每 0.5 秒选一名持有者当光环中心”方案：改成全局唯一后不需要了。
+- 佛法的“派生伤害兜底”方案：乘算已确认，不需要。

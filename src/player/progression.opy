@@ -59,8 +59,12 @@ def feskaBuildPool():
         Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids or Target_Player.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] > 0)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
         # 技能强化只对英雄池内的当前英雄入池; 其他行的英雄池是空数组, 不会被选中。
         Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: Upgrade_Catalog[upgrade][UPGRADE_COLUMN_KIND] != UPGRADE_KIND_SKILL or Target_Player.getHero() in Upgrade_Catalog[upgrade][UPGRADE_COLUMN_HERO_POOL])
+        # 全局唯一科技: 已被任何人持有就不再进池。唯一性判定不过滤存活, 死亡不丢科技。
+        # 分两条独立的 filter: 嵌套 filter(宏里带 getPlayers().filter)会共用"当前数组元素", 结果不可靠。
         if len(shieldTechHolders()) > 0:
             Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.SHIELD)
+        if len(feskaDharmaHolders()) > 0:
+            Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.DHARMA)
     else:
         Target_Player.Candidate_Upgrade_Ids = Stat_Catalog_Indexes.filter(lambda upgrade: not (upgrade == Stat_Upgrade_Id.ULTIMATE_CHARGE and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
 
@@ -114,11 +118,17 @@ rule "Feska - Initialize player":
     eventPlayer.Heartsteel_Flat_Health = 0
     eventPlayer.Heartsteel_Stacks = 0
     eventPlayer.Heartsteel_Health_Pool = null
-    eventPlayer.Shield_Health_Pool = null
-    eventPlayer.Regeneration_Health_Pool = null
     eventPlayer.Victory_Will_Used_This_Wave = false
     eventPlayer.Victory_Will_Effect_End = 0
     eventPlayer.Tech_Effect_Ids = []
+    eventPlayer.Temp_Pool_Ids = []
+    eventPlayer.Temp_Pool_Handles = []
+    eventPlayer.Temp_Pool_Expire_At = []
+    eventPlayer.Missing_Health_Percent = 0
+    eventPlayer.Is_Resolute = false
+    eventPlayer.Resolute_Until = 0
+    eventPlayer.Ammo_Before_Hit = 0
+    eventPlayer.Knockback_Dealt_At = 0
     eventPlayer.Is_Alone = false
     eventPlayer.Is_Spawning_Derived_Damage = false
     eventPlayer.Is_Berserk = false
@@ -150,12 +160,15 @@ rule "Feska - Release player modifier":
         destroyEffect(eventPlayer.Tech_Effect_Ids[Loop_Index])
     eventPlayer.Tech_Effect_Ids = []
     if Tech_Id.SHIELD in eventPlayer.Owned_Tech_Ids:
-        # 持有者离场则科技失效: 清掉其他玩家身上本来源的护盾池, 不留常驻残血池。
+        # 持有者离场则科技失效: 清掉其他玩家身上本来源的护盾记录, 不留常驻残血池。
         Player_List = getPlayers(Team.2)
         for Loop_Index in range(len(Player_List)):
-            if Player_List[Loop_Index].Shield_Health_Pool != null:
-                removeHealthPool(Player_List[Loop_Index].Shield_Health_Pool)
-            Player_List[Loop_Index].Shield_Health_Pool = null
+            Target_Player = Player_List[Loop_Index]
+            Temp_Pool_Tag = Temp_Pool_Id.SHIELD
+            feskaClearTempPoolsByTag()
+    if Tech_Id.DHARMA in eventPlayer.Owned_Tech_Ids:
+        # 光环中心离场: 句柄由 "Feska - Dharma aura" 的状态差分停掉, 这里只把中心置空。
+        Dharma_Mod_Owner = null
 
 
 rule "Feska - Offer upgrade":
@@ -219,8 +232,8 @@ rule "Feska - Replace taken unique card":
     @Team 2
     @Condition not eventPlayer.Is_Choice_Locked
     @Condition eventPlayer.Current_Choice_Kind == Choice_Kind.TECH
-    @Condition len(shieldTechHolders()) > 0
-    @Condition Tech_Id.SHIELD in eventPlayer.Card_Upgrade_Ids
+    @Condition len(feskaDharmaHolders()) > 0 or len(shieldTechHolders()) > 0
+    @Condition (Tech_Id.SHIELD in eventPlayer.Card_Upgrade_Ids and len(shieldTechHolders()) > 0) or (Tech_Id.DHARMA in eventPlayer.Card_Upgrade_Ids and len(feskaDharmaHolders()) > 0)
 
     # 唯一科技被其他玩家先选走后, 在场候选也要换掉, 不能只在抽取时过滤。
     Target_Player = eventPlayer
@@ -228,7 +241,7 @@ rule "Feska - Replace taken unique card":
     Reroll_Candidates = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade not in eventPlayer.Card_Upgrade_Ids)
     if len(Reroll_Candidates) > 0:
         for Loop_Index in range(3):
-            if eventPlayer.Card_Upgrade_Ids[Loop_Index] == Tech_Id.SHIELD:
+            if feskaUniqueTechTaken(eventPlayer.Card_Upgrade_Ids[Loop_Index]):
                 eventPlayer.Card_Upgrade_Ids[Loop_Index] = random.choice(Reroll_Candidates)
 
 
@@ -249,7 +262,7 @@ rule "Feska - Confirm card":
         return
     eventPlayer.Chosen_Upgrade_Id = eventPlayer.Card_Upgrade_Ids[eventPlayer.Selected_Card_Index]
     if eventPlayer.Current_Choice_Kind == Choice_Kind.TECH:
-        if eventPlayer.Chosen_Upgrade_Id == Tech_Id.SHIELD and len(shieldTechHolders()) > 0:
+        if feskaUniqueTechTaken(eventPlayer.Chosen_Upgrade_Id):
             smallMessage(eventPlayer, "该科技已被其他玩家选走")
             eventPlayer.Current_Choice_Kind = Choice_Kind.NONE
             eventPlayer.Is_Card_Panel_Visible = true
@@ -303,8 +316,8 @@ rule "Feska - Confirm card":
         eventPlayer.Bonus_By_Stat[Stat_Bonus.ARMOR] += 1
         feskaApplyArmorPool()
     elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.DAMAGE_REDUCTION:
-        # 成长系统减伤总上限 50%, 避免重复选择后完全免伤。
-        eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION] = min(eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION] + 3, 50)
+        # 减伤改为加算: 各项相加后由 feskaReceivedPercent 统一封顶 90%, 这里只累加。
+        eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION] += 3
         feskaRefreshMods()
     elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.REGENERATION:
         eventPlayer.Bonus_By_Stat[Stat_Bonus.REGENERATION] += 1
@@ -338,17 +351,11 @@ rule "Feska - Restore stats on hero change or respawn":
         removeHealthPool(eventPlayer.Armor_Health_Pool)
     if eventPlayer.Heartsteel_Health_Pool != null:
         removeHealthPool(eventPlayer.Heartsteel_Health_Pool)
-    if eventPlayer.Shield_Health_Pool != null:
-        removeHealthPool(eventPlayer.Shield_Health_Pool)
-    if eventPlayer.Regeneration_Health_Pool != null:
-        removeHealthPool(eventPlayer.Regeneration_Health_Pool)
-    if eventPlayer.Reactive_Armor_Health_Pool != null:
-        removeHealthPool(eventPlayer.Reactive_Armor_Health_Pool)
     eventPlayer.Armor_Health_Pool = null
     eventPlayer.Heartsteel_Health_Pool = null
-    eventPlayer.Shield_Health_Pool = null
-    eventPlayer.Regeneration_Health_Pool = null
-    eventPlayer.Reactive_Armor_Health_Pool = null
+    # 护盾/血肉/反应装甲等临时池都在共用池表里, 一次性清空后按科技状态重建。
+    Target_Player = eventPlayer
+    feskaClearAllTempPools()
     # stat_dirty 是死亡后的重生路径; 英雄确实变了才是真正换英雄。
     # 换英雄后工坊重置 setMaxHealth 百分比, 清理生命池后读到的 getMaxHealth() 即新英雄原始最大生命。
     if eventPlayer.Restored_For_Hero != eventPlayer.getHero():
@@ -407,9 +414,9 @@ rule "Feska - Wave end cleanup":
     for Loop_Index in range(len(Player_List)):
         Target_Player = Player_List[Loop_Index]
         feskaStopBerserk()
-        if Player_List[Loop_Index].Regeneration_Health_Pool != null:
-            removeHealthPool(Player_List[Loop_Index].Regeneration_Health_Pool)
-        Player_List[Loop_Index].Regeneration_Health_Pool = null
+        # 血肉再生的池跨阶段没有意义, 准备阶段统一收掉, 进攻阶段首帧按科技重建。
+        Temp_Pool_Tag = Temp_Pool_Id.FLESH_REGENERATION
+        feskaClearTempPoolsByTag()
         Player_List[Loop_Index].Victory_Will_Used_This_Wave = false
 
 
@@ -446,6 +453,16 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/crit.opy"
 #!include "feska/tech/ultloop.opy"
 #!include "feska/tech/execute.opy"
+#!include "feska/tech/steadfast.opy"
+#!include "feska/tech/painful_healing.opy"
+#!include "feska/tech/indomitable.opy"
+#!include "feska/tech/resolute.opy"
+#!include "feska/tech/knockdown.opy"
+#!include "feska/tech/silver_bullet.opy"
+#!include "feska/tech/dharma.opy"
+#!include "feska/tech/death_rattle.opy"
+#!include "feska/tech/unyielding.opy"
+#!include "feska/tech/death_dance.opy"
 
 
 rule "Feska - Upgrade catalog":
@@ -494,7 +511,18 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_IGNITE,
         UPGRADE_ROW_CRIT,
         UPGRADE_ROW_ULTIMATE_LOOP,
-        UPGRADE_ROW_EXECUTE
+        UPGRADE_ROW_EXECUTE,
+        # 索引 43..52: 近战与前排批, 只能追加在末尾。
+        UPGRADE_ROW_STEADFAST,
+        UPGRADE_ROW_PAINFUL_HEALING,
+        UPGRADE_ROW_INDOMITABLE,
+        UPGRADE_ROW_RESOLUTE,
+        UPGRADE_ROW_KNOCKDOWN,
+        UPGRADE_ROW_SILVER_BULLET,
+        UPGRADE_ROW_DHARMA,
+        UPGRADE_ROW_DEATH_RATTLE,
+        UPGRADE_ROW_UNYIELDING,
+        UPGRADE_ROW_DEATH_DANCE
     ]
     Tech_Catalog_Indexes = []
     Stat_Catalog_Indexes = []
