@@ -10,11 +10,13 @@ rule "Feska - Blood regeneration":
     @Condition Tech_Id.FLESH_REGENERATION in eventPlayer.Owned_Tech_Ids
 
     wait(10, Wait.ABORT_WHEN_FALSE)
-    # 整池重建: 先移除旧池再建新池, 重复调用不会叠层。
-    if eventPlayer.Regeneration_Health_Pool != null:
-        removeHealthPool(eventPlayer.Regeneration_Health_Pool)
-    eventPlayer.addHealthPool(Health.NORMAL, ceil(feskaPoolGrowthValue() + feskaMaxHealth(eventPlayer) * 0.05), true, false)
-    eventPlayer.Regeneration_Health_Pool = getLastCreatedHealthPool()
+    # 整池重建: 先按标签清掉旧记录再建新池, 重复调用不会叠层。
+    Target_Player = eventPlayer
+    Temp_Pool_Tag = Temp_Pool_Id.FLESH_REGENERATION
+    feskaClearTempPoolsByTag()
+    Temp_Pool_Amount = ceil(feskaPoolGrowthValue() + feskaMaxHealth(eventPlayer) * 0.05)
+    Temp_Pool_Expire = 0
+    feskaAddTempPool()
     playEffect(getPlayers(Team.2), DynamicEffect.MOIRA_FADE_REAPPEAR, Color.PURPLE, eventPlayer, 1)
     if ruleCondition:
         loop()

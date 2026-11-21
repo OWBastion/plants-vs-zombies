@@ -25,6 +25,9 @@ globalvar Stat_Catalog_Indexes
 # 子程序当前操作的玩家与循环下标。OverPy 子程序不支持参数, 用同步临时变量传递。
 globalvar Target_Player
 globalvar Loop_Index
+# 池表子程序专用的循环下标。池表会被"正在遍历玩家"的调用方间接调用,
+# 共用 Loop_Index 会把外层计数改掉, 所以另开一个。
+globalvar Pool_Index
 # OverPy 只允许单字母的隐式临时变量。需要具名的临时工作值只能显式声明。
 globalvar Player_List
 globalvar Ready_Ability_Buttons
@@ -45,6 +48,15 @@ globalvar Effect_Targets
 globalvar Death_Rattle_Position
 # 死亡之舞: 本次结算转出的流血总量。
 globalvar Bleed_Amount
+# 共用临时生命池表: 子程序入参与重组数组时的工作变量。
+# 这里没有 Temp_Pool_Type —— Add Health Pool 的 Health Type 是枚举常量槽, 不能经变量中转,
+# 类型一律由 feskaAddTempPool 按标签分派后写内联字面量, 原因见 pools.opy 文件头。
+globalvar Temp_Pool_Tag
+globalvar Temp_Pool_Amount
+globalvar Temp_Pool_Expire
+globalvar Temp_Pool_Keep_Ids
+globalvar Temp_Pool_Keep_Handles
+globalvar Temp_Pool_Keep_Expire
 
 # 目录每行的列下标。3 为唯一性标志(仅光子护盾为 1, 判定仍按 Tech_Id), 8 图标, 9 英雄池。
 #!define UPGRADE_COLUMN_NAME 0
@@ -126,6 +138,16 @@ enum Tech_Id:
     DEATH_RATTLE = 50
     UNYIELDING = 51
     DEATH_DANCE = 52
+
+# 共用临时生命池的来源标签: 一条记录 = 一个池, 同标签可有多条(坚定的每层、痛苦疗愈的每次受击)。
+# 整池重建型来源(光子护盾/血肉再生/反应装甲)每次重建前按标签清掉旧记录。
+# 新增标签必须在 feskaAddTempPool 里补一条对应 Health 类型的 addHealthPool 分支, 否则池不会被创建。
+enum Temp_Pool_Id:
+    SHIELD = 0
+    FLESH_REGENERATION
+    REACTIVE
+    STEADFAST
+    PAINFUL_HEALING
 
 # 属性强化在 Upgrade_Catalog 中的行号。数值是历史索引, 不可重排。
 enum Stat_Upgrade_Id:
@@ -230,11 +252,13 @@ playervar Is_Berserk_Guard_Armed
 playervar Heartsteel_Stacks
 playervar Tech_Effect_Ids
 playervar Victory_Will_Effect_End
-# 生命池各由所属科技持一个句柄。共用临时池表已撤除: addHealthPool 的类型与数量走全局变量时
-# 游戏内报错/卡住, 连带 feskaAddTempPool 不可用, 详见 pools.opy 文件头。
-playervar Shield_Health_Pool
-playervar Regeneration_Health_Pool
-playervar Reactive_Armor_Health_Pool
+# 生命池分两类。护甲强化与心之钢各自持一个句柄(来源唯一、整池重建, 句柄就在各自字段里);
+# 光子护盾/血肉再生/反应装甲/坚定/痛苦疗愈走下面的共用临时池表, 因为坚定与痛苦疗愈
+# 需要"一次受击一条记录、各自到期", 单句柄表达不了。
+# 共用临时池表: 三张平行数组, 下标一一对应。到期时间是绝对时间, 0 表示不按时间到期。
+playervar Temp_Pool_Ids
+playervar Temp_Pool_Handles
+playervar Temp_Pool_Expire_At
 # 不屈意志: 按缺失生命换算的增伤与减伤百分点, 由低频规则维护。
 playervar Missing_Health_Percent
 # 坚韧: 受击后的 4 秒减伤窗口。

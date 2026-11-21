@@ -1,8 +1,8 @@
-# 费斯卡科技：近战与前排（v11，已落地）
+# 费斯卡科技：近战与前排（v12，已落地）
 
 状态：**已在代码中实现**，`pnpm run compile` 结果为 `errors=0`。编号 43–52，与 `Tech_Id` 和 `Upgrade_Catalog` 的末尾 10 行一一对齐。编译通过不等于游戏内验证，第七节列了必须实测的项。
 
-**当前可用 8 项**：坚定（43）与痛苦疗愈（44）因共用池表撤除而 `enabled=0`，见第四节。
+**当前可用 8 项**：坚定（43）与痛苦疗愈（44）`enabled=0`，共用池表已重做可用，缺的是这两项的规则体，见第四节。
 
 ## 一、10 项科技
 
@@ -46,27 +46,49 @@
 
 缺失生命的口径是 `100 - 100 × getHealth() / feskaMaxHealth`，生命池挡下的伤害不算失血，因此不会“被护盾打反而增伤”。
 
-## 四、地基三：共用临时生命池表——**已撤除**
+## 四、地基三：共用临时生命池表（已重做）
 
-**根因**：`addHealthPool` 的类型与数量走全局变量（`Temp_Pool_Type` / `Temp_Pool_Amount`）时游戏内报错或卡住：
+上一版把根因判成“参数来自全局变量”，**这个结论是错的**：数量与到期时间一直走全局变量，现在也照旧走全局变量且工作正常。真正错的是子程序自己的两处写法。
+
+### 错误一：Health Type 被变量化
 
 ```
 为玩家添加生命池(全局.Target_Player, 全局.Temp_Pool_Type, 全局.Temp_Pool_Amount, 真, 假)
 ```
 
-内联写法（`addHealthPool(Health.ARMOR, 表达式, true, false)`）正常，所以问题定位到“参数来自全局变量”这一层，与子程序无关。
+`Add Health Pool` 的 Health Type 是**枚举常量槽**，只接受字面量（`护盾` / `护甲` / `生命值`）。传变量时 OverPy 只校验“它是数字”，编译能过，但生成的动作在游戏里类型槽是空的，池加不上并连带规则卡住。同一个参数位在可用版本里放的是 `ceil(...)` 表达式（数量），说明该位置只受表达式、不受枚举变量，所以差异确实只在类型这一项。
 
-| 受影响 | 处理 |
+重做后由 `feskaAddTempPool` 按标签分派，五个分支各自写内联字面量：
+
+```
+if Temp_Pool_Tag == Temp_Pool_Id.SHIELD:      addHealthPool(Health.SHIELDS, ...)
+elif Temp_Pool_Tag == Temp_Pool_Id.REACTIVE:  addHealthPool(Health.ARMOR, ...)
+...
+```
+
+`Temp_Pool_Type` 这个全局量已删除——留着它就会有人再想往枚举槽里塞变量。**新增标签必须补一支分支**，漏配时 `getLastCreatedHealthPool()` 会拿到上一个池。
+
+### 错误二：子程序复用了调用方的循环变量
+
+旧 `feskaClearTempPoolsByTag` / `feskaClearAllTempPools` 内部用全局 `Loop_Index` 遍历池表，而调用方 `feskaRefreshShields`、离场清理本身也在用 `Loop_Index` 遍历玩家。子程序一进循环就把外层计数改掉，外层只剩第一个玩家被处理，后续玩家漏处理甚至越界——这可能才是“偶尔卡住”的直接来源。
+
+池表子程序现在统一用专用的 `Pool_Index`，与业务循环彻底分开；`Loop_Index` 只给规则自己的循环用。
+
+### 重做后的形态
+
+| 位置 | 现状 |
 | --- | --- |
-| 光子护盾、血肉再生、反应装甲 | 回到各自持句柄（`Shield_Health_Pool` / `Regeneration_Health_Pool` / `Reactive_Armor_Health_Pool`），参数全部内联，功能不变 |
-| 坚定（43）、痛苦疗愈（44） | `enabled=0` 且规则体未实现，只留目录行与重做约束；恢复时把目录行第 5 列改回 `1` |
-| 池表本身 | `Temp_Pool_*` 字段、`Temp_Pool_Id` 枚举、三个操作、到期规则全部删除，`pools.opy` 只剩四个 Apply 子程序 |
+| `pools.opy` | `feskaAddTempPool`（按标签分派后建池并记账）、`feskaClearTempPoolsByTag`、`feskaClearAllTempPools`、四个 Apply 子程序 |
+| 光子护盾、血肉再生、反应装甲 | 回归共用表，各自先按标签清旧记录再整池重建，参数经全局变量传入 |
+| 护甲强化、心之钢 | 仍各自持句柄（`Armor_Health_Pool` / `Heartsteel_Health_Pool`），来源唯一、单句柄够用 |
+| 表结构 | `Temp_Pool_Ids` / `Temp_Pool_Handles` / `Temp_Pool_Expire_At` 三张平行数组，到期时间 0 表示不按时间到期 |
+| 到期 | `Feska - Temp pool expiry` 每 0.25 秒逐条移除到期记录 |
 
-**两项重启时的实现约束**（写在各自文件注释里）：
+坚定（43）与痛苦疗愈（44）仍然 `enabled=0`：共用表现在能用了，但这两项的规则体还没写。重做时的约束不变：
 
 1. **坚定每层必须单独建池并单独到期**。整池重建会把已经吸收掉的护甲补回来。
 2. **痛苦疗愈要封顶同时存在的记录数**。高攻速受击会把玩家身上的池数量堆到不可控。
-3. 两者的句柄都改由自己持有的数组记录，直接 `addHealthPool` 且参数内联，不要再走全局变量。
+3. 两者都用 `feskaAddTempPool` 追加记录，标签分别是 `STEADFAST` 与 `PAINFUL_HEALING`，到期时间填绝对时间戳。
 
 ## 五、佛法自然的唯一性
 
@@ -93,11 +115,11 @@
 
 | 序号 | 待验证                                                          | 失败后果                                                                                       |
 | -- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| 1  | —（原“打空的池再 `removeHealthPool`”已随池表撤除失效） | 池表删除后无对应代码，不再阻塞 |
+| 1  | 池表重建后三池是否照常: 受击前 `getHealthOfType(Health.SHIELDS/ARMOR)` 有值、击穿后归零、下一阶段重建 | 重做后的 `feskaAddTempPool` 若仍不建池, 护盾/血肉/反甲会集体变空卡, 这是本轮改动的唯一风险集中点。先看是否有池, 再看池是否按标签重建 |
 | 2  | 无弹夹英雄（莱因哈特、布丽吉特、温斯顿等）`getMaxAmmo(0)` 的返回值                    | 若返回 >0，选牌池过滤失效，卡会发给用不上弹夹的英雄。判据用 `getMaxAmmo` 而不是 `getAmmo`：前者是弹夹容量，后者在打空时也是 0，区分不开。这条是唯一防线 |
 | 3  | `playerDealtKnockback` / `playerReceivedKnockback` 在本模式的实际触发 | 事件不触发则大运来咯等同空卡                                                                             |
 | 4  | `startDamageModification` 的接收者数组是否随每帧重估                      | 不重估则佛法自然只在建句柄那一刻对范围内僵尸生效                                                                   |
-| 5  | 生命池句柄跨死亡是否失效                                              | 光子护盾、血肉再生、反应装甲在重生时都会先 `removeHealthPool` 再重建；若失效句柄报错，重生流程会中断                                      |
+| 5  | 生命池句柄跨死亡是否失效                                              | 重生时 `feskaClearAllTempPools` 会对旧句柄 `removeHealthPool` 再重建; 若失效句柄报错, 重生流程会中断                                      |
 | 6  | 死亡之舞的流血 DOT 是否计入受击统计                                         | 若计入，会绕过 `attacker != null` 触发坚韧、十字军铠甲、反甲                                                                |
 
 ## 八、已作废

@@ -121,9 +121,10 @@ rule "Feska - Initialize player":
     eventPlayer.Heartsteel_Flat_Health = 0
     eventPlayer.Heartsteel_Stacks = 0
     eventPlayer.Heartsteel_Health_Pool = null
-    eventPlayer.Shield_Health_Pool = null
-    eventPlayer.Regeneration_Health_Pool = null
-    eventPlayer.Reactive_Armor_Health_Pool = null
+    # 共用临时池表: 必须初始化成空数组, 留默认值 0 会让后续 len() 中断整条规则。
+    eventPlayer.Temp_Pool_Ids = []
+    eventPlayer.Temp_Pool_Handles = []
+    eventPlayer.Temp_Pool_Expire_At = []
     eventPlayer.Victory_Will_Used_This_Wave = false
     eventPlayer.Victory_Will_Effect_End = 0
     eventPlayer.Tech_Effect_Ids = []
@@ -164,11 +165,12 @@ rule "Feska - Release player modifier":
     eventPlayer.Tech_Effect_Ids = []
     if Tech_Id.SHIELD in eventPlayer.Owned_Tech_Ids:
         # 持有者离场则科技失效: 清掉其他玩家身上本来源的护盾池, 不留常驻残血池。
+        # 这里的外层循环用 Loop_Index, 池表子程序内部用 Pool_Index, 两者不会互相覆盖。
         Player_List = getPlayers(Team.2)
         for Loop_Index in range(len(Player_List)):
-            if Player_List[Loop_Index].Shield_Health_Pool != null:
-                removeHealthPool(Player_List[Loop_Index].Shield_Health_Pool)
-            Player_List[Loop_Index].Shield_Health_Pool = null
+            Target_Player = Player_List[Loop_Index]
+            Temp_Pool_Tag = Temp_Pool_Id.SHIELD
+            feskaClearTempPoolsByTag()
     if Tech_Id.DHARMA in eventPlayer.Owned_Tech_Ids:
         # 光环中心离场: 句柄由 "Feska - Dharma aura" 的状态差分停掉, 这里只把中心置空。
         Dharma_Mod_Owner = null
@@ -356,16 +358,9 @@ rule "Feska - Restore stats on hero change or respawn":
         removeHealthPool(eventPlayer.Heartsteel_Health_Pool)
     eventPlayer.Armor_Health_Pool = null
     eventPlayer.Heartsteel_Health_Pool = null
-    # 护盾/血肉/反应装甲各自持句柄, 逐个移除后按科技状态重建。
-    if eventPlayer.Shield_Health_Pool != null:
-        removeHealthPool(eventPlayer.Shield_Health_Pool)
-    if eventPlayer.Regeneration_Health_Pool != null:
-        removeHealthPool(eventPlayer.Regeneration_Health_Pool)
-    if eventPlayer.Reactive_Armor_Health_Pool != null:
-        removeHealthPool(eventPlayer.Reactive_Armor_Health_Pool)
-    eventPlayer.Shield_Health_Pool = null
-    eventPlayer.Regeneration_Health_Pool = null
-    eventPlayer.Reactive_Armor_Health_Pool = null
+    # 护盾/血肉/反应装甲以及坚定、痛苦疗愈的临时池共用一张表, 一次清空后按科技状态重建。
+    Target_Player = eventPlayer
+    feskaClearAllTempPools()
     # stat_dirty 是死亡后的重生路径; 英雄确实变了才是真正换英雄。
     # 换英雄后工坊重置 setMaxHealth 百分比, 清理生命池后读到的 getMaxHealth() 即新英雄原始最大生命。
     if eventPlayer.Restored_For_Hero != eventPlayer.getHero():
@@ -427,9 +422,8 @@ rule "Feska - Wave end cleanup":
         Target_Player = Player_List[Loop_Index]
         feskaStopBerserk()
         # 血肉再生的池跨阶段没有意义, 准备阶段统一收掉, 进攻阶段首帧按科技重建。
-        if Player_List[Loop_Index].Regeneration_Health_Pool != null:
-            removeHealthPool(Player_List[Loop_Index].Regeneration_Health_Pool)
-        Player_List[Loop_Index].Regeneration_Health_Pool = null
+        Temp_Pool_Tag = Temp_Pool_Id.FLESH_REGENERATION
+        feskaClearTempPoolsByTag()
         Player_List[Loop_Index].Victory_Will_Used_This_Wave = false
 
 
