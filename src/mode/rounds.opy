@@ -45,7 +45,9 @@ rule "Players - Round Attack End":
     @Condition Current_Wave < Total_Wave_Count
     @Condition Is_Attack_Phase
 
-    waitUntil(Wave_Attack_Time_Left == 0, Wave_Attack_Duration)
+    # 铃响只由倒计时决定。超时是防卡死的兜底, 取两倍时长, 不能在倒计时还剩一段时就关复活。
+    waitUntil(Wave_Attack_Time_Left <= 0, Wave_Attack_Duration * 2)
+    Wave_Attack_Time_Left = 0
     # 铃响后停止补位: 额度没放完也不再放, 把残余僵尸交给玩家清场收尾。
     getPlayers(Team.1).disableRespawn()
     # 安全阀: 清不掉(卡住/无敌残留)也必须能进下一波, 否则整局卡死在这一波。
