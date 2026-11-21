@@ -156,7 +156,7 @@ settings {
                 "projectileGravity%": 400,
                 "ability2Cooldown%": 35,
                 "ability2Duration%": 25,
-                "health%": 325,
+                "health%": 250,
                 "movementSpeed%": 50,
                 "ultGen%": 10,
                 "ultDuration%": 25,
@@ -286,7 +286,7 @@ settings {
                 "enablePrimaryFire": false,
                 "combatUltGen%": 300,
                 "projectileGravity%": 200,
-                "health%": 500,
+                "health%": 250,
                 "movementSpeed%": 50,
                 "ultGen%": 300,
                 "passiveUltGen%": 300,
@@ -326,7 +326,7 @@ settings {
                 "ability1Cooldown%": 300,
                 "projectileSpeed%": 10,
                 "combatUltGen%": 80,
-                "health%": 400,
+                "health%": 225,
                 "ultGen%": 80,
                 "passiveUltGen%": 95,
                 "enableSecondaryFire": false
@@ -359,7 +359,7 @@ settings {
                 "ability2FuseTime%": 1,
                 "combatUltGen%": 15,
                 "projectileGravity%": 400,
-                "health%": 400,
+                "health%": 225,
                 "enableAbility1": false,
                 "ultGen%": 15,
                 "passiveUltGen%": 15
@@ -445,8 +445,8 @@ settings {
             "dva": {
                 "damageDealt%": 125,
                 "callMechKb%": 125,
-                "ability2Cooldown%": 28,
-                "ability1Cooldown%": 350,
+                "ability2Cooldown%": 50,
+                "ability1Cooldown%": 200,
                 "ability1Kb%": 125,
                 "movementGravity%": 60,
                 "passiveUltGen%": 95,
@@ -461,18 +461,18 @@ settings {
                 "ability2Cooldown%": 50
             },
             "hanzo": {
-                "ability3Cooldown%": 275,
+                "ability3Cooldown%": 200,
                 "ability3Distance%": 85,
-                "damageDealt%": 90,
+                "damageDealt%": 100,
                 "combatUltGen%": 105,
                 "ultGen%": 105,
                 "passiveUltGen%": 105,
                 "ability1Cooldown%": 0
             },
             "cassidy": {
-                "damageDealt%": 95,
+                "damageDealt%": 100,
                 "combatUltGen%": 95,
-                "ability1Cooldown%": 250,
+                "ability1Cooldown%": 200,
                 "ultGen%": 95
             },
             "lucio": {
@@ -487,13 +487,13 @@ settings {
                 "secondaryFireCooldown%": 67
             },
             "bastion": {
-                "damageDealt%": 90,
+                "damageDealt%": 100,
                 "jumpVerticalSpeed%": 230,
                 "enableInfiniteAmmo": false,
                 "ultDuration%": 75
             },
             "soldier": {
-                "damageDealt%": 95,
+                "damageDealt%": 100,
                 "combatUltGen%": 125,
                 "ability2Cooldown%": 67,
                 "ultGen%": 125,
@@ -502,12 +502,12 @@ settings {
                 "enableSpawningWithUlt": true
             },
             "mercy": {
-                "damageDealt%": 95,
+                "damageDealt%": 100,
                 "combatUltGen%": 120,
                 "enableInfiniteAmmo": false,
                 "ultGen%": 120,
                 "passiveUltGen%": 120,
-                "ability2Cooldown%": 8
+                "ability2Cooldown%": 50
             },
             "orisa": {
                 "projectileSpeed%": 130,
@@ -552,7 +552,7 @@ settings {
                 "ammoClipSize%": 50,
                 "combatUltGen%": 165,
                 "projectileGravity%": 200,
-                "ability2Cooldown%": 40,
+                "ability2Cooldown%": 50,
                 "ability2Duration%": 200,
                 "movementSpeed%": 135,
                 "movementGravity%": 80,
@@ -563,7 +563,7 @@ settings {
             },
             "ramattra": {
                 "damageReceived%": 90,
-                "ability2Cooldown%": 36,
+                "ability2Cooldown%": 50,
                 "ability1Cooldown%": 50,
                 "ultDuration%": 500,
                 "enableSpawningWithUlt": true
@@ -585,7 +585,7 @@ settings {
                 "damageDealt%": 130,
                 "enableInfiniteAmmo": false,
                 "secondaryFireCooldown%": 60,
-                "ability2Cooldown%": 20
+                "ability2Cooldown%": 50
             },
             "zarya": {
                 "damageDealt%": 120,
@@ -618,7 +618,7 @@ settings {
                 "enableAbility1": false
             },
             "pharah": {
-                "damageDealt%": 95,
+                "damageDealt%": 100,
                 "passiveRechargeRate%": 15,
                 "passiveMaxTime%": 60,
                 "enableAbility1": false,
@@ -653,7 +653,7 @@ settings {
                 "ability2Cooldown%": 50
             },
             "junkrat": {
-                "damageDealt%": 90,
+                "damageDealt%": 100,
                 "projectileSpeed%": 125,
                 "combatUltGen%": 95,
                 "ability2Cooldown%": 200,
@@ -662,21 +662,21 @@ settings {
                 "movementGravity%": 110,
                 "ultGen%": 95,
                 "ultDuration%": 50,
-                "ability1Cooldown%": 300,
+                "ability1Cooldown%": 200,
                 "ability1Kb%": 55
             },
             "tracer": {
-                "damageDealt%": 95,
+                "damageDealt%": 100,
                 "enableInfiniteAmmo": false,
-                "ability2Cooldown%": 275,
-                "ability1Cooldown%": 450
+                "ability2Cooldown%": 200,
+                "ability1Cooldown%": 200
             },
             "lifeweaver": {
                 "ability1Cooldown%": 200,
                 "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 50,
                 "primaryFireRange%": 200,
-                "secondaryFireCooldown%": 20
+                "secondaryFireCooldown%": 50
             },
             "wreckingBall": {
                 "damageDealt%": 135,
@@ -698,9 +698,9 @@ settings {
                 "passiveUltGen%": 125
             },
             "symmetra": {
-                "ability2Cooldown%": 275,
-                "damageDealt%": 80,
-                "ability1Cooldown%": 260,
+                "ability2Cooldown%": 200,
+                "damageDealt%": 100,
+                "ability1Cooldown%": 200,
                 "jumpVerticalSpeed%": 150,
                 "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
@@ -734,7 +734,7 @@ settings {
                 "passiveUltGen%": 145
             },
             "ashe": {
-                "damageDealt%": 90,
+                "damageDealt%": 100,
                 "ability1EnemyKb%": 150,
                 "ability2Cooldown%": 50,
                 "ability2FuseTime%": 1,
@@ -750,7 +750,7 @@ settings {
                 "damageReceived%": 90,
                 "jumpVerticalSpeed%": 110,
                 "combatUltGen%": 165,
-                "ability1Cooldown%": 225,
+                "ability1Cooldown%": 200,
                 "ability2Cooldown%": 75,
                 "ability2MaxHealing%": 200,
                 "primaryFireRechargeRate%": 500,
@@ -763,7 +763,7 @@ settings {
                 "ability1Kb%": 250,
                 "damageReceived%": 90,
                 "secondaryFireRechargeRate%": 150,
-                "secondaryFireCooldown%": 0,
+                "secondaryFireCooldown%": 50,
                 "projectileSpeed%": 150,
                 "combatUltGen%": 140,
                 "primaryFireKb%": 250,
@@ -773,12 +773,12 @@ settings {
             },
             "sigma": {
                 "damageDealt%": 130,
-                "ability1Cooldown%": 0,
+                "ability1Cooldown%": 50,
                 "enableUlt": false,
                 "ability2Cooldown%": 150
             },
             "roadhog": {
-                "damageDealt%": 80,
+                "damageDealt%": 100,
                 "damageReceived%": 90,
                 "healingReceived%": 25,
                 "secondaryFireRechargeRate%": 500,
@@ -809,14 +809,14 @@ settings {
                 "ability1Cooldown%": 134
             },
             "sombra": {
-                "damageDealt%": 95,
-                "ability2Cooldown%": 500,
+                "damageDealt%": 100,
+                "ability2Cooldown%": 200,
                 "combatUltGen%": 125,
                 "projectileGravity%": 120,
                 "enableInfiniteAmmo": false,
                 "ultGen%": 125,
                 "passiveUltGen%": 125,
-                "secondaryFireCooldown%": 250
+                "secondaryFireCooldown%": 200
             },
             "widowmaker": {
                 "damageDealt%": 100,
@@ -834,7 +834,7 @@ settings {
                 "reaper"
             ],
             "general": {
-                "damageDealt%": 120,
+                "damageDealt%": 125,
                 "damageReceived%": 110,
                 "healingReceived%": 120,
                 "jumpVerticalSpeed%": 100,
