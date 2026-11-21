@@ -143,13 +143,11 @@ enum Stat_Upgrade_Id:
 #!define feskaDamagePercent(p) (100 + p.Bonus_By_Stat[Stat_Bonus.DAMAGE] + (20 if p.Is_Alone else 0))
 #!define feskaReceivedPercent(p) ((100 - p.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION]) * (0.85 if p.Is_Alone else 1))
 
-# 动态难度: 难度预设给出三项基准百分比, 玩家数每多 1 人在基准上叠加。下标为 Difficulty_Level(简单/困难/专家/苦难)。
-# 三项依次是僵尸生命值、僵尸承受伤害(越低越减伤)、僵尸造成伤害。
-#!define DIFFICULTY_HEALTH_PERCENT [100, 130, 160, 200]
+# 动态难度: 难度预设给出两项基准百分比, 玩家数每多 1 人在基准上叠加。下标为 Difficulty_Level(简单/困难/专家/苦难)。
+# 两项依次是僵尸承受伤害(越低越减伤)、僵尸造成伤害。僵尸生命值不随难度和人数量调整。
 #!define DIFFICULTY_MITIGATION_PERCENT [0, 5, 10, 15]
 #!define DIFFICULTY_DAMAGE_PERCENT [100, 115, 130, 150]
 #!define DIFFICULTY_PLAYER_COUNT() max(getNumberOfPlayers(Team.2), 1)
-#!define zombieHealthPercent() (DIFFICULTY_HEALTH_PERCENT[Difficulty_Level] + 20 * (DIFFICULTY_PLAYER_COUNT() - 1))
 #!define zombieDamageReceivedPercent() (100 - DIFFICULTY_MITIGATION_PERCENT[Difficulty_Level] - 3 * (DIFFICULTY_PLAYER_COUNT() - 1))
 #!define zombieDamagePercent() (DIFFICULTY_DAMAGE_PERCENT[Difficulty_Level] + 10 * (DIFFICULTY_PLAYER_COUNT() - 1))
 # AI 数量按难度爬到「AI 上限」: 简单整局线性, 困难第 6 波, 专家第 4 波, 苦难第 1 波。
@@ -207,8 +205,6 @@ playervar Reactive_Armor_Health_Pool
 playervar Is_Berserk
 # 狂战士之魂: 未激活期间的不死守卫已武装(持有者只有一条等待规则在跑)
 playervar Is_Berserk_Guard_Armed
-# 动态难度改写僵尸最大生命前, 先暂存出生时(含 health%)的最大生命。
-playervar Zombie_Base_Max_Health
 playervar Heartsteel_Stacks
 playervar Shield_Health_Pool
 playervar Tech_Effect_Ids
