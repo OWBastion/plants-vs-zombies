@@ -20,17 +20,17 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     elif getCurrentMap() == Map.LIJIANG_CONTROL_CENTER:
         Zombie_Spawn_Positions = [vect(31.21, 267, 312), vect(20, 270, 347.29), vect(24, 267, 327.17)]
         Brain_Positions = [vect(67.71, 267.45, 349.43)]
-    elif getCurrentMap() == Map.LIJIANG_CONTROL_CENTER:
-        Zombie_Spawn_Positions = [vect(31.21, 267, 312), vect(20, 270, 347.29), vect(24, 267, 327.17)]
-        Brain_Positions = [vect(67.71, 267.45, 349.43)]
+    elif getCurrentMap() == Map.LIJIANG_GARDEN:
+        Zombie_Spawn_Positions = [vect(36.46, 94.50, 150.06)]
+        Brain_Positions = [vect(91.65, 96.51, 143.77)]
     elif getCurrentMap() == Map.ILIOS_LIGHTHOUSE:
         Zombie_Spawn_Positions = [vect(355, -24.66, 1.66), vect(324, -24.7, -0.04), vect(332.12, -20.74, 11.47), vect(336.38, -16.26, 8.63)]
         Brain_Positions = [vect(320, -23.97, 46.25)]
     elif getCurrentMap() == Map.ILIOS_RUINS:
-        Zombie_Spawn_Positions = [vect(-28.86, 58.37, -156.1), vect(-18.58, 59.39, -143.9), vect(-22.15, 58.37, -170.63), vect(-26.53, 67.62, -179.83)]
+        Zombie_Spawn_Positions = [vect(-18.58, 59.39, -143.9), vect(-36.83, 60.49, -147.35), vect(-26.53, 67.62, -179.83)]
         Brain_Positions = [vect(-80.12, 63.04, -160.04)]
     elif getCurrentMap() == Map.ILIOS_WELL:
-        Zombie_Spawn_Positions = [vect(-185.28, 5.03, -42.68), vect(-186.79, 3.78, -56.12), vect(-163.67, 4.86, -38.01)]
+        Zombie_Spawn_Positions = [vect(-185.28, 5.03, -42.68), vect(-186.79, 3.78, -56.12), vect(-178.11, -1.52, -50.27)]
         Brain_Positions = [vect(-148.32, -3.41, -93.48)]
     elif getCurrentMap() == Map.NEPAL_VILLAGE:
         Zombie_Spawn_Positions = [vect(-169.79, -95.24, -33.05), vect(-199.72, -97.33, -54.5), vect(-163.22, -89.21, -28.77)]
@@ -50,12 +50,25 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     elif getCurrentMap() == Map.OASIS_CITY_CENTER:
         Zombie_Spawn_Positions = [vect(202.94, 17.47, -16.34), vect(154.30, 3.41, 213.54), vect(167.71, 0.69, 205.37)]
         Brain_Positions = [vect(184.930, 0.35, 183.59)]
+    elif getCurrentMap() == Map.EICHENWALDE or getCurrentMap() == Map.EICHENWALDE_HALLOWEEN:
+        Zombie_Spawn_Positions = [vect(75.47, 10.13, -110.66), vect(63.35, 14.12, -60.61)]
+        Brain_Positions = [vect(89.11, 12.68, -64.00)]
+    elif getCurrentMap() == Map.TEMPLE_OF_ANUBIS:
+        Zombie_Spawn_Positions = [vect(-10.03, 3.50, 75.10), vect(-9.74, 13.93, 82.48)]
+        Brain_Positions = [vect(-7.29, 4.20, 112.46)]
+    elif getCurrentMap() == Map.ROUTE66:
+        Zombie_Spawn_Positions = [vect(-40.92, 2.81, -37.62), vect(-36.01, 8.280, -44.02)]
+        Brain_Positions = [vect(7.15, 1.60, -10.99)]
     # 刷新点黄球与脑子白光柱只是调试标记, 关闭 Debug 时不生成。
+    # 各图刷新点数量不同(庭院 1 个、艾兴瓦尔德 2 个), 越界索引会取到无效坐标, 按实际长度逐个判。
     if Debug_Enabled:
         createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[0], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[1], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        if len(Zombie_Spawn_Positions) > 1:
+            createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[1], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        if len(Zombie_Spawn_Positions) > 2:
+            createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+        if len(Zombie_Spawn_Positions) > 3:
+            createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Positions[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 
