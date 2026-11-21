@@ -11,7 +11,7 @@ rule "Players - Round Lead Time Start":
     destroyAllDummies()
     Zombie_Spawn_Count = 0
     chaseOverTime(Wave_Prep_Time_Left, 0, Wave_Prep_Duration, ChaseTimeReeval.NONE)
-    bigMessage(getAllPlayers(), "第 {0} 波即将开始  {1}  {2} 只".format(Current_Wave + 1, DIFFICULTY_NAME(), zombieWaveQuotaNow()))
+    bigMessage(getAllPlayers(), "第 {0} 波即将开始".format(Current_Wave + 1))
 
 
 rule "Players - Round Lead Time End":

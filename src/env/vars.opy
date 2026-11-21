@@ -207,8 +207,6 @@ enum Stat_Upgrade_Id:
 #!define zombieWaveQuota(wave) min(Zombie_Alive_Limit, max(1, ceil(Zombie_Alive_Limit * min(wave, DIFFICULTY_RAMP_WAVE()) / DIFFICULTY_RAMP_WAVE())))
 #!define zombieCurrentWave() (Current_Wave if Is_Attack_Phase else Current_Wave + 1)
 #!define zombieWaveQuotaNow() zombieWaveQuota(zombieCurrentWave())
-# 难度名用于开波提示, 直接显示生效的难度, 改了设置没生效时能一眼看出。
-#!define DIFFICULTY_NAME() ["简单", "困难", "专家", "苦难"][Difficulty_Level]
 
 #!define feskaCardPosition(x, y) (localPlayer.getEyePosition() + 30 * (x * worldVector(Vector.LEFT, localPlayer, Transform.ROTATION) + y * directionFromAngles(localPlayer.getHorizontalFacingAngle(), localPlayer.getVerticalFacingAngle() - 90) + 3 * localPlayer.getFacingDirection()))
 
