@@ -371,7 +371,9 @@ rule "Feska - Restore stats on hero change or respawn":
     # 换英雄/重生都结束狂战士; 按英雄与波次恢复移动限制。
     Target_Player = eventPlayer
     feskaStopBerserk()
-    if eventPlayer.getHero() == Hero.SHION:
+    # 托比昂/狮音在进攻阶段本就自由移动, 重生后要解除油门而不是重新定点, 否则会原地卡死。
+    if freeMoveHero() == true:
+        eventPlayer.clearStatusEffect(Status.ROOTED)
         eventPlayer.stopForcingThrottle()
     elif Is_Attack_Phase:
         eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)

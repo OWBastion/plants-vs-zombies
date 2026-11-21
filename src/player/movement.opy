@@ -1,5 +1,9 @@
 #!mainFile "../main.opy"
 
+# 进攻阶段仍可自由移动的英雄: 托比昂与狮音。
+# 定点规则与重生后的移动恢复共用这一份名单, 避免两处各写一套导致复活后被重新定点。
+#!define freeMoveHero() (eventPlayer.getHero() in [Hero.TORBJORN, Hero.SHION])
+
 rule "[Player]: Stop move when under attack":
     @Event eachPlayer
     @Team 1
@@ -18,8 +22,7 @@ rule "[Player]: Stop move when under attack":
     @Team 2
     @Condition Debug_Enabled != true
     @Condition Is_Attack_Phase == true
-    @Condition eventPlayer.getHero() != Hero.TORBJORN
-    @Condition eventPlayer.getHero() != Hero.SHION
+    @Condition freeMoveHero() != true
 
     smallMessage(eventPlayer, "  无法移动，正在防御中")
     eventPlayer.startForcingThrottle(0, 0.01, 0, 0.01, 0, 0.01)
