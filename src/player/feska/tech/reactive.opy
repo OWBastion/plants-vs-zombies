@@ -37,3 +37,4 @@ rule "Feska - Reactive armor rebuild":
 
     Target_Player = eventPlayer
     feskaApplyReactivePool()
+    playEffect(getPlayers(Team.2), DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, Color.YELLOW, eventPlayer, 1)

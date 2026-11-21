@@ -10,3 +10,4 @@ rule "Feska - Giant":
     eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALTH] += Upgrade_Catalog[Tech_Id.GIANT][UPGRADE_COLUMN_HEALTH]
     eventPlayer.startScalingSize(1.3 + 0.05 * eventPlayer.Heartsteel_Stacks, false)
     feskaApplyUpgradeStats()
+    playEffect(getPlayers(Team.2), DynamicEffect.WINSTON_JUMP_PACK_LANDING, Color.YELLOW, eventPlayer, 2)

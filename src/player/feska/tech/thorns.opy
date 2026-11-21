@@ -18,4 +18,5 @@ rule "Feska - Thorns":
     @Condition Tech_Id.THORNS in eventPlayer.Owned_Tech_Ids
     @Condition eventPlayer.Is_Spawning_Derived_Damage != true
 
+    playEffect(eventPlayer, DynamicEffect.REINHARDT_FIRE_STRIKE_TARGET_IMPACT, Color.ORANGE, attacker, 0.5)
     damage(attacker, eventPlayer, eventDamage * 0.5)

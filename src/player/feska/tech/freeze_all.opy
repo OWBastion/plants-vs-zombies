@@ -9,4 +9,5 @@ rule "Feska - Absolute zero":
     @Condition eventPlayer.isUsingUltimate()
 
     getLivingPlayers(Team.1).setStatusEffect(eventPlayer, Status.FROZEN, 2.5)
+    playEffect(getPlayers(Team.2), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.AQUA, eventPlayer, 4)
     wait(2.5)

@@ -16,6 +16,7 @@ rule "Feska - Execute":
     @Condition victim.getHealth() <= victim.getMaxHealth() * FESKA_EXECUTE_THRESHOLD / 100
 
     eventPlayer.Is_Spawning_Derived_Damage = true
+    playEffect(getPlayers(Team.2), DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, Color.PURPLE, victim, 1)
     damage(victim, eventPlayer, victim.getHealth() + victim.getMaxHealth() * 2)
     wait(0.032)
     eventPlayer.Is_Spawning_Derived_Damage = false

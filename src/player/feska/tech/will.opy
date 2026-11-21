@@ -16,4 +16,5 @@ rule "Feska - Victory will":
     eventPlayer.Victory_Will_Used_This_Wave = true
     heal(eventPlayer, null, feskaMaxHealth(eventPlayer))
     eventPlayer.setStatusEffect(eventPlayer, Status.INVINCIBLE, 8)
+    eventPlayer.Victory_Will_Effect_End = getTotalTimeElapsed() + 8
     smallMessage(eventPlayer, "胜利意志：8 秒无敌")

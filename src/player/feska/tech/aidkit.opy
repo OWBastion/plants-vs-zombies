@@ -9,3 +9,4 @@ rule "Feska - Aid kit":
 
     eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING] += Upgrade_Catalog[Tech_Id.FIRST_AID_KIT][UPGRADE_COLUMN_HEALING]
     feskaApplyUpgradeStats()
+    playEffect(eventPlayer, DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, Color.GREEN, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 1)

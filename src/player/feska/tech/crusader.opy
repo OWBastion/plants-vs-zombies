@@ -17,4 +17,5 @@ rule "Feska - Crusader armor":
     @Condition attacker != eventPlayer
 
     eventPlayer.setHealth(min(eventPlayer.getHealth() + min(feskaCrusaderFlat(), eventDamage), eventPlayer.getMaxHealth()))
+    playEffect(eventPlayer, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, Color.YELLOW, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 0.5)
     wait()

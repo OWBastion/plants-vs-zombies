@@ -13,3 +13,4 @@ rule "Feska - Sniper":
     # 只在技能确实处于冷却时返还剩余冷却的 70%, 弹丸命中时冷却尚未启动的技能不参与。
     if eventPlayer.getAbilityCooldown(eventAbility) > 0:
         eventPlayer.setAbilityCooldown(eventAbility, eventPlayer.getAbilityCooldown(eventAbility) * 0.3)
+        playEffect(eventPlayer, DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR, Color.PURPLE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 0.5)

@@ -9,3 +9,4 @@ rule "Feska - Brutal":
 
     eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE] += Upgrade_Catalog[Tech_Id.BRUTAL][UPGRADE_COLUMN_DAMAGE]
     feskaApplyUpgradeStats()
+    playEffect(eventPlayer, DynamicEffect.DOOMFIST_RISING_UPPERCUT_LEAP, Color.ORANGE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 1)

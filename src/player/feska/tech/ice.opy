@@ -11,3 +11,4 @@ rule "Feska - Ice blade":
     @Condition random.uniform(0, 100) < 25
 
     victim.setStatusEffect(eventPlayer, Status.FROZEN, 0.6)
+    playEffect(eventPlayer, DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.AQUA, victim, 0.5)

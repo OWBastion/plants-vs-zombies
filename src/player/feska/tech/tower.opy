@@ -11,6 +11,9 @@ rule "Feska - Healing tower":
 
     wait(2, Wait.ABORT_WHEN_FALSE)
     # 全体治疗不含狂战士(禁疗); 其余存活真人队友都治, 含持有者。
-    heal(getLivingPlayers(Team.2).filter(lambda player: not player.isDummy() and player.Is_Berserk != true), eventPlayer, feskaMaxHealth(eventPlayer) * 0.02)
+    Player_List = getLivingPlayers(Team.2).filter(lambda player: not player.isDummy() and player.Is_Berserk != true)
+    if Player_List.any(lambda player: player.getHealth() < player.getMaxHealth()):
+        playEffect(getPlayers(Team.2), DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, Color.GREEN, eventPlayer, 2)
+    heal(Player_List, eventPlayer, feskaMaxHealth(eventPlayer) * 0.02)
     if ruleCondition:
         loop()

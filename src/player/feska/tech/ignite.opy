@@ -19,3 +19,4 @@ rule "Feska - Ignite on ability 2 damage":
 
     victim.setStatusEffect(eventPlayer, Status.BURNING, FESKA_IGNITE_SECONDS)
     victim.startDamageOverTime(eventPlayer, FESKA_IGNITE_SECONDS, ceil(victim.getMaxHealth() * FESKA_IGNITE_PERCENT / 100))
+    playEffect(eventPlayer, DynamicEffect.ASHE_DYNAMITE_EXPLOSION, Color.ORANGE, victim, 0.5)

@@ -14,5 +14,6 @@ rule "Feska - Blood regeneration":
         removeHealthPool(eventPlayer.Regeneration_Health_Pool)
     eventPlayer.addHealthPool(Health.NORMAL, ceil(feskaPoolGrowthValue() + feskaMaxHealth(eventPlayer) * 0.05), true, false)
     eventPlayer.Regeneration_Health_Pool = getLastCreatedHealthPool()
+    playEffect(getPlayers(Team.2), DynamicEffect.MOIRA_FADE_REAPPEAR, Color.PURPLE, eventPlayer, 1)
     if ruleCondition:
         loop()
