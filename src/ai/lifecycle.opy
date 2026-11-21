@@ -1,8 +1,6 @@
 #!mainFile "../main.opy"
 
-# 准备阶段逐个预生成僵尸: 不在同一帧成批创建, 避免明显卡顿。
-# 但间隔必须短到开波时本波配额已经全部到位: 最多 16 只在 0.16 秒间隔下 2.6 秒生成完,
-# 远小于最短准备时间(15 秒), 所以每波一开始就是该波应有的数量, 不会再从 2 只慢慢加。
+# 逐个生成以分散创建开销, 开波前由波次规则确认存活数量。
 #!define AI_PRELOAD_INTERVAL 0.16
 
 # 生成目标按难度爬到设置的上限(zombieAliveTarget), 不是每波都直接补到 AI 上限。
@@ -16,12 +14,12 @@ rule "[ai]: Create AI Bot":
         # 准备阶段与进攻阶段补齐用同一间隔。
         wait(AI_PRELOAD_INTERVAL, Wait.ABORT_WHEN_FALSE)
         if getNumberOfPlayers(Team.1) == 0:
-            createDummy(Hero.BRIGITTE, Team.1, -1, Zombie_Spawn_Positions[0].getPosition(), Brain_Positions[0])
+            createDummy(Hero.BRIGITTE, Team.1, -1, Zombie_Spawn_Positions[0], Brain_Positions[0])
         else:
             createDummy(
                 random.choice(Zombie_Hero_Pool.filter(lambda hero: getNumberOfHeroes(hero, Team.1) == 0)),
                 Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0]
             )
-        # 准备阶段玩家可以提前开火, 僵尸必须不可伤害, 否则波次没开始就少人。
+        # 倒计时归零后仍可能在补齐配额, 由进攻开始规则解除无敌。
         if Is_Attack_Phase == false:
-            getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, Wave_Prep_Time_Left)
+            getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, 999999986991104)
