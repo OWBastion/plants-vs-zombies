@@ -4,21 +4,11 @@
 # 只用于玩家传送: Brain_Positions 本身仍是僵尸寻路目标与吃脑判定点。
 #!define PLAYER_SPAWN_POSITION() (Brain_Positions[0] + vect(0, 1.5, 0))
 
-rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
-    @Condition isGameInProgress() == true
-    @Condition Current_Wave >= 2
+rule "[Mode]: Pause built-in match timer":
+    @Condition isGameInProgress()
 
-    wait(5)
-    setMatchTime(900)
-
-
-rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
-    @Condition isGameInProgress() == true
-    @Condition Is_Attack_Phase == true
-    @Condition Current_Wave == Total_Wave_Count
-
-    wait(1)
-    setMatchTime(Wave_Attack_Duration + Wave_Prep_Duration)
+    # 波次计时独立运行，避免团队死斗的计时先归零而影响僵尸自动复活。
+    pauseMatchTime()
 
 
 rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
