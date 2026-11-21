@@ -11,7 +11,7 @@ rule "Feska - Soul purge":
 
     # 派生伤害期间关闭引爆, 避免连锁爆炸递归。
     eventPlayer.Is_Spawning_Derived_Damage = true
-    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.BLUE, victim, 1)
+    playEffect(getPlayers(Team.2), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.BLUE, victim, 3)
     damage(getPlayersInRadius(victim, 5, Team.1, LosCheck.SURFACES).filter(lambda player: player != victim), eventPlayer, 60)
     wait(0.032)
     eventPlayer.Is_Spawning_Derived_Damage = false

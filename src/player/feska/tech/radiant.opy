@@ -14,5 +14,6 @@ rule "Feska - Radiant light":
     # 15 米内所有友方(含持有者)获得 2.5 秒无敌。setStatusEffect 只叠加时长,
     # 不会清除其他来源的无敌; 不要求视线, 与卡面"15 米内所有友方"一致。
     getLivingPlayers(Team.2).filter(lambda player: not player.isDummy() and distance(player, eventPlayer) <= 15).setStatusEffect(eventPlayer, Status.INVINCIBLE, 2.5)
+    playEffect(getPlayers(Team.2), DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, Color.YELLOW, eventPlayer, 2)
     if ruleCondition:
         loop()
