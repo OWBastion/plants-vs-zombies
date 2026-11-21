@@ -43,7 +43,6 @@ settings {
         "team1": {
             "dva": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "enableAbility2": false,
                 "ability1Cooldown%": 500,
                 "ability1Kb%": 0,
@@ -63,7 +62,6 @@ settings {
                 "ability3Cooldown%": 275,
                 "ability3Distance%": 85,
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "damageReceived%": 105,
                 "enableAbility2": false,
                 "health%": 150,
@@ -72,7 +70,6 @@ settings {
             },
             "cassidy": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 95,
                 "ability1Cooldown%": 200,
                 "health%": 200,
                 "enableUlt": false,
@@ -81,7 +78,6 @@ settings {
             },
             "lucio": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 130,
                 "jumpVerticalSpeed%": 90,
                 "health%": 200,
                 "movementSpeed%": 50,
@@ -90,7 +86,6 @@ settings {
             },
             "bastion": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "jumpVerticalSpeed%": 150,
                 "health%": 250,
                 "movementSpeed%": 50,
@@ -98,7 +93,6 @@ settings {
             },
             "soldier": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "healingDealt%": 150,
                 "health%": 140,
                 "ability2Cooldown%": 67,
@@ -107,7 +101,6 @@ settings {
                 "enableSecondaryFire": false
             },
             "mercy": {
-                "damageDealt%": 120,
                 "weaponsEnabled": "staff",
                 "health%": 150,
                 "movementSpeed%": 55,
@@ -116,7 +109,6 @@ settings {
             },
             "orisa": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "ability1Cooldown%": 100,
                 "enableAbility2": false,
                 "health%": 100,
@@ -137,7 +129,6 @@ settings {
             },
             "baptiste": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 300,
                 "ability1Cooldown%": 300,
                 "healingDealt%": 175,
                 "health%": 250,
@@ -146,7 +137,6 @@ settings {
                 "ability2Cooldown%": 240
             },
             "brigitte": {
-                "damageDealt%": 120,
                 "secondaryFireRechargeRate%": 75,
                 "combatUltGen%": 110,
                 "enableAbility1": false,
@@ -159,7 +149,6 @@ settings {
                 "enableSpawningWithUlt": true
             },
             "torbjorn": {
-                "damageDealt%": 400,
                 "weaponsEnabled": "hammer",
                 "jumpVerticalSpeed%": 150,
                 "ammoClipSize%": 50,
@@ -189,7 +178,6 @@ settings {
             },
             "doomfist": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "jumpVerticalSpeed%": 25,
                 "secondaryFireCooldown%": 0,
                 "secondaryFireKb%": 0,
@@ -201,14 +189,13 @@ settings {
             },
             "juno": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 450,
+                "damageDealt%": 113,
                 "jumpVerticalSpeed%": 150,
                 "enableSecondaryFire": false,
                 "ability2Cooldown%": 20
             },
             "zarya": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "jumpVerticalSpeed%": 125,
                 "projectileSpeed%": 125,
                 "ability2Cooldown%": 75,
@@ -220,7 +207,6 @@ settings {
             },
             "reaper": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "ability2Cooldown%": 140,
                 "healingDealt%": 35,
                 "health%": 200,
@@ -228,7 +214,7 @@ settings {
                 "enableUlt": false
             },
             "mauga": {
-                "damageDealt%": 450,
+                "damageDealt%": 113,
                 "enablePrimaryFire": false,
                 "enableSecondaryFire": false,
                 "enableUlt": false,
@@ -236,7 +222,7 @@ settings {
             },
             "pharah": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 450,
+                "damageDealt%": 113,
                 "damageReceived%": 105,
                 "jumpVerticalSpeed%": 80,
                 "enablePassiveUnlimitedFuel": true,
@@ -249,7 +235,6 @@ settings {
             },
             "junkerQueen": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 325,
                 "ability1Cooldown%": 67,
                 "health%": 200,
                 "movementSpeed%": 50,
@@ -258,7 +243,6 @@ settings {
             },
             "winston": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "ultKb%": 50,
                 "ability1Cooldown%": 225,
                 "ability1Kb%": 20,
@@ -274,7 +258,7 @@ settings {
             },
             "genji": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 500,
+                "damageDealt%": 113,
                 "damageReceived%": 95,
                 "combatUltGen%": 180,
                 "health%": 200,
@@ -287,7 +271,6 @@ settings {
             },
             "junkrat": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "combatUltGen%": 0,
                 "projectileGravity%": 400,
                 "enableAbility2": false,
@@ -301,7 +284,6 @@ settings {
             },
             "tracer": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "combatUltGen%": 300,
                 "projectileGravity%": 200,
                 "health%": 500,
@@ -317,7 +299,6 @@ settings {
             },
             "wreckingBall": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 200,
                 "enableRollOnly": true,
                 "secondaryFireCooldown%": 200,
                 "ammoClipSize%": 25,
@@ -333,7 +314,6 @@ settings {
             "zenyatta": {
                 "enablePrimaryFire": false,
                 "enableAbility2": false,
-                "damageDealt%": 400,
                 "health%": 150,
                 "movementSpeed%": 50,
                 "enableSecondaryFire": false,
@@ -353,7 +333,6 @@ settings {
             },
             "sojourn": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "damageReceived%": 100,
                 "health%": 140,
                 "movementSpeed%": 50,
@@ -361,7 +340,6 @@ settings {
             },
             "mei": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "ability2Cooldown%": 200,
                 "primaryFireFreezeDuration%": 130,
                 "primaryFireFreezeRate%": 120,
@@ -375,7 +353,6 @@ settings {
             "ashe": {
                 "“毒蛇”无法进行普通攻击": "开启",
                 "enablePrimaryFire": false,
-                "damageDealt%": 350,
                 "ability1EnemyKb%": 75,
                 "ability1SelfKb%": 60,
                 "ability2Cooldown%": 300,
@@ -388,7 +365,6 @@ settings {
                 "passiveUltGen%": 15
             },
             "moira": {
-                "damageDealt%": 225,
                 "ability1Cooldown%": 300,
                 "ability2MaxDamage%": 10,
                 "ability2Cooldown%": 225,
@@ -400,7 +376,6 @@ settings {
                 "enableSecondaryFire": false
             },
             "reinhardt": {
-                "damageDealt%": 325,
                 "ability1Cooldown%": 175,
                 "ability1Kb%": 15,
                 "secondaryFireRechargeRate%": 75,
@@ -411,7 +386,6 @@ settings {
             },
             "sigma": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 300,
                 "ability1Cooldown%": 200,
                 "secondaryFireCooldown%": 300,
                 "projectileSpeed%": 50,
@@ -422,7 +396,6 @@ settings {
             },
             "roadhog": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "healingReceived%": 85,
                 "health%": 200,
                 "movementSpeed%": 50,
@@ -443,7 +416,6 @@ settings {
             },
             "sombra": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 400,
                 "ability2Cooldown%": 400,
                 "projectileGravity%": 500,
                 "health%": 100,
@@ -452,7 +424,6 @@ settings {
             },
             "widowmaker": {
                 "enablePrimaryFire": false,
-                "damageDealt%": 325,
                 "ability2Cooldown%": 140,
                 "ability1Cooldown%": 200,
                 "projectileGravity%": 80,
@@ -462,7 +433,7 @@ settings {
                 "enableSpawningWithUlt": true
             },
             "general": {
-                "damageDealt%": 400,
+                "damageDealt%": 90,
                 "jumpVerticalSpeed%": 190,
                 "movementSpeed%": 50,
                 "movementGravity%": 90,
@@ -473,7 +444,6 @@ settings {
         "team2": {
             "dva": {
                 "damageDealt%": 125,
-                "damageReceived%": 500,
                 "callMechKb%": 125,
                 "ability2Cooldown%": 28,
                 "ability1Cooldown%": 350,
@@ -484,7 +454,6 @@ settings {
             },
             "illari": {
                 "damageDealt%": 120,
-                "damageReceived%": 400,
                 "solarEnergyMax%": 500,
                 "solarEnergyRecharge%": 500,
                 "projectileSpeed%": 100,
@@ -495,7 +464,6 @@ settings {
                 "ability3Cooldown%": 275,
                 "ability3Distance%": 85,
                 "damageDealt%": 90,
-                "damageReceived%": 500,
                 "combatUltGen%": 105,
                 "ultGen%": 105,
                 "passiveUltGen%": 105,
@@ -503,14 +471,12 @@ settings {
             },
             "cassidy": {
                 "damageDealt%": 95,
-                "damageReceived%": 500,
                 "combatUltGen%": 95,
                 "ability1Cooldown%": 250,
                 "ultGen%": 95
             },
             "lucio": {
                 "damageDealt%": 125,
-                "damageReceived%": 325,
                 "projectileSpeed%": 200,
                 "enableInfiniteAmmo": false,
                 "enableSpawningWithUlt": true,
@@ -522,14 +488,12 @@ settings {
             },
             "bastion": {
                 "damageDealt%": 90,
-                "damageReceived%": 500,
                 "jumpVerticalSpeed%": 230,
                 "enableInfiniteAmmo": false,
                 "ultDuration%": 75
             },
             "soldier": {
                 "damageDealt%": 95,
-                "damageReceived%": 150,
                 "combatUltGen%": 125,
                 "ability2Cooldown%": 67,
                 "ultGen%": 125,
@@ -539,7 +503,6 @@ settings {
             },
             "mercy": {
                 "damageDealt%": 95,
-                "damageReceived%": 500,
                 "combatUltGen%": 120,
                 "enableInfiniteAmmo": false,
                 "ultGen%": 120,
@@ -547,7 +510,6 @@ settings {
                 "ability2Cooldown%": 8
             },
             "orisa": {
-                "damageReceived%": 500,
                 "projectileSpeed%": 130,
                 "ability1Cooldown%": 150,
                 "enableInfiniteAmmo": false,
@@ -555,7 +517,6 @@ settings {
             },
             "ana": {
                 "damageDealt%": 110,
-                "damageReceived%": 500,
                 "combatUltGen%": 130,
                 "ability2Cooldown%": 150,
                 "ultGen%": 130,
@@ -564,7 +525,6 @@ settings {
             },
             "baptiste": {
                 "damageDealt%": 110,
-                "damageReceived%": 330,
                 "enableInfiniteAmmo": false,
                 "healingDealt%": 50,
                 "ultGen%": 120
@@ -587,7 +547,6 @@ settings {
             },
             "torbjorn": {
                 "damageDealt%": 100,
-                "damageReceived%": 300,
                 "weaponsEnabled": "hammer",
                 "jumpVerticalSpeed%": 225,
                 "ammoClipSize%": 50,
@@ -652,7 +611,6 @@ settings {
                 "passiveUltGen%": 140
             },
             "mauga": {
-                "damageReceived%": 400,
                 "ability2Cooldown%": 50,
                 "primaryFireIgniteDamage": 166,
                 "primaryFireIgniteDuration": 150,
@@ -661,7 +619,6 @@ settings {
             },
             "pharah": {
                 "damageDealt%": 95,
-                "damageReceived%": 500,
                 "passiveRechargeRate%": 15,
                 "passiveMaxTime%": 60,
                 "enableAbility1": false,
@@ -678,7 +635,6 @@ settings {
             "winston": {
                 "damageDealt%": 130,
                 "ultKb%": 125,
-                "damageReceived%": 205,
                 "ability1Cooldown%": 110,
                 "ability1Kb%": 125,
                 "jumpVerticalSpeed%": 110,
@@ -698,7 +654,6 @@ settings {
             },
             "junkrat": {
                 "damageDealt%": 90,
-                "damageReceived%": 500,
                 "projectileSpeed%": 125,
                 "combatUltGen%": 95,
                 "ability2Cooldown%": 200,
@@ -712,7 +667,6 @@ settings {
             },
             "tracer": {
                 "damageDealt%": 95,
-                "damageReceived%": 500,
                 "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 275,
                 "ability1Cooldown%": 450
@@ -746,7 +700,6 @@ settings {
             "symmetra": {
                 "ability2Cooldown%": 275,
                 "damageDealt%": 80,
-                "damageReceived%": 500,
                 "ability1Cooldown%": 260,
                 "jumpVerticalSpeed%": 150,
                 "combatUltGen%": 125,
@@ -783,7 +736,6 @@ settings {
             "ashe": {
                 "damageDealt%": 90,
                 "ability1EnemyKb%": 150,
-                "damageReceived%": 500,
                 "ability2Cooldown%": 50,
                 "ability2FuseTime%": 1,
                 "combatUltGen%": 110,
@@ -822,7 +774,6 @@ settings {
             "sigma": {
                 "damageDealt%": 130,
                 "ability1Cooldown%": 0,
-                "damageReceived%": 500,
                 "enableUlt": false,
                 "ability2Cooldown%": 150
             },
@@ -860,7 +811,6 @@ settings {
             "sombra": {
                 "damageDealt%": 95,
                 "ability2Cooldown%": 500,
-                "damageReceived%": 500,
                 "combatUltGen%": 125,
                 "projectileGravity%": 120,
                 "enableInfiniteAmmo": false,
@@ -871,7 +821,6 @@ settings {
             "widowmaker": {
                 "damageDealt%": 100,
                 "ability2Cooldown%": 110,
-                "damageReceived%": 500,
                 "ammoClipSize%": 25,
                 "combatUltGen%": 500,
                 "ability1Cooldown%": 200,
@@ -886,7 +835,7 @@ settings {
             ],
             "general": {
                 "damageDealt%": 120,
-                "damageReceived%": 500,
+                "damageReceived%": 110,
                 "healingReceived%": 120,
                 "jumpVerticalSpeed%": 100,
                 "projectileSpeed%": 115,
