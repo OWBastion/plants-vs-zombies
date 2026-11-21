@@ -60,8 +60,7 @@ def feskaBuildPool():
         # 技能强化只对英雄池内的当前英雄入池; 其他行的英雄池是空数组, 不会被选中。
         Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: Upgrade_Catalog[upgrade][UPGRADE_COLUMN_KIND] != UPGRADE_KIND_SKILL or Target_Player.getHero() in Upgrade_Catalog[upgrade][UPGRADE_COLUMN_HERO_POOL])
         # 银质子弹依赖弹夹: 当前英雄没有弹夹就直接不进池, 不会抽到空卡。
-        # 按当前英雄判, 不是按英雄名单: 中途换到无弹夹英雄时规则本身也会失效(见 silver_bullet.opy)。
-        if not feskaHeroHasAmmo(Target_Player):
+        if Target_Player.getMaxAmmo(0) <= 0:
             Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.SILVER_BULLET)
         # 全局唯一科技: 已被任何人持有就不再进池。唯一性判定不过滤存活, 死亡不丢科技。
         # 分两条独立的 filter: 嵌套 filter(宏里带 getPlayers().filter)会共用"当前数组元素", 结果不可靠。

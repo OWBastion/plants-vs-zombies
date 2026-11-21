@@ -90,14 +90,14 @@
 
 1. **本版本的 `def` 不支持带返回值的 `return`**。`return X` 与 `return null` 都报 `expected the end of the return statement`。原本“用带返回值的子程序取持有者”的方案作废，改成全局量 `Dharma_Holder` 由规则维护。
 2. **嵌套 `filter` 共用“当前数组元素”**。`数组.filter(lambda x: ... 另一个数组.filter(lambda y: ...))` 会出 `nested-binder-lambda` 告警，结果不可靠。唯一性过滤因此拆成两条独立 filter，条件里改用布尔宏 `feskaUniqueTechTaken()`。
-3. **银质子弹按英雄过滤，不靠“上一发还有子弹”兜底**。判据用 `getMaxAmmo(0) > 0`（无弹夹英雄为 0），选牌时就排除，规则条件里再判一次，兜住“先拿卡、后换到无弹夹英雄”的情况。`Ammo_Before_Hit` 只剩一个职责：区分“打空最后一发”和“弹夹本来就是 0”，以及同一发命中多只僵尸只结算一次。宏 `feskaHeroHasAmmo` 放在 `vars.opy`，因为 `feskaBuildPool` 在 `progression.opy` 第 55 行就用到它，而科技 include 在第 440 行。
+3. **银质子弹按英雄过滤，只有选牌池一处判断**。判据 `getMaxAmmo(0) > 0`（无弹夹英雄为 0），在 `feskaBuildPool()` 里直接取不到这张卡，规则侧不再重复判断。`Ammo_Before_Hit` 只剩一个职责：同一发命中多只僵尸时只结算一次（霰弹枪打 3 只不会吃 3 次 250%）。
 
 ## 七、必须游戏内验证
 
 | 序号 | 待验证 | 失败后果 |
 | --- | --- | --- |
 | 1 | 对已被打空的池调用 `removeHealthPool` 是否安全 | 若报错，到期规则会中断，三张表不同步，之后会移除错误的池 |
-| 2 | 无弹夹英雄（莱因哈特、布丽吉特、温斯顿等）`getMaxAmmo(0)` 的返回值 | 若返回 >0，选牌池过滤失效，卡会发给用不上弹夹的英雄。判据已从 `getAmmo` 换成 `getMaxAmmo`，两种英雄的正常值应是 0 与非 0 |
+| 2 | 无弹夹英雄（莱因哈特、布丽吉特、温斯顿等）`getMaxAmmo(0)` 的返回值 | 若返回 >0，选牌池过滤失效，卡会发给用不上弹夹的英雄。判据用 `getMaxAmmo` 而不是 `getAmmo`：前者是弹夹容量，后者在打空时也是 0，区分不开。这条是唯一防线 |
 | 3 | `playerDealtKnockback` / `playerReceivedKnockback` 在本模式的实际触发 | 事件不触发则大运来咯等同空卡 |
 | 4 | `startDamageModification` 的接收者数组是否随每帧重估 | 不重估则佛法自然只在建句柄那一刻对范围内僵尸生效 |
 | 5 | 生命池记录跨死亡是否被引擎清掉 | 若清了，`feskaClearAllTempPools` 会对失效句柄调 `removeHealthPool` |
