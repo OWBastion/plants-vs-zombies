@@ -41,8 +41,7 @@ rule "Hud text":
 
 rule "Players - HUD - Show round":
     hudSubheader(getAllPlayers(), "植物大战僵尸 PvE  {0}".format(MODE_VERSION), HudPosition.TOP, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-    # 末尾是本波场上存活数与配额: 开波时应当等于配额, 少于配额说明生成被挡住了。
-    progressBarHud(getAllPlayers(), hudWaveRemaining(), "第 {0}/{1} 波  {2} {3}s  僵尸 {4}/{5}".format(hudWaveNumber(), Total_Wave_Count, "进攻" if Is_Attack_Phase else "准备", ceil(Wave_Attack_Time_Left if Is_Attack_Phase else Wave_Prep_Time_Left), getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow()), HudPosition.TOP, 1, Color.RED if Is_Attack_Phase else Color.GREEN, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR)
+    progressBarHud(getAllPlayers(), hudWaveRemaining(), "第 {0}/{1} 波  {2} {3}s".format(hudWaveNumber(), Total_Wave_Count, "进攻" if Is_Attack_Phase else "准备", ceil(Wave_Attack_Time_Left if Is_Attack_Phase else Wave_Prep_Time_Left)), HudPosition.TOP, 1, Color.RED if Is_Attack_Phase else Color.GREEN, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR)
 
 
 rule "Players - HUD - Show own tech":
