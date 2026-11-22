@@ -22,7 +22,7 @@ rule "[ai]: Create AI Bot":
         waitUntil(zombieNeedsSpawn() and zombieSpawnWindow(), 999999986991104)
         Zombie_Count_Before_Spawn = getNumberOfPlayers(Team.1)
         if Debug_Enabled:
-            logToInspector("[生成] 尝试 {0} 英雄 {1} 队伍1 {2} 存活 {3} 配额 {4} 队列 {5} 本波被拒 {6} 波 {7} 进攻中 {8}".format("复用" if zombieReuseHero() else "新", Zombie_Wave_Heroes[0], Zombie_Count_Before_Spawn, getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Zombie_Spawn_Failures, Current_Wave, Is_Attack_Phase))
+            logToInspector("[生成] 尝试 {0} 英雄 {1} 队伍1 {2} 存活 {3} 配额 {4} 队列 {5} 本波被拒 {6} 波 {7} 进攻中 {8} 在场英雄 {9}".format("复用" if zombieReuseHero() else "新", Zombie_Wave_Heroes[0], Zombie_Count_Before_Spawn, getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Zombie_Spawn_Failures, Current_Wave, Is_Attack_Phase, getPlayers(Team.1).map(lambda player: player.getHero())))
         if zombieReuseHero():
             createDummy(random.choice(getPlayers(Team.1)).getHero(), Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
         else:
