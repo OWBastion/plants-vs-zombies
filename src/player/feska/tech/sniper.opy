@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_SNIPER ["老练狙神", "对 15 米外的敌人造成伤害时，返还所用技能 70% 的剩余冷却时间。触发间隔至少 1 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.WIDOWMAKER, Button.PRIMARY_FIRE), []]
+#!define UPGRADE_ROW_SNIPER ["老练狙神", "对 15 米外的敌人造成伤害时，返还所用技能 70% 的剩余冷却时间", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.WIDOWMAKER, Button.PRIMARY_FIRE), []]
 
 playervar Sniper_Next_At
 

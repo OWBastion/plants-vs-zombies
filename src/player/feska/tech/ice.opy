@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_ICE ["冰寒之刃", "武器命中未冰冻的目标时，有 25% 概率使其冰冻 0.6 秒。触发间隔至少 1 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MEI, Button.PRIMARY_FIRE), []]
+#!define UPGRADE_ROW_ICE ["冰寒之刃", "武器命中时有 25% 概率使目标冰冻 0.6 秒", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.MEI, Button.PRIMARY_FIRE), []]
 
 playervar Ice_Next_At
 
