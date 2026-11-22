@@ -69,7 +69,7 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
             createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[2], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
         if len(Zombie_Spawn_Positions) > 3:
             createEffect(getPlayers(Team.2), Effect.SPHERE, Color.YELLOW, Zombie_Spawn_Positions[3], 0.3, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-        createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Positions[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(getPlayers(Team.2), Effect.LIGHT_SHAFT, Color.WHITE, Brain_Positions[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 
 rule "Player Resurrect - Disable Built-in Respawn":
