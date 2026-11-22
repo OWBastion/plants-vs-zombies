@@ -14,6 +14,7 @@ globalvar Wave_Attack_Time_Left
 globalvar Wave_Prep_Time_Left
 globalvar Zombie_Alive_Limit
 globalvar Zombie_Wave_Heroes
+globalvar Zombie_Spawn_Failures
 globalvar Zombie_Hero_Pool
 globalvar Tank_Hero_Pool
 globalvar Damage_Hero_Pool

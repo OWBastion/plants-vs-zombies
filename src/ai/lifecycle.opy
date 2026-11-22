@@ -27,6 +27,7 @@ rule "[ai]: Create AI Bot":
             wait(AI_PRELOAD_INTERVAL)
         else:
             # 创建失败时把该英雄放回队尾，下一次尝试另一个英雄。
+            Zombie_Spawn_Failures += 1
             Zombie_Wave_Heroes.append(Zombie_Wave_Heroes[0])
             wait(1)
         Zombie_Wave_Heroes = Zombie_Wave_Heroes.slice(1)
