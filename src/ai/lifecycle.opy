@@ -14,18 +14,15 @@ globalvar Zombie_Count_Before_Spawn
 # 本波新英雄被拒两次后, 直接复制场上已有的英雄补满配额, 不再每只都白等 1 秒。
 #!define zombieReuseHero() (Zombie_Spawn_Failures >= 2 and getNumberOfPlayers(Team.1) > 0)
 
+# 常驻循环, 不靠规则条件的触发沿: 实测第 4 波备战时条件成立却没有重新启动, 整波一只都没生成。
 rule "[ai]: Create AI Bot":
     @Condition isGameInProgress()
-    @Condition zombieSpawnWindow()
-    @Condition zombieNeedsSpawn()
 
-    wait(AI_PRELOAD_INTERVAL)
-    if Debug_Enabled:
-        logToInspector("[生成] 循环启动 难度 {0} AI上限 {1} 波 {2} 进攻中 {3} 队伍1 {4} 配额 {5} 队列 {6}".format(Difficulty_Level, Zombie_Alive_Limit, Current_Wave, Is_Attack_Phase, getNumberOfPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes)))
-    while zombieNeedsSpawn() and zombieSpawnWindow():
+    while true:
+        waitUntil(zombieNeedsSpawn() and zombieSpawnWindow(), 999999986991104)
         Zombie_Count_Before_Spawn = getNumberOfPlayers(Team.1)
         if Debug_Enabled:
-            logToInspector("[生成] 尝试 {0} 英雄 {1} 队伍1 {2} 存活 {3} 配额 {4} 队列 {5} 本波被拒 {6}".format("复用" if zombieReuseHero() else "新", Zombie_Wave_Heroes[0], Zombie_Count_Before_Spawn, getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Zombie_Spawn_Failures))
+            logToInspector("[生成] 尝试 {0} 英雄 {1} 队伍1 {2} 存活 {3} 配额 {4} 队列 {5} 本波被拒 {6} 波 {7} 进攻中 {8}".format("复用" if zombieReuseHero() else "新", Zombie_Wave_Heroes[0], Zombie_Count_Before_Spawn, getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Zombie_Spawn_Failures, Current_Wave, Is_Attack_Phase))
         if zombieReuseHero():
             createDummy(random.choice(getPlayers(Team.1)).getHero(), Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
         else:
@@ -42,5 +39,3 @@ rule "[ai]: Create AI Bot":
         else:
             Zombie_Spawn_Failures += 1
         wait(AI_PRELOAD_INTERVAL)
-    if Debug_Enabled:
-        logToInspector("[生成] 循环结束 队伍1 {0} 配额 {1} 队列 {2} 进攻中 {3} 集结中 {4} 进攻剩余 {5}".format(getNumberOfPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Is_Attack_Phase, isAssemblingHeroes(), Wave_Attack_Time_Left))

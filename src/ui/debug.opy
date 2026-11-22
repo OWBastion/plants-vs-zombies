@@ -16,6 +16,7 @@ rule "[Debug]: Log zombie deaths":
     @Condition Debug_Enabled
 
     enableInspector()
+    logToInspector("[版本] 生成逻辑 v3: 常驻循环 + 复用已有英雄 + 开波不等待")
     logToInspector("僵尸阵亡 存活 {0}s 位置 {1} 击杀者 {2} 卡死计数 {3} 回合 {4} 进攻中 {5}".format(getTotalTimeElapsed() - eventPlayer.Spawn_Time, eventPlayer.getPosition(), attacker, eventPlayer.No_Progress_Count, Current_Wave, Is_Attack_Phase))
 
 
@@ -23,3 +24,4 @@ rule "[Debug]: Enable inspector":
     @Condition Debug_Enabled
 
     enableInspector()
+    logToInspector("[版本] 生成逻辑 v3: 常驻循环 + 复用已有英雄 + 开波不等待")
