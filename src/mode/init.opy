@@ -12,7 +12,7 @@ rule "Copyright (c) 2025 他又（aka Teakowa）":
 rule "Initialize global variables":
     Debug_Enabled = createWorkshopSettingBool("Debug", "Debug开关", false, 100)
     Total_Wave_Count = createWorkshopSettingInt("模式", "最大攻击波次", 12, 4, 36, 12)
-    Difficulty_Level = createWorkshopSettingEnum("模式", "难度", 0, ["简单： AI 逐渐生成至上限", "困难：AI 在第6波达到生成上限", "专家：AI 在第4波达到生成上限", "苦难：AI 在第1波达到生成上限"])
+    Difficulty_Level = createWorkshopSettingEnum("模式", "难度", 2, ["简单： AI 逐渐生成至上限", "困难：AI 在第6波达到生成上限", "专家：AI 在第4波达到生成上限", "苦难：AI 在第1波达到生成上限"])
     Zombie_Alive_Limit = createWorkshopSettingInt("模式", "AI 上限", 13, 4, 16, 15)
     Wave_Attack_Duration = createWorkshopSettingInt("模式", "攻击波持续时间", 300, 30, 600, 13)
     Wave_Prep_Duration = createWorkshopSettingInt("模式", "攻击波间隔时间", 30, 15, 60, 14)
