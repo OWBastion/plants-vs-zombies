@@ -18,25 +18,18 @@ rule "[ai]: Create AI Bot":
 
     # 按配额一只只循环生成, 计数自己维护。生成更多机器人扩展把每队的机器人上限抬高,
     # 所以这里直接发满配额, 不做任何 6 只之类的自我限制。
+    wait(AI_PRELOAD_INTERVAL)
     while zombieNeedsSpawn() and zombieSpawnWindow():
-        wait(AI_PRELOAD_INTERVAL)
         Zombie_Count_Before_Spawn = getNumberOfPlayers(Team.1)
-        if Zombie_Spawn_Count == 0:
-            createDummy(Hero.BRIGITTE, Team.1, -1, Zombie_Spawn_Positions[0], Brain_Positions[0])
-        else:
-            # 传英雄数组让引擎随机挑一个: 每队同英雄最多 2 个(heroLimit), 用 <= 1 保证池子不会被筛空。
-            createDummy(
-                Zombie_Hero_Pool.filter(lambda hero: getNumberOfHeroes(hero, Team.1) <= 1),
-                Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0]
-            )
-        if getNumberOfPlayers(Team.1) == Zombie_Count_Before_Spawn and Zombie_Count_Before_Spawn > 0:
-            # 工坊可能拒绝加载新的英雄模型。数量没增加时, 复用已经在场的英雄。
-            createDummy(random.choice(getPlayers(Team.1)).getHero(), Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
+        createDummy(
+            random.choice(Zombie_Hero_Pool.filter(lambda hero: getNumberOfHeroes(hero, Team.1) < 2)),
+            Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0]
+        )
         Zombie_Spawn_Count += 1
-        # 两次尝试都被拒绝通常是空槽位用尽(死亡中的机器人仍占槽位)。放慢到 1 秒再试,
-        # 不要在 0.16 秒的节奏上整波空转; 减员本身由引擎复活补回。
-        if getNumberOfPlayers(Team.1) == Zombie_Count_Before_Spawn:
-            wait(1)
+        wait(AI_PRELOAD_INTERVAL)
         # 倒计时归零后仍可能在补齐配额, 由进攻开始规则解除无敌。
         if Is_Attack_Phase == false:
             getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, 999999986991104)
+        # 创建受阻时放慢重试频率。
+        if getNumberOfPlayers(Team.1) == Zombie_Count_Before_Spawn:
+            wait(1)
