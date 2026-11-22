@@ -97,6 +97,8 @@ rule "[Mode]: Spawn Teleport":
         # 会跟着玩家槽位存活, 新命会原地不动并被卡死看门狗击杀
         eventPlayer.stopForcingThrottle()
         eventPlayer.clearStatusEffect(Status.ROOTED)
+        if eventPlayer.getTeam() == Team.1 and (not Is_Attack_Phase or Wave_Attack_Time_Left > 0):
+            eventPlayer.enableRespawn()
         # 实测请求值比实际复活等待多约 2 秒: 5 -> 约 3 秒, 3 -> 约 1 秒
         eventPlayer.setRespawnTime(3 if Current_Wave == Total_Wave_Count else 5)
     else:

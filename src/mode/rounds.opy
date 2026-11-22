@@ -6,8 +6,6 @@ rule "Players - Round Lead Time Start":
     @Condition not Is_Attack_Phase
 
     waitUntil(not isAssemblingHeroes() and isGameInProgress(), 999999986991104)
-    # 上一波残留的 dummy 与「禁止复活」状态都要清掉, 否则新一波的僵尸死一次就再也不回来。
-    getPlayers(Team.1).enableRespawn()
     destroyAllDummies()
     Zombie_Wave_Heroes = random.shuffle(Zombie_Hero_Pool)
     Zombie_Wave_Heroes.append(random.shuffle(Zombie_Hero_Pool))
@@ -33,7 +31,6 @@ rule "Players - Round Attack Start":
     @Condition Current_Wave <= Total_Wave_Count
     @Condition Is_Attack_Phase
 
-    getPlayers(Team.1).enableRespawn()
     getPlayers(Team.1).clearStatusEffect(Status.INVINCIBLE)
     bigMessage(getAllPlayers(), "第 {0} 波进攻".format(Current_Wave))
     chaseOverTime(Wave_Attack_Time_Left, 0, Wave_Attack_Duration, ChaseTimeReeval.NONE)
