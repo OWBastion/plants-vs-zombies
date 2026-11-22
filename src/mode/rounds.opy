@@ -9,6 +9,8 @@ rule "Players - Round Lead Time Start":
     destroyAllDummies()
     # 队列不含重复英雄: 按顺序每种只生成一次, 创建失败的放回队尾。
     Zombie_Wave_Heroes = random.shuffle(Zombie_Hero_Pool)
+    if Debug_Enabled:
+        logToInspector("[波次] 备战开始 第 {0} 波 英雄池 {1} 队列 {2} 队伍1 {3} 备战时长 {4}".format(Current_Wave + 1, len(Zombie_Hero_Pool), len(Zombie_Wave_Heroes), getNumberOfPlayers(Team.1), Wave_Prep_Duration))
     chaseOverTime(Wave_Prep_Time_Left, 0, Wave_Prep_Duration, ChaseTimeReeval.NONE)
     bigMessage(getAllPlayers(), "第 {0} 波即将开始".format(Current_Wave + 1))
 
@@ -20,7 +22,11 @@ rule "Players - Round Lead Time End":
     @Condition Wave_Prep_Time_Left <= 0
 
     # 备战结束后等僵尸发满; 生成被卡住时 15 秒后照常开波, 缺的由进攻前段补齐。
+    if Debug_Enabled:
+        logToInspector("[波次] 备战倒计时结束 队伍1 {0} 存活 {1} 配额 {2} 队列 {3}".format(getNumberOfPlayers(Team.1), getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes)))
     waitUntil(getNumberOfLivingPlayers(Team.1) >= zombieWaveQuotaNow(), 15)
+    if Debug_Enabled:
+        logToInspector("[波次] 开波 队伍1 {0} 存活 {1} 配额 {2}".format(getNumberOfPlayers(Team.1), getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow()))
     Current_Wave++
     Wave_Attack_Time_Left = Wave_Attack_Duration
     Wave_Prep_Time_Left = 0
