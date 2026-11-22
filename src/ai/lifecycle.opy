@@ -22,11 +22,13 @@ rule "[ai]: Create AI Bot":
         waitUntil(zombieNeedsSpawn() and zombieSpawnWindow(), 999999986991104)
         Zombie_Count_Before_Spawn = getNumberOfPlayers(Team.1)
         if Debug_Enabled:
-            logToInspector("[生成] 尝试 {0} 英雄 {1} 队伍1 {2} 存活 {3} 配额 {4} 队列 {5} 本波被拒 {6} 波 {7} 进攻中 {8} 在场英雄 {9}".format("复用" if zombieReuseHero() else "新", Zombie_Wave_Heroes[0], Zombie_Count_Before_Spawn, getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Zombie_Spawn_Failures, Current_Wave, Is_Attack_Phase, getPlayers(Team.1).map(lambda player: player.getHero())))
+            logToInspector("[生成] 尝试 {0} 英雄 {1} 队伍1 {2} 存活 {3} 配额 {4} 队列 {5} 本波被拒 {6} 波 {7} 进攻中 {8} 槽位 {10} 在场英雄 {9}".format("复用" if zombieReuseHero() else "新", Zombie_Wave_Heroes[0], Zombie_Count_Before_Spawn, getNumberOfLivingPlayers(Team.1), zombieWaveQuotaNow(), len(Zombie_Wave_Heroes), Zombie_Spawn_Failures, Current_Wave, Is_Attack_Phase, getPlayers(Team.1).map(lambda player: player.getHero()), Zombie_Count_Before_Spawn))
+        # 槽位手动指定为当前队伍人数(销毁后从 0 起连续), 不交给引擎找第一个空位。
+        # 复制时选场上数量最少的英雄, 避免整波变成同一种。
         if zombieReuseHero():
-            createDummy(random.choice(getPlayers(Team.1)).getHero(), Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
+            createDummy(sorted(getPlayers(Team.1), lambda player: getNumberOfHeroes(player.getHero(), Team.1))[0].getHero(), Team.1, Zombie_Count_Before_Spawn, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
         else:
-            createDummy(Zombie_Wave_Heroes[0], Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
+            createDummy(Zombie_Wave_Heroes[0], Team.1, Zombie_Count_Before_Spawn, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
             # 新英雄试过一次就出队: 被拒绝的不再重试。不能用 slice(1): 它编译成数量 999999999999 的数组分割。
             Zombie_Wave_Heroes = Zombie_Wave_Heroes.slice(1, len(Zombie_Wave_Heroes))
         # 实测机器人在同一秒内加入, 1 秒内没加入就是被拒绝。
