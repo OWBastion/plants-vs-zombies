@@ -41,7 +41,7 @@ settings {
             "gamemodeStartTrigger": "manual",
             "enableTiebreaker": false,
             "tiebreakerTime": 300,
-            "heroLimit": "2PerTeam",
+            "heroLimit": "off",
             "追赶等级时造成消灭威能加值": "100%",
             "enableKillCam": false
         }
