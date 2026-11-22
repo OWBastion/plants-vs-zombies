@@ -19,10 +19,13 @@ rule "[ai]: Create AI Bot":
     while zombieNeedsSpawn() and zombieSpawnWindow():
         Zombie_Count_Before_Spawn = getNumberOfPlayers(Team.1)
         createDummy(Zombie_Wave_Heroes[0], Team.1, -1, random.choice(Zombie_Spawn_Positions), Brain_Positions[0])
-        wait(AI_PRELOAD_INTERVAL)
-        if not Is_Attack_Phase:
-            getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, 999999986991104)
-        if getNumberOfPlayers(Team.1) == Zombie_Count_Before_Spawn:
+        # 机器人异步加入, 固定等 0.16 秒会把迟到的当成失败。等到人数增加, 最多 2 秒。
+        waitUntil(getNumberOfPlayers(Team.1) > Zombie_Count_Before_Spawn, 2)
+        if getNumberOfPlayers(Team.1) > Zombie_Count_Before_Spawn:
+            if not Is_Attack_Phase:
+                getPlayers(Team.1).setStatusEffect(null, Status.INVINCIBLE, 999999986991104)
+            wait(AI_PRELOAD_INTERVAL)
+        else:
             # 创建失败时把该英雄放回队尾，下一次尝试另一个英雄。
             Zombie_Wave_Heroes.append(Zombie_Wave_Heroes[0])
             wait(1)

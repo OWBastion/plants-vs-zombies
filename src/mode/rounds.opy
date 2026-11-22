@@ -18,8 +18,9 @@ rule "Players - Round Lead Time End":
     @Condition Current_Wave < Total_Wave_Count
     @Condition not Is_Attack_Phase
     @Condition Wave_Prep_Time_Left <= 0
-    @Condition getNumberOfLivingPlayers(Team.1) >= zombieWaveQuotaNow()
 
+    # 备战结束后等僵尸发满; 生成被卡住时 15 秒后照常开波, 缺的由进攻前段补齐。
+    waitUntil(getNumberOfLivingPlayers(Team.1) >= zombieWaveQuotaNow(), 15)
     Current_Wave++
     Wave_Attack_Time_Left = Wave_Attack_Duration
     Wave_Prep_Time_Left = 0
