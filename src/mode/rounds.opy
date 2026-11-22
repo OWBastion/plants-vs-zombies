@@ -7,10 +7,8 @@ rule "Players - Round Lead Time Start":
 
     waitUntil(not isAssemblingHeroes() and isGameInProgress(), 999999986991104)
     destroyAllDummies()
-    # 工坊同时只能加载 12 个英雄, 玩家已占一部分: 每波只用少数几种, 反复生成(重复 24 个, 够配额上限且留有失败余量)。
-    Zombie_Wave_Heroes = random.shuffle(Zombie_Hero_Pool).slice(0, ZOMBIE_WAVE_HERO_KINDS)
-    Zombie_Wave_Heroes.append(Zombie_Wave_Heroes)
-    Zombie_Wave_Heroes.append(Zombie_Wave_Heroes)
+    # 队列不含重复英雄: 按顺序每种只生成一次, 创建失败的放回队尾。
+    Zombie_Wave_Heroes = random.shuffle(Zombie_Hero_Pool)
     chaseOverTime(Wave_Prep_Time_Left, 0, Wave_Prep_Duration, ChaseTimeReeval.NONE)
     bigMessage(getAllPlayers(), "第 {0} 波即将开始".format(Current_Wave + 1))
 

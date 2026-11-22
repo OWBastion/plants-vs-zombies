@@ -13,7 +13,6 @@ globalvar Difficulty_Level
 globalvar Wave_Attack_Time_Left
 globalvar Wave_Prep_Time_Left
 globalvar Zombie_Alive_Limit
-#!define ZOMBIE_WAVE_HERO_KINDS 6
 globalvar Zombie_Wave_Heroes
 globalvar Zombie_Spawn_Failures
 globalvar Zombie_Hero_Pool
