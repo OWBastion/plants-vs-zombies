@@ -16,6 +16,7 @@ rule "Initialize global variables":
     Zombie_Alive_Limit = createWorkshopSettingInt("模式", "AI 上限", 13, 4, 16, 15)
     Wave_Attack_Duration = createWorkshopSettingInt("模式", "攻击波持续时间", 300, 30, 600, 13)
     Wave_Prep_Duration = createWorkshopSettingInt("模式", "攻击波间隔时间", 30, 15, 60, 14)
+    Player_Respawn_Wave_Interval = createWorkshopSettingInt("模式", "玩家复活间隔（波）", 1, 1, 2, 16)
     Wave_Prep_Time_Left = Wave_Prep_Duration
     Wave_Attack_Time_Left = Wave_Attack_Duration
     Hero_Pool_Size_By_Role[0] = createWorkshopSettingInt("英雄池", "随机英雄池：重装", 4, 1, 6, 11)

@@ -59,6 +59,8 @@ rule "Players - Round Attack End":
     Finished_Wave_Count = Current_Wave
     Is_Attack_Phase = false
     Wave_Prep_Time_Left = Wave_Prep_Duration
+    if isGameInProgress() and Finished_Wave_Count % Player_Respawn_Wave_Interval == 0:
+        getDeadPlayers(Team.2).resurrect()
 
 
 # 最后一波没有「进攻结束」规则, 铃响后必须在这里停掉补位:

@@ -60,6 +60,8 @@ globalvar Temp_Pool_Keep_Ids
 globalvar Temp_Pool_Keep_Handles
 globalvar Temp_Pool_Keep_Expire
 
+globalvar Player_Respawn_Wave_Interval 48
+
 # 目录每行的列下标。3 为唯一性标志(仅光子护盾为 1, 判定仍按 Tech_Id), 8 图标, 9 英雄池。
 #!define UPGRADE_COLUMN_NAME 0
 #!define UPGRADE_COLUMN_DESCRIPTION 1

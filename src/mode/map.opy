@@ -118,12 +118,10 @@ rule "[Mode]: Hero Change Teleport":
     eventPlayer.teleport(PLAYER_SPAWN_POSITION())
 
 
-rule "Player Resurrect - Respawn at Brain Points":
+rule "Player Resurrect - Move Dead Players to Brain Points":
     @Event playerDied
     @Team 2
     @Condition isGameInProgress()
     @Condition not eventPlayer.isAlive()
 
     eventPlayer.teleport(PLAYER_SPAWN_POSITION())
-    waitUntil(not Is_Attack_Phase and ((Current_Wave == 4 or Current_Wave == 6 or Current_Wave == 8 or Current_Wave == 10) == true), 999999986991104)
-    eventPlayer.resurrect()
