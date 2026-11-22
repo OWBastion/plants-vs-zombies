@@ -30,4 +30,5 @@ rule "[ai]: Create AI Bot":
             Zombie_Spawn_Failures += 1
             Zombie_Wave_Heroes.append(Zombie_Wave_Heroes[0])
             wait(1)
-        Zombie_Wave_Heroes = Zombie_Wave_Heroes.slice(1)
+        # 不能用 slice(1): 它编译成数量 999999999999 的数组分割, 引擎可能当成无效值返回空数组。
+        Zombie_Wave_Heroes = Zombie_Wave_Heroes.slice(1, len(Zombie_Wave_Heroes))
