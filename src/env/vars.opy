@@ -13,8 +13,7 @@ globalvar Difficulty_Level
 globalvar Wave_Attack_Time_Left
 globalvar Wave_Prep_Time_Left
 globalvar Zombie_Alive_Limit
-# 本波已经发起的生成次数。按下标补齐到配额, 不用队伍玩家数当循环条件。
-globalvar Zombie_Spawn_Count
+globalvar Zombie_Wave_Heroes
 globalvar Zombie_Hero_Pool
 globalvar Tank_Hero_Pool
 globalvar Damage_Hero_Pool

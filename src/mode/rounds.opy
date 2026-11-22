@@ -9,7 +9,8 @@ rule "Players - Round Lead Time Start":
     # 上一波残留的 dummy 与「禁止复活」状态都要清掉, 否则新一波的僵尸死一次就再也不回来。
     getPlayers(Team.1).enableRespawn()
     destroyAllDummies()
-    Zombie_Spawn_Count = 0
+    Zombie_Wave_Heroes = random.shuffle(Zombie_Hero_Pool)
+    Zombie_Wave_Heroes.append(random.shuffle(Zombie_Hero_Pool))
     chaseOverTime(Wave_Prep_Time_Left, 0, Wave_Prep_Duration, ChaseTimeReeval.NONE)
     bigMessage(getAllPlayers(), "第 {0} 波即将开始".format(Current_Wave + 1))
 
@@ -18,11 +19,9 @@ rule "Players - Round Lead Time End":
     @Condition isGameInProgress()
     @Condition Current_Wave < Total_Wave_Count
     @Condition not Is_Attack_Phase
+    @Condition Wave_Prep_Time_Left <= 0
+    @Condition getNumberOfLivingPlayers(Team.1) >= zombieWaveQuotaNow()
 
-    waitUntil(Wave_Prep_Time_Left == 0, Wave_Prep_Duration)
-    # 准备时间到点后仍然等本波配额发完再开波(16 只按 0.16 秒间隔约 2.6 秒)。
-    # 最多多等 6 秒: 生成被挡住时不能把准备阶段永久卡住。
-    waitUntil(Zombie_Spawn_Count >= zombieWaveQuotaNow(), 6)
     Current_Wave++
     Wave_Attack_Time_Left = Wave_Attack_Duration
     Wave_Prep_Time_Left = 0
