@@ -9,7 +9,6 @@ rule "Players - Round Lead Time Start":
     destroyAllDummies()
     # 队列不含重复英雄: 按顺序每种只生成一次, 创建失败的放回队尾。
     Zombie_Wave_Heroes = random.shuffle(Zombie_Hero_Pool)
-    Zombie_Spawn_Failures = 0
     if Debug_Enabled:
         logToInspector("[波次] 备战开始 第 {0} 波 英雄池 {1} 队列 {2} 队伍1 {3} 备战时长 {4}".format(Current_Wave + 1, len(Zombie_Hero_Pool), len(Zombie_Wave_Heroes), getNumberOfPlayers(Team.1), Wave_Prep_Duration))
     chaseOverTime(Wave_Prep_Time_Left, 0, Wave_Prep_Duration, ChaseTimeReeval.NONE)

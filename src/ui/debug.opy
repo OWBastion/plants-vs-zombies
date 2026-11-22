@@ -16,7 +16,7 @@ rule "[Debug]: Log zombie deaths":
     @Condition Debug_Enabled
 
     enableInspector()
-    logToInspector("[版本] 生成逻辑 v4: 常驻循环 + 手动槽位 + 复用取最少英雄")
+    logToInspector("[版本] 生成逻辑 v5: 展开 16 个 createDummy + 手动槽位 + 补位复制最少英雄")
     logToInspector("僵尸阵亡 存活 {0}s 位置 {1} 击杀者 {2} 卡死计数 {3} 回合 {4} 进攻中 {5}".format(getTotalTimeElapsed() - eventPlayer.Spawn_Time, eventPlayer.getPosition(), attacker, eventPlayer.No_Progress_Count, Current_Wave, Is_Attack_Phase))
 
 
@@ -24,4 +24,4 @@ rule "[Debug]: Enable inspector":
     @Condition Debug_Enabled
 
     enableInspector()
-    logToInspector("[版本] 生成逻辑 v4: 常驻循环 + 手动槽位 + 复用取最少英雄")
+    logToInspector("[版本] 生成逻辑 v5: 展开 16 个 createDummy + 手动槽位 + 补位复制最少英雄")
