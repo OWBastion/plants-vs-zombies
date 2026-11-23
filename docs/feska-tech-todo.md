@@ -6,7 +6,7 @@
 
 | 范围 | 状态 |
 | --- | --- |
-| 43 项科技目录 | 41 项 `enabled=1` 进池；坚定与痛苦疗愈暂时停用 |
+| 43 项科技目录 | 41 项 `enabled=1` 进池 |
 | 9 项属性强化 | 全部实现并进池；再生、充能已移除，索引 30/32 保留 |
 | 技能强化与迁移合并卡 | 灼蚀、会心一击、终极循环往复、铁血无情已实现 |
 | 选择流程、波次奖励、HUD、唯一性 | 已实现 |
@@ -19,7 +19,7 @@
 ## 1. 当前代码与任务边界
 
 - 最新已核对提交：`5ad18df refactor: 统一变量、枚举与宏的命名`。标识符已统一为 `Tech_Id` / `Stat_Upgrade_Id` / `Owned_Tech_Ids` / `Is_Attack_Phase` / `UPGRADE_*` 等新命名，本文与源码一致。
-- `src/player/progression.opy` 已有 42 项科技目录（40 项启用，坚定与痛苦疗愈因共用池表撤除而关闭）和 9 项属性强化目录；再生与充能已移除，索引 30/32 用占位行保留。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
+- `src/player/progression.opy` 已有 43 项科技目录（41 项启用）和 9 项属性强化目录；再生与充能已移除，索引 30/32 用占位行保留。科技按项拆到 `src/player/feska/tech/*.opy`，生命池子程序在 `src/player/feska/pools.opy`。
 - 入口：`src/main.opy` include 成长模块；变量与宏位于 `src/env/vars.opy`。目录列已含类型、唯一性、启用列，候选池由目录过滤生成，无硬编码区间。
 - 波次接入：`src/mode/rounds.opy` 的 `Players - Round Attack End` 先给已持有四项科技的玩家 `Pending_Stat_Upgrade_Count += 1`，再更新 `Finished_Wave_Count`；条件是 `Current_Wave < Total_Wave_Count`，最终波不发放。
 - 生命口径已分离：`feskaHealthPercent(p)` 是 `setMaxHealth` 用的百分比，`feskaMaxHealth(p)` 是实际生命点数（原始生命 × 加成% ＋ 心之钢 ＋ 护甲强化），不含本来源光盾/血肉/反应装甲池。前置单位问题已修正。
