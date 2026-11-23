@@ -15,7 +15,6 @@ rule "Feska - Draw sword stats":
     eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE] += Upgrade_Catalog[Tech_Id.DRAW_SWORD][UPGRADE_COLUMN_DAMAGE]
     eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALTH] += Upgrade_Catalog[Tech_Id.DRAW_SWORD][UPGRADE_COLUMN_HEALTH]
     feskaApplyUpgradeStats()
-    playEffect(eventPlayer, DynamicEffect.REINHARDT_FIRE_STRIKE_TARGET_IMPACT, Color.ORANGE, eventPlayer.getPosition(), 0.5)
 
 
 rule "Feska - Draw sword range limit":

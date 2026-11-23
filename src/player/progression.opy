@@ -315,11 +315,6 @@ rule "Feska - Confirm card":
     # 条件由假变真即"获得科技", 科技不移除所以只触发一次。
     if eventPlayer.Chosen_Upgrade_Id == Tech_Id.SHIELD:
         feskaRefreshShields()
-        playEffect(getPlayers(Team.2), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.BLUE, eventPlayer, 2)
-    elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.SELF_REPAIR:
-        playEffect(eventPlayer, DynamicEffect.HEAL_TARGET_ACTIVE, Color.GREEN, eventPlayer.getPosition(), 0.5)
-    elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.ULTIMATE_CHARGE:
-        playEffect(eventPlayer, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR, Color.AQUA, eventPlayer.getPosition(), 0.5)
     elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.HEARTSTEEL:
         # 只统计获得该科技之后的消灭, 不追认此前累计的统计值。
         eventPlayer.Elimination_Baseline = eventPlayer.getNumberOfElims()

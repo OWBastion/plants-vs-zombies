@@ -11,4 +11,3 @@ rule "Feska - Glass cannon":
     eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE] += Upgrade_Catalog[Tech_Id.GLASS_CANNON][UPGRADE_COLUMN_DAMAGE]
     eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALTH] += Upgrade_Catalog[Tech_Id.GLASS_CANNON][UPGRADE_COLUMN_HEALTH]
     feskaApplyUpgradeStats()
-    playEffect(eventPlayer, DynamicEffect.BASTION_TANK_CANNON_EXPLOSION, Color.ORANGE, eventPlayer.getPosition(), 0.5)
