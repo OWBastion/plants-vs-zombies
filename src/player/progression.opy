@@ -59,9 +59,9 @@ def feskaBuildPool():
         Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and upgrade not in Target_Player.Rerolled_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
         # 技能强化只对英雄池内的当前英雄入池; 其他行的英雄池是空数组, 不会被选中。
         Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: Upgrade_Catalog[upgrade][UPGRADE_COLUMN_KIND] != UPGRADE_KIND_SKILL or Target_Player.getHero() in Upgrade_Catalog[upgrade][UPGRADE_COLUMN_HERO_POOL])
-        # 银质子弹依赖弹夹: 当前英雄没有弹夹就直接不进池, 不会抽到空卡。
+        # 银质子弹与一板一眼依赖弹夹: 当前英雄没有弹夹就直接不进池, 不会抽到空卡。
         if Target_Player.getMaxAmmo(0) <= 0:
-            Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.SILVER_BULLET)
+            Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade not in [Tech_Id.SILVER_BULLET, Tech_Id.METHODICAL])
         # 全局唯一科技: 已被任何人持有就不再进池。唯一性判定不过滤存活, 死亡不丢科技。
         # 分两条独立的 filter: 嵌套 filter(宏里带 getPlayers().filter)会共用"当前数组元素", 结果不可靠。
         if len(shieldTechHolders()) > 0:
@@ -133,6 +133,8 @@ rule "Feska - Initialize player":
     eventPlayer.Is_Resolute = false
     eventPlayer.Resolute_Until = 0
     eventPlayer.Ammo_Before_Hit = 0
+    eventPlayer.Methodical_Original_Max_Ammo = 0
+    eventPlayer.Methodical_Ammo_Before_Hit = 0
     eventPlayer.Knockback_Dealt_At = 0
     eventPlayer.Is_Alone = false
     eventPlayer.Is_Spawning_Derived_Damage = false
@@ -383,6 +385,10 @@ rule "Feska - Restore stats on hero change or respawn":
     feskaApplyShieldToPlayer()
     # 反应装甲的护甲池由 reactive.opy 的补池规则重建, 这里只清旧池句柄(见上)。
     feskaRefreshMods()
+    # 一板一眼: 重生/换英雄会重置弹匣修改, 这里重施上限; 原容量只在选到科技时记录一次。
+    if Tech_Id.METHODICAL in eventPlayer.Owned_Tech_Ids:
+        eventPlayer.setMaxAmmo(0, 1)
+        eventPlayer.setAmmo(0, 1)
 
 
 rule "Feska - Invalidate hero on death":
@@ -463,6 +469,7 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/death_rattle.opy"
 #!include "feska/tech/unyielding.opy"
 #!include "feska/tech/death_dance.opy"
+#!include "feska/tech/methodical.opy"
 
 
 rule "Feska - Upgrade catalog":
@@ -512,7 +519,7 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_CRIT,
         UPGRADE_ROW_ULTIMATE_LOOP,
         UPGRADE_ROW_EXECUTE,
-        # 索引 43..52: 近战与前排批, 只能追加在末尾。
+        # 索引 43..53: 后续批次, 只能追加在末尾。
         UPGRADE_ROW_STEADFAST,
         UPGRADE_ROW_PAINFUL_HEALING,
         UPGRADE_ROW_INDOMITABLE,
@@ -522,7 +529,8 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_DHARMA,
         UPGRADE_ROW_DEATH_RATTLE,
         UPGRADE_ROW_UNYIELDING,
-        UPGRADE_ROW_DEATH_DANCE
+        UPGRADE_ROW_DEATH_DANCE,
+        UPGRADE_ROW_METHODICAL
     ]
     Tech_Catalog_Indexes = []
     Stat_Catalog_Indexes = []

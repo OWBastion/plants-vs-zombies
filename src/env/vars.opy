@@ -140,6 +140,7 @@ enum Tech_Id:
     DEATH_RATTLE = 50
     UNYIELDING = 51
     DEATH_DANCE = 52
+    METHODICAL = 53
 
 # 共用临时生命池的来源标签: 一条记录 = 一个池, 同标签可有多条(坚定的每层、痛苦疗愈的每次受击)。
 # 整池重建型来源(光子护盾/血肉再生/反应装甲)每次重建前按标签清掉旧记录。
@@ -271,6 +272,9 @@ playervar Is_Resolute
 playervar Resolute_Until
 # 银质子弹: 上一次命中时的弹夹余量, 用来识别"最后一发"; 0 表示未记录。
 playervar Ammo_Before_Hit
+# 一板一眼: 选中时的原弹匣容量(换算附加伤害)与上一发命中时的弹量(同发多目标去重)。
+playervar Methodical_Original_Max_Ammo
+playervar Methodical_Ammo_Before_Hit
 # 大运来咯: 打出击退的时间戳。
 playervar Knockback_Dealt_At
 # 佛法自然: 僵尸身上的"乱"特效实体(0 表示没有)。
