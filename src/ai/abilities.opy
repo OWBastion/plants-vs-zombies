@@ -216,7 +216,7 @@ rule "[ai]: venture Use Ability 1":
 
     wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ABILITY_1)
-    wait(3.6)
+    wait(5.4)
     eventPlayer.forceButtonPress(Button.JUMP)
     if ruleCondition:
         loop()

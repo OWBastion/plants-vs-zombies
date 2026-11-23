@@ -183,7 +183,7 @@ settings {
                 "enablePrimaryFire": false,
                 "enableUlt": false,
                 "ability1Cooldown%": 50,
-                "ability1Duration%": 200
+                "ability1Duration%": 300
             },
             "doomfist": {
                 "enablePrimaryFire": false,
