@@ -572,7 +572,7 @@ settings {
                 "projectileGravity%": 200,
                 "ability2Cooldown%": 40,
                 "ability2Duration%": 200,
-                "movementGravity%": 80,
+                "movementSpeed%": 75,
                 "ultGen%": 165,
                 "passiveUltGen%": 165,
                 "ability1Cooldown%": 150
