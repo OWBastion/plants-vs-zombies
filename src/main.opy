@@ -88,8 +88,8 @@ settings {
                 "jumpVerticalSpeed%": 90,
                 "health%": 230,
                 "movementSpeed%": 50,
-                "enableUlt": false,
-                "enableSecondaryFire": false
+                "enableSecondaryFire": false,
+                "ultGen%": 500
             },
             "bastion": {
                 "enablePrimaryFire": false,
