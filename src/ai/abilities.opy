@@ -121,18 +121,18 @@ rule "[ai]: Lucio Amp":
         loop()
 
 
-# 音障: 充能满即对周围僵尸释放。死亡时退出循环, 重生后再由 eachPlayer 重新进入。
+# 音障: 充能满即释放; 按下后充能归零, 条件自然失效。
 rule "[ai]: Lucio Use Sound Barrier":
     @Event eachPlayer
     @Team 1
     @Hero lucio
     @Condition eventPlayer.isDummy()
-    @Condition isGameInProgress()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
+    @Condition eventPlayer.getUltCharge() == 100
 
-    while eventPlayer.isAlive():
-        if eventPlayer.getUltCharge() >= 99.9 and Is_Attack_Phase and not eventPlayer.isUsingUltimate():
-            eventPlayer.forceButtonPress(Button.ULTIMATE)
-        wait(1)
+    eventPlayer.forceButtonPress(Button.ULTIMATE)
+    wait(1)
 
 
 rule "[ai]: Roadhog Use Breather":
