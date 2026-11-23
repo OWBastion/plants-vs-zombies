@@ -17,7 +17,7 @@ rule "Feska - Heartsteel":
         eventPlayer.Elimination_Baseline += 20
         eventPlayer.Heartsteel_Flat_Health += round(feskaGrowthHeartsteel() + feskaMaxHealth(eventPlayer) * 0.02)
         eventPlayer.Heartsteel_Stacks += 1
-        eventPlayer.startScalingSize((1.3 if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids else 1) + 0.05 * eventPlayer.Heartsteel_Stacks, false)
+        eventPlayer.startScalingSize((1.7 if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids else 1) + 0.05 * eventPlayer.Heartsteel_Stacks, false)
         Target_Player = eventPlayer
         feskaApplyHeartsteelPool()
         playEffect(getPlayers(Team.2), DynamicEffect.WRECKING_BALL_PILEDRIVER_IMPACT, Color.ORANGE, eventPlayer, 2)

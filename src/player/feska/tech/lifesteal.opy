@@ -1,6 +1,6 @@
 #!mainFile "../../../main.opy"
 
-#!define UPGRADE_ROW_LIFESTEAL ["吸血习性", "每次参与消灭恢复 5% 最大生命值", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.REAPER, Button.PRIMARY_FIRE), []]
+#!define UPGRADE_ROW_LIFESTEAL ["吸血习性", "每次参与消灭恢复 15% 最大生命值", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.REAPER, Button.PRIMARY_FIRE), []]
 
 rule "Feska - Lifesteal on elimination":
     @Event playerEarnedElimination
@@ -12,4 +12,4 @@ rule "Feska - Lifesteal on elimination":
     @Condition not eventPlayer.Is_Berserk
     @Condition Tech_Id.LIFESTEAL in eventPlayer.Owned_Tech_Ids
 
-    heal(eventPlayer, null, feskaMaxHealth(eventPlayer) * 0.05)
+    heal(eventPlayer, null, feskaMaxHealth(eventPlayer) * 0.15)

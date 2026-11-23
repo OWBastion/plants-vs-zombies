@@ -81,15 +81,14 @@ globalvar Player_Respawn_Wave_Interval 48
 #!define MAX_TECH_COUNT 4
 
 # 属性强化的累加槽位, 下标即 Bonus_By_Stat[Stat_Bonus.*]。
+# 5 与 7 的强化已移除, 槽位保留以免数组布局变动。
 enum Stat_Bonus:
     DAMAGE = 0
     HEALTH
     HEALING
     ARMOR
     DAMAGE_REDUCTION
-    REGENERATION
-    HEALING_RECEIVED
-    ULTIMATE_CHARGE
+    HEALING_RECEIVED = 6
 
 # 选牌界面当前展示哪一类候选。
 enum Choice_Kind:
@@ -162,9 +161,8 @@ enum Stat_Upgrade_Id:
     NOURISHMENT = 13
     ARMOR = 28
     DAMAGE_REDUCTION = 29
-    REGENERATION = 30
+    # 30 与 32 的强化已移除, 索引保留, 目录用占位行。
     HEALING_RECEIVED = 31
-    ULTIMATE_CHARGE = 32
 
 #!define feskaGrowthAt(progress, base, span) round(base + span * progress)
 #!define feskaProgressRatio() min(max((Current_Wave - 1) / max(Total_Wave_Count - 1, 1), 0), 1)

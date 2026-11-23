@@ -56,7 +56,7 @@ def feskaBuildPool():
     @Name "Feska - build candidate pool"
 
     if Target_Player.Current_Choice_Kind == Choice_Kind.TECH:
-        Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and upgrade not in Target_Player.Rerolled_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids or Target_Player.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] > 0)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
+        Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and upgrade not in Target_Player.Rerolled_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
         # 技能强化只对英雄池内的当前英雄入池; 其他行的英雄池是空数组, 不会被选中。
         Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: Upgrade_Catalog[upgrade][UPGRADE_COLUMN_KIND] != UPGRADE_KIND_SKILL or Target_Player.getHero() in Upgrade_Catalog[upgrade][UPGRADE_COLUMN_HERO_POOL])
         # 银质子弹依赖弹夹: 当前英雄没有弹夹就直接不进池, 不会抽到空卡。
@@ -69,7 +69,7 @@ def feskaBuildPool():
         if len(feskaDharmaHolders()) > 0:
             Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.DHARMA)
     else:
-        Target_Player.Candidate_Upgrade_Ids = Stat_Catalog_Indexes.filter(lambda upgrade: not (upgrade == Stat_Upgrade_Id.ULTIMATE_CHARGE and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
+        Target_Player.Candidate_Upgrade_Ids = Stat_Catalog_Indexes
 
 
 def feskaDealCards():
@@ -281,7 +281,7 @@ rule "Feska - Confirm card":
             eventPlayer.Is_Card_Panel_Visible = true
             eventPlayer.Is_Choice_Locked = false
             return
-        if eventPlayer.Chosen_Upgrade_Id == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in eventPlayer.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in eventPlayer.Owned_Tech_Ids or eventPlayer.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] > 0):
+        if eventPlayer.Chosen_Upgrade_Id == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in eventPlayer.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in eventPlayer.Owned_Tech_Ids):
             smallMessage(eventPlayer, "与已持有的科技冲突")
             eventPlayer.Current_Choice_Kind = Choice_Kind.NONE
             eventPlayer.Is_Card_Panel_Visible = true
@@ -297,12 +297,6 @@ rule "Feska - Confirm card":
                 createEffect(getPlayers(Team.2) if isGameInProgress() and Is_Attack_Phase and eventPlayer.isAlive() and eventPlayer.Is_Alone else [], Effect.MERCY_DAMAGE_BOOSTED, Color.BLUE, eventPlayer, 1, EffectReeval.VISIBILITY)
             eventPlayer.Tech_Effect_Ids.append(getLastCreatedEntity())
     else:
-        if eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.ULTIMATE_CHARGE and Tech_Id.NO_ULTIMATE in eventPlayer.Owned_Tech_Ids:
-            smallMessage(eventPlayer, "与已持有的科技冲突")
-            eventPlayer.Current_Choice_Kind = Choice_Kind.NONE
-            eventPlayer.Is_Card_Panel_Visible = true
-            eventPlayer.Is_Choice_Locked = false
-            return
         eventPlayer.Pending_Stat_Upgrade_Count -= 1
         eventPlayer.Taken_Stat_Upgrade_Count += 1
         # 属性强化可重复选择且没有"持有"状态, 无法用科技的条件触发, 只能在选牌处累加。
@@ -325,13 +319,9 @@ rule "Feska - Confirm card":
         # 减伤改为加算: 各项相加后由 feskaReceivedPercent 统一封顶 90%, 这里只累加。
         eventPlayer.Bonus_By_Stat[Stat_Bonus.DAMAGE_REDUCTION] += 3
         feskaRefreshMods()
-    elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.REGENERATION:
-        eventPlayer.Bonus_By_Stat[Stat_Bonus.REGENERATION] += 1
     elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.HEALING_RECEIVED:
         eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED] += 1
         eventPlayer.setHealingReceived(100 + 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
-    elif eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.ULTIMATE_CHARGE:
-        eventPlayer.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] += 1
     Target_Player = eventPlayer
     smallMessage(eventPlayer, "已选择：{0}".format(Upgrade_Catalog[eventPlayer.Chosen_Upgrade_Id][UPGRADE_COLUMN_NAME]))
     eventPlayer.Card_Upgrade_Ids = []
@@ -381,7 +371,7 @@ rule "Feska - Restore stats on hero change or respawn":
     # setMaxHealth 的参数是百分比, 不是生命点数; 点数口径见 feskaMaxHealth。
     eventPlayer.setMaxHealth(feskaHealthPercent(eventPlayer))
     if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids or Tech_Id.HEARTSTEEL in eventPlayer.Owned_Tech_Ids:
-        eventPlayer.startScalingSize((1.3 if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids else 1) + 0.05 * eventPlayer.Heartsteel_Stacks, false)
+        eventPlayer.startScalingSize((1.7 if Tech_Id.GIANT in eventPlayer.Owned_Tech_Ids else 1) + 0.05 * eventPlayer.Heartsteel_Stacks, false)
     eventPlayer.setHealingDealt(100 + eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING])
     # 重生/换英雄会清掉英雄属性修改, 这里按累计状态无条件重放, 不能只在有堆叠时恢复。
     eventPlayer.setHealingReceived(100 + 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
@@ -424,7 +414,7 @@ rule "Feska - Wave end cleanup":
     for Loop_Index in range(len(Player_List)):
         Target_Player = Player_List[Loop_Index]
         feskaStopBerserk()
-        # 血肉再生的池跨阶段没有意义, 准备阶段统一收掉, 进攻阶段首帧按科技重建。
+        # 血肉再生的池跨阶段没有意义, 准备阶段统一收掉, 进攻阶段由科技规则每 10 秒新增。
         Temp_Pool_Tag = Temp_Pool_Id.FLESH_REGENERATION
         feskaClearTempPoolsByTag()
         Player_List[Loop_Index].Victory_Will_Used_This_Wave = false
@@ -508,9 +498,9 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_LONE_WOLF,
         ["属性强化：护甲", "永久获得 25 点可治疗护甲", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
         ["属性强化：减伤", "受到的伤害降低 3%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
-        ["属性强化：再生", "进攻期间，每秒恢复 0.3% 最大生命值", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, []], # 保留索引 30；对应强化已移除。
         ["属性强化：受疗", "受到的治疗效果提高 10%", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
-        ["属性强化：充能", "进攻期间，每秒额外获得 0.2% 终极技能充能", UPGRADE_KIND_STAT, 0, 1, 0, 0, 0, 0, []],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, []], # 保留索引 32；对应强化已移除。
         [0, 0, 0, 0, 0, 0, 0, 0, 0, []], # 保留索引 33。
         # 索引 34..38 由 vars.opy 的 Tech_Id.FIRST_AID_KIT..Tech_Id.BERSERK 固定, 必须排在属性强化之后。
         UPGRADE_ROW_FIRST_AID_KIT,
