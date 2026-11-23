@@ -29,10 +29,10 @@ rule "[ai]: Use Hero Abilities":
     @Condition eventPlayer.isDummy()
     @Condition eventPlayer.isAlive()
     @Condition Is_Attack_Phase
-    @Condition eventPlayer.getHero() in [Hero.DVA, Hero.MAUGA, Hero.WINSTON, Hero.REINHARDT, Hero.HAZARD, Hero.ECHO, Hero.BASTION, Hero.SOLDIER, Hero.FREJA, Hero.REAPER, Hero.GENJI, Hero.TRACER, Hero.SOJOURN, Hero.ILLARI, Hero.BAPTISTE, Hero.JUNO, Hero.SIGMA]
+    @Condition eventPlayer.getHero() in [Hero.DVA, Hero.MAUGA, Hero.WINSTON, Hero.REINHARDT, Hero.HAZARD, Hero.ECHO, Hero.BASTION, Hero.SOLDIER, Hero.FREJA, Hero.REAPER, Hero.GENJI, Hero.TRACER, Hero.SOJOURN, Hero.ILLARI, Hero.BAPTISTE, Hero.JUNO, Hero.SIGMA, Hero.MOIRA]
 
-    # 贴身时优先普攻: 冲刺/举盾/吸收/幽灵形态这几项在近战距离会挡住自己的攻击, 其余技能照常使用。
-    if (not zombieInMeleeRange() or eventPlayer.getHero() not in [Hero.SOLDIER, Hero.SIGMA, Hero.REINHARDT, Hero.REAPER]) and not eventPlayer.isUsingAbility1() and not eventPlayer.isUsingAbility2() and not eventPlayer.isUsingUltimate():
+    # 贴身时优先普攻: 冲刺/举盾/吸收/幽灵形态/消失这几项在近战距离会挡住自己的攻击, 其余技能照常使用。
+    if (not zombieInMeleeRange() or eventPlayer.getHero() not in [Hero.SOLDIER, Hero.SIGMA, Hero.REINHARDT, Hero.REAPER, Hero.MOIRA]) and not eventPlayer.isUsingAbility1() and not eventPlayer.isUsingAbility2() and not eventPlayer.isUsingUltimate():
         if eventPlayer.getHero() != Hero.SIGMA and eventPlayer.getAbilityCooldown(Button.ABILITY_1) == 0:
             if eventPlayer.getHero() == Hero.SOLDIER:
                 eventPlayer.startForcingButton(Button.ABILITY_1)
