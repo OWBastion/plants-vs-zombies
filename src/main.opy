@@ -468,7 +468,6 @@ settings {
                 "ability1Cooldown%": 350,
                 "ability1Kb%": 125,
                 "movementGravity%": 60,
-                "passiveUltGen%": 95,
                 "selfDestructKb%": 125
             },
             "illari": {
@@ -483,16 +482,11 @@ settings {
                 "ability3Cooldown%": 275,
                 "ability3Distance%": 85,
                 "damageDealt%": 90,
-                "combatUltGen%": 105,
-                "ultGen%": 105,
-                "passiveUltGen%": 105,
                 "ability1Cooldown%": 0
             },
             "cassidy": {
                 "damageDealt%": 95,
-                "combatUltGen%": 95,
                 "ability1Cooldown%": 250,
-                "ultGen%": 95
             },
             "lucio": {
                 "damageDealt%": 125,
@@ -513,19 +507,13 @@ settings {
             },
             "soldier": {
                 "damageDealt%": 95,
-                "combatUltGen%": 125,
                 "ability2Cooldown%": 67,
-                "ultGen%": 125,
                 "ultDuration%": 200,
-                "passiveUltGen%": 125,
                 "enableSpawningWithUlt": true
             },
             "mercy": {
                 "damageDealt%": 95,
-                "combatUltGen%": 120,
                 "enableInfiniteAmmo": false,
-                "ultGen%": 120,
-                "passiveUltGen%": 120,
                 "ability2Cooldown%": 8
             },
             "orisa": {
@@ -536,27 +524,20 @@ settings {
             },
             "ana": {
                 "damageDealt%": 110,
-                "combatUltGen%": 130,
                 "ability2Cooldown%": 150,
-                "ultGen%": 130,
-                "passiveUltGen%": 130,
                 "ability1Cooldown%": 72
             },
             "baptiste": {
                 "damageDealt%": 110,
                 "enableInfiniteAmmo": false,
                 "healingDealt%": 50,
-                "ultGen%": 120
             },
             "brigitte": {
                 "damageDealt%": 170,
                 "damageReceived%": 90,
                 "secondaryFireRechargeRate%": 200,
                 "secondaryFireCooldown%": 100,
-                "combatUltGen%": 165,
                 "ability1Kb%": 125,
-                "ultGen%": 165,
-                "passiveUltGen%": 165,
                 "shieldBashKb%": 300,
                 "enableSpawningWithUlt": true
             },
@@ -568,13 +549,10 @@ settings {
                 "damageDealt%": 100,
                 "weaponsEnabled": "hammer",
                 "ammoClipSize%": 50,
-                "combatUltGen%": 165,
                 "projectileGravity%": 200,
                 "ability2Cooldown%": 40,
                 "ability2Duration%": 200,
                 "movementSpeed%": 75,
-                "ultGen%": 165,
-                "passiveUltGen%": 165,
                 "ability1Cooldown%": 150
             },
             "ramattra": {
@@ -588,13 +566,10 @@ settings {
                 "damageDealt%": 110,
                 "damageReceived%": 90,
                 "ability1Cooldown%": 50,
-                "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
                 "secondaryFireCooldown%": 120,
                 "secondaryFireKb%": 120,
-                "ultGen%": 125,
                 "ultDuration%": 50,
-                "passiveUltGen%": 125,
                 "ability2Cooldown%": 124
             },
             "juno": {
@@ -608,23 +583,17 @@ settings {
                 "damageReceived%": 90,
                 "jumpVerticalSpeed%": 125,
                 "projectileSpeed%": 130,
-                "combatUltGen%": 155,
                 "ability2Cooldown%": 89,
                 "enableInfiniteAmmo": false,
                 "ability1Cooldown%": 73,
-                "ultGen%": 155,
-                "passiveUltGen%": 160
             },
             "reaper": {
                 "damageDealt%": 120,
                 "damageReceived%": 90,
                 "ability1Cooldown%": 95,
-                "combatUltGen%": 140,
                 "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 125,
                 "healingDealt%": 105,
-                "ultGen%": 140,
-                "passiveUltGen%": 140
             },
             "mauga": {
                 "ability2Cooldown%": 50,
@@ -654,10 +623,7 @@ settings {
                 "ability1Kb%": 125,
                 "jumpVerticalSpeed%": 110,
                 "ability2Cooldown%": 75,
-                "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
-                "ultGen%": 125,
-                "passiveUltGen%": 125
             },
             "genji": {
                 "damageReceived%": 100,
@@ -670,12 +636,10 @@ settings {
             "junkrat": {
                 "damageDealt%": 90,
                 "projectileSpeed%": 125,
-                "combatUltGen%": 95,
                 "ability2Cooldown%": 200,
                 "enableInfiniteAmmo": false,
                 "primaryFireKb%": 75,
                 "movementGravity%": 110,
-                "ultGen%": 95,
                 "ultDuration%": 50,
                 "ability1Cooldown%": 300,
                 "ability1Kb%": 55
@@ -697,31 +661,22 @@ settings {
                 "damageDealt%": 135,
                 "secondaryFireCooldown%": 50,
                 "ability1Kb%": 150,
-                "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
-                "ultGen%": 125,
-                "passiveUltGen%": 125,
                 "ability3Cooldown%": 30,
                 "enableSpawningWithUlt": true
             },
             "zenyatta": {
                 "damageReceived%": 90,
                 "projectileSpeed%": 200,
-                "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
-                "ultGen%": 125,
-                "passiveUltGen%": 125
             },
             "symmetra": {
                 "ability2Cooldown%": 275,
                 "damageDealt%": 80,
                 "ability1Cooldown%": 260,
                 "jumpVerticalSpeed%": 150,
-                "combatUltGen%": 125,
                 "enableInfiniteAmmo": false,
                 "movementGravity%": 75,
-                "ultGen%": 125,
-                "passiveUltGen%": 125,
                 "enableSpawningWithUlt": true
             },
             "sojourn": {
@@ -740,36 +695,27 @@ settings {
                 "jumpVerticalSpeed%": 110,
                 "projectileSpeed%": 120,
                 "ability1Cooldown%": 50,
-                "combatUltGen%": 125,
                 "projectileGravity%": 110,
                 "enableInfiniteAmmo": false,
                 "ultFreezeRate%": 120,
                 "ultFreezeMinimum%": 40,
-                "ultGen%": 125,
-                "passiveUltGen%": 145
             },
             "ashe": {
                 "damageDealt%": 90,
                 "ability1EnemyKb%": 150,
                 "ability2Cooldown%": 50,
                 "ability2FuseTime%": 1,
-                "combatUltGen%": 110,
                 "enableInfiniteAmmo": false,
                 "ability1Cooldown%": 80,
-                "ultGen%": 110,
-                "passiveUltGen%": 110
             },
             "moira": {
                 "damageDealt%": 120,
                 "damageReceived%": 90,
                 "jumpVerticalSpeed%": 110,
-                "combatUltGen%": 165,
                 "ability1Cooldown%": 225,
                 "ability2Cooldown%": 75,
                 "ability2MaxHealing%": 200,
                 "primaryFireRechargeRate%": 500,
-                "ultGen%": 165,
-                "passiveUltGen%": 155
             },
             "reinhardt": {
                 "damageDealt%": 130,
@@ -779,11 +725,8 @@ settings {
                 "secondaryFireRechargeRate%": 150,
                 "secondaryFireCooldown%": 0,
                 "projectileSpeed%": 150,
-                "combatUltGen%": 140,
                 "primaryFireKb%": 250,
                 "ability2Cooldown%": 72,
-                "ultGen%": 140,
-                "passiveUltGen%": 185
             },
             "sigma": {
                 "damageDealt%": 130,
@@ -798,11 +741,8 @@ settings {
                 "secondaryFireRechargeRate%": 500,
                 "secondaryFireMaximumTime%": 200,
                 "projectileSpeed%": 150,
-                "combatUltGen%": 165,
                 "enableInfiniteAmmo": false,
                 "healingDealt%": 50,
-                "ultGen%": 165,
-                "passiveUltGen%": 165,
                 "ability1Cooldown%": 55,
                 "ultKb%": 125
             },
@@ -812,7 +752,6 @@ settings {
                 "projectileSpeed%": 115,
                 "无需装弹": "开启",
                 "healingDealt%": 160,
-                "ultGen%": 185,
                 "ability2Cooldown%": 53
             },
             "hazard": {
@@ -825,23 +764,17 @@ settings {
             "sombra": {
                 "damageDealt%": 95,
                 "ability2Cooldown%": 500,
-                "combatUltGen%": 125,
                 "projectileGravity%": 120,
                 "enableInfiniteAmmo": false,
-                "ultGen%": 125,
-                "passiveUltGen%": 125,
                 "secondaryFireCooldown%": 250
             },
             "widowmaker": {
                 "damageDealt%": 100,
                 "ability2Cooldown%": 110,
                 "ammoClipSize%": 25,
-                "combatUltGen%": 500,
                 "ability1Cooldown%": 200,
                 "projectileGravity%": 80,
-                "ultGen%": 500,
                 "ultDuration%": 300,
-                "passiveUltGen%": 500,
                 "enableSpawningWithUlt": true
             },
             "shion": {
@@ -857,11 +790,8 @@ settings {
                 "healingReceived%": 120,
                 "jumpVerticalSpeed%": 100,
                 "projectileSpeed%": 115,
-                "combatUltGen%": 140,
                 "healingDealt%": 125,
                 "movementSpeed%": 100,
-                "ultGen%": 130,
-                "passiveUltGen%": 130
             }
         }
     },
