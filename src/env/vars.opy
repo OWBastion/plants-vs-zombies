@@ -277,3 +277,4 @@ playervar Ammo_Before_Hit
 playervar Knockback_Dealt_At
 # 佛法自然: 僵尸身上的"乱"特效实体(0 表示没有)。
 playervar Dharma_Orb_Id
+playervar Rerolled_Tech_Ids

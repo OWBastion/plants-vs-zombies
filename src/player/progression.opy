@@ -56,7 +56,7 @@ def feskaBuildPool():
     @Name "Feska - build candidate pool"
 
     if Target_Player.Current_Choice_Kind == Choice_Kind.TECH:
-        Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids or Target_Player.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] > 0)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
+        Target_Player.Candidate_Upgrade_Ids = Tech_Catalog_Indexes.filter(lambda upgrade: upgrade not in Target_Player.Owned_Tech_Ids and upgrade not in Target_Player.Rerolled_Tech_Ids and not (upgrade == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in Target_Player.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in Target_Player.Owned_Tech_Ids or Target_Player.Bonus_By_Stat[Stat_Bonus.ULTIMATE_CHARGE] > 0)) and not (upgrade in [Tech_Id.FREEZE_ALL, Tech_Id.ULTIMATE_CHARGE] and Tech_Id.NO_ULTIMATE in Target_Player.Owned_Tech_Ids))
         # 技能强化只对英雄池内的当前英雄入池; 其他行的英雄池是空数组, 不会被选中。
         Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: Upgrade_Catalog[upgrade][UPGRADE_COLUMN_KIND] != UPGRADE_KIND_SKILL or Target_Player.getHero() in Upgrade_Catalog[upgrade][UPGRADE_COLUMN_HERO_POOL])
         # 银质子弹依赖弹夹: 当前英雄没有弹夹就直接不进池, 不会抽到空卡。
@@ -101,6 +101,7 @@ rule "Feska - Initialize player":
     @Condition not eventPlayer.Is_Initialized
 
     eventPlayer.Owned_Tech_Ids = []
+    eventPlayer.Rerolled_Tech_Ids = []
     eventPlayer.Bonus_By_Stat = [0, 0, 0, 0, 0, 0, 0, 0]
     # 首次生成时没有任何本模式生命池与 setMaxHealth 修改, 读取到的就是英雄原始最大生命。
     eventPlayer.Base_Max_Health = eventPlayer.getMaxHealth()
@@ -231,6 +232,8 @@ rule "Feska - Reroll card":
         if len(Reroll_Candidates) == 0:
             smallMessage(eventPlayer, "没有可刷新的卡")
             return
+        if eventPlayer.Current_Choice_Kind == Choice_Kind.TECH:
+            eventPlayer.Rerolled_Tech_Ids.append(eventPlayer.Card_Upgrade_Ids[eventPlayer.Selected_Card_Index])
         eventPlayer.Card_Upgrade_Ids[eventPlayer.Selected_Card_Index] = random.choice(Reroll_Candidates)
         eventPlayer.Card_Rerolled_Flags[eventPlayer.Selected_Card_Index] = true
 
