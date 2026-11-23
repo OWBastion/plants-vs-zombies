@@ -68,6 +68,23 @@ rule "[ai]: Winston Use Barrier":
         loop()
 
 
+# 标枪旋转(E): 装备设置里僵尸奥丽莎原本禁用了技能2。旋转期间无法攻击, 贴身时只普攻。
+rule "[ai]: Orisa Use Ability 2":
+    @Event eachPlayer
+    @Team 1
+    @Hero orisa
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
+    @Condition not zombieInMeleeRange()
+
+    eventPlayer.forceButtonPress(Button.ABILITY_2)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
 rule "[ai]: Zarya Use Barrier":
     @Event eachPlayer
     @Team 1

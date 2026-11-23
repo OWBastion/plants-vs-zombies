@@ -117,7 +117,7 @@ settings {
             "orisa": {
                 "enablePrimaryFire": false,
                 "ability1Cooldown%": 100,
-                "enableAbility2": false,
+                "enableAbility2": true,
                 "health%": 115,
                 "movementSpeed%": 50,
                 "enableSecondaryFire": false
