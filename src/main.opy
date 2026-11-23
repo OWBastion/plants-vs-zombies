@@ -575,7 +575,6 @@ settings {
                 "movementSpeed%": 135,
                 "movementGravity%": 80,
                 "ultGen%": 165,
-                "ultDuration%": 250,
                 "passiveUltGen%": 165,
                 "ability1Cooldown%": 150
             },
@@ -632,7 +631,6 @@ settings {
                 "ability2Cooldown%": 50,
                 "primaryFireIgniteDamage": 166,
                 "primaryFireIgniteDuration": 150,
-                "终极技能持续时间无限": "开启",
                 "enableAbility1": false
             },
             "pharah": {
@@ -760,7 +758,6 @@ settings {
                 "enableInfiniteAmmo": false,
                 "ability1Cooldown%": 80,
                 "ultGen%": 110,
-                "ultDuration%": 150,
                 "passiveUltGen%": 110
             },
             "moira": {
@@ -849,7 +846,8 @@ settings {
                 "enableSpawningWithUlt": true
             },
             "shion": {
-                "movementSpeed%": 75
+                "movementSpeed%": 75,
+                "ability2Duration%": 500
             },
             "enabledHeroes": [
                 "reaper"
