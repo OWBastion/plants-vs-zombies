@@ -52,6 +52,22 @@ rule "[ai]: Use Hero Abilities":
         loop()
 
 
+# 温斯顿屏障: 冷却好就放。Jump Pack 走通用规则的 ABILITY_1, 这里补 ABILITY_2(屏障发射器)。
+rule "[ai]: Winston Use Barrier":
+    @Event eachPlayer
+    @Team 1
+    @Hero winston
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
+    @Condition eventPlayer.getAbilityCooldown(Button.ABILITY_2) == 0
+
+    eventPlayer.forceButtonPress(Button.ABILITY_2)
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+
 rule "[ai]: Zarya Use Barrier":
     @Event eachPlayer
     @Team 1
