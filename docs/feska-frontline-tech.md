@@ -117,7 +117,7 @@ elif Temp_Pool_Tag == Temp_Pool_Id.REACTIVE:  addHealthPool(Health.ARMOR, ...)
 | -- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | 1  | 池表重建后三池是否照常: 受击前 `getHealthOfType(Health.SHIELDS/ARMOR)` 有值、击穿后归零、下一阶段重建 | 重做后的 `feskaAddTempPool` 若仍不建池, 护盾/血肉/反甲会集体变空卡, 这是本轮改动的唯一风险集中点。先看是否有池, 再看池是否按标签重建 |
 | 2  | 无弹夹英雄（莱因哈特、布丽吉特、温斯顿等）`getMaxAmmo(0)` 的返回值                    | 若返回 >0，选牌池过滤失效，卡会发给用不上弹夹的英雄。判据用 `getMaxAmmo` 而不是 `getAmmo`：前者是弹夹容量，后者在打空时也是 0，区分不开。这条是唯一防线 |
-| 3  | `playerDealtKnockback` / `playerReceivedKnockback` 在本模式的实际触发 | 事件不触发则大运来咯等同空卡                                                                             |
+| 3  | `playerDealtKnockback` / `playerReceivedKnockback` 在本模式的实际触发 | 已确认两事件均触发。曾出现「击倒自己」：`setStatusEffect` 的接收者是调用方，参数顺序写反。现为受击方 `eventPlayer.setStatusEffect(持有者, ...)`，未在游戏内复验 |
 | 4  | `startDamageModification` 的接收者数组是否随每帧重估                      | 不重估则佛法自然只在建句柄那一刻对范围内僵尸生效                                                                   |
 | 5  | 生命池句柄跨死亡是否失效                                              | 重生时 `feskaClearAllTempPools` 会对旧句柄 `removeHealthPool` 再重建; 若失效句柄报错, 重生流程会中断                                      |
 | 6  | 死亡之舞的流血 DOT 是否计入受击统计                                         | 若计入，会绕过 `attacker != null` 触发坚韧、十字军铠甲、反甲                                                                |

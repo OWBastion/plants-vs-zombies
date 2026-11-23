@@ -81,7 +81,7 @@
 | T29 | 痛苦疗愈 | 受到伤害的 12% 转换为临时生命值，持续 8 秒。 | 已启用；最多同时保留 8 个池，达到上限后不再追加。 |
 | T30 | 不屈意志 | 每损失 1% 最大生命，获得 1% 伤害减免与 1% 增伤。 | 已实现：`indomitable.opy`，0.25 秒重算 `Missing_Health_Percent`，减伤并入加算总和（90% 封顶），增伤不封顶。 |
 | T31 | 坚韧 | 受到伤害后，接下来 4 秒内受到的伤害降低 40%。 | 已实现：`resolute.opy`，单时间戳窗口，窗口内受击只顺延不叠层。 |
-| T32 | 大运来咯 | 你造成的击退会将敌人击倒 1 秒。 | 已实现：`knockdown.opy`，`playerDealtKnockback` + `playerReceivedKnockback` 按“0.12 秒内 + 12 米”配对，只覆盖击退事件。待验证：两事件在本模式的实际触发时机。 |
+| T32 | 大运来咯 | 你造成的击退会将敌人击倒 1 秒。 | 已实现：`knockdown.opy`，`playerDealtKnockback` + `playerReceivedKnockback` 按“0.12 秒内 + 12 米”配对，只覆盖击退事件。两事件均确认触发。已修：`setStatusEffect` 的接收者是调用方，原写法把持有者当接收者导致击倒自己；现为受击方 `eventPlayer.setStatusEffect(持有者, ...)`。 |
 | T33 | 银质子弹 | 弹匣的最后一枚子弹额外造成 250% 伤害。 | 已实现：`silver_bullet.opy`，判 `getAmmo(0) == 0` 且上一发还有子弹（避免无弹夹的近战英雄恒触发）。待验证：无弹夹英雄 `getAmmo` 的返回值。 |
 | T34 | 佛法自然〔唯一〕 | 15 米内的僵尸视为易损，受到的伤害增加 25%。 | 已实现：`dharma.opy` + `unique.opy`，全场单句柄 `startDamageModification`，与难度修改器乘算；唯一性复用光子护盾那套（目录标志、池过滤、唯一卡替换）。 |
 | T35 | 亡语 | 阵亡后造成爆炸，对 25 米范围内的敌人造成你 50% 最大生命值的伤害。 | 已实现：`death_rattle.opy`，`playerDied` 同帧快照坐标后结算，伤害来源为 `null`。 |
