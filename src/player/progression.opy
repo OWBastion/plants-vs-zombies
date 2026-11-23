@@ -379,6 +379,10 @@ rule "Feska - Restore stats on hero change or respawn":
     eventPlayer.setHealingReceived(100 + 10 * eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING_RECEIVED])
     if Tech_Id.NO_ULTIMATE in eventPlayer.Owned_Tech_Ids:
         eventPlayer.setUltEnabled(false)
+    if Tech_Id.ULTIMATE_BOT in eventPlayer.Owned_Tech_Ids:
+        # 换英雄/重生会重置技能启用状态, 和回归基本功一样按持有状态重放。
+        eventPlayer.setAbility1Enabled(false)
+        eventPlayer.setAbility2Enabled(false)
     Target_Player = eventPlayer
     feskaApplyArmorPool()
     feskaApplyHeartsteelPool()
@@ -470,6 +474,7 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/unyielding.opy"
 #!include "feska/tech/death_dance.opy"
 #!include "feska/tech/methodical.opy"
+#!include "feska/tech/ultimate_bot.opy"
 
 
 rule "Feska - Upgrade catalog":
@@ -530,7 +535,8 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_DEATH_RATTLE,
         UPGRADE_ROW_UNYIELDING,
         UPGRADE_ROW_DEATH_DANCE,
-        UPGRADE_ROW_METHODICAL
+        UPGRADE_ROW_METHODICAL,
+        UPGRADE_ROW_ULTIMATE_BOT
     ]
     Tech_Catalog_Indexes = []
     Stat_Catalog_Indexes = []
