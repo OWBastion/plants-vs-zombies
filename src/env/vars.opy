@@ -280,4 +280,5 @@ playervar Methodical_Ammo_Before_Hit
 playervar Knockback_Dealt_At
 # 佛法自然: 僵尸身上的"乱"特效实体(0 表示没有)。
 playervar Dharma_Orb_Id
-playervar Rerolled_Tech_Ids
+# 已出现过的科技: 亮出过的科技(含被刷新掉的)永久退出抽池, 不论是否选中。
+playervar Seen_Tech_Ids
