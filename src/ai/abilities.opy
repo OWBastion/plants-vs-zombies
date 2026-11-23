@@ -154,6 +154,20 @@ rule "[ai]: Lucio Use Sound Barrier":
     wait(1)
 
 
+# 圣: 充能满即释放; 按下后充能归零, 条件自然失效。
+rule "[ai]: Zenyatta Use Transcendence":
+    @Event eachPlayer
+    @Team 1
+    @Hero zenyatta
+    @Condition eventPlayer.isDummy()
+    @Condition eventPlayer.isAlive()
+    @Condition Is_Attack_Phase
+    @Condition eventPlayer.getUltCharge() == 100
+
+    eventPlayer.forceButtonPress(Button.ULTIMATE)
+    wait(1)
+
+
 rule "[ai]: Roadhog Use Breather":
     @Event eachPlayer
     @Team 1

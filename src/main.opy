@@ -329,7 +329,8 @@ settings {
                 "health%": 175,
                 "movementSpeed%": 50,
                 "enableSecondaryFire": false,
-                "enableSpawningWithUlt": true
+                "enableSpawningWithUlt": true,
+                "ultGen%": 500
             },
             "symmetra": {
                 "enablePrimaryFire": false,
