@@ -106,6 +106,10 @@ def AITarget():
 # 英雄移动速度设置下限是 50%, 更慢只能靠油门系数: 实际速度 = 设置速度 × 油门。
 #!define AI_THROTTLE 0.85
 
+# 近战触发距离。贴身即停手: 近战规则用它卡距离, 持续型技能用它在贴身时让位给普攻。
+#!define ZOMBIE_MELEE_RANGE 3.5
+#!define zombieInMeleeRange() (eventPlayer.Chase_Target_Player != null and eventPlayer.Chase_Target_Player.isAlive() and distance(eventPlayer, eventPlayer.Chase_Target_Player) <= ZOMBIE_MELEE_RANGE)
+
 
 def AIMove():
     @Name "//AI Move"
@@ -121,7 +125,7 @@ def AIMove():
 def stuckCheck():
     @Name "//AI Stuck Recovery"
 
-    if (eventPlayer.Chase_Target_Player != null and eventPlayer.Chase_Target_Player.isAlive() and distance(eventPlayer, eventPlayer.Chase_Target_Player) <= 3.5) or distance(eventPlayer, Brain_Positions[0]) <= 2.5:
+    if (eventPlayer.Chase_Target_Player != null and eventPlayer.Chase_Target_Player.isAlive() and distance(eventPlayer, eventPlayer.Chase_Target_Player) <= ZOMBIE_MELEE_RANGE) or distance(eventPlayer, Brain_Positions[0]) <= 2.5:
         eventPlayer.No_Progress_Count = 0
         eventPlayer.Last_Progress_Position = eventPlayer.getPosition()
         return
