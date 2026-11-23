@@ -11,6 +11,8 @@
 #!define FESKA_ULTIMATE_BOT_MAX_HOLDERS 2
 #!define feskaUltimateBotHolders() getPlayers(Team.2).filter(lambda player: not player.isDummy() and Tech_Id.ULTIMATE_BOT in player.Owned_Tech_Ids)
 #!define feskaUltimateBotFull() (len(feskaUltimateBotHolders()) >= FESKA_ULTIMATE_BOT_MAX_HOLDERS)
-# 这张卡已无名额。写成布尔宏而不是"已占用数组": 空数组字面量的类型推断不可靠,
+# 这张卡已无名额(抽池过滤与在场候选替换共用)。写成布尔宏而不是"已占用数组": 空数组字面量的类型推断不可靠,
 # 会在 arrayContains 处报 Number|Vector。
-#!define feskaUniqueTechTaken(upgrade) ((upgrade == Tech_Id.SHIELD and len(shieldTechHolders()) > 0) or (upgrade == Tech_Id.DHARMA and len(feskaDharmaHolders()) > 0) or (upgrade == Tech_Id.ULTIMATE_BOT and feskaUltimateBotFull()))
+#!define feskaTechQuotaFull(upgrade) ((upgrade == Tech_Id.SHIELD and len(shieldTechHolders()) > 0) or (upgrade == Tech_Id.DHARMA and len(feskaDharmaHolders()) > 0) or (upgrade == Tech_Id.ULTIMATE_BOT and feskaUltimateBotFull()))
+# 确认阶段兜底只拦真正唯一的卡: 限量卡靠池过滤和候选替换保证, 不需要也不该给玩家"被拦"的反馈。
+#!define feskaUniqueTechTaken(upgrade) ((upgrade == Tech_Id.SHIELD and len(shieldTechHolders()) > 0) or (upgrade == Tech_Id.DHARMA and len(feskaDharmaHolders()) > 0))

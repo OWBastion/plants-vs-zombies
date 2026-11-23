@@ -265,7 +265,7 @@ rule "Feska - Replace taken unique card":
     Reroll_Candidates = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade not in eventPlayer.Card_Upgrade_Ids)
     if len(Reroll_Candidates) > 0:
         for Loop_Index in range(3):
-            if feskaUniqueTechTaken(eventPlayer.Card_Upgrade_Ids[Loop_Index]):
+            if feskaTechQuotaFull(eventPlayer.Card_Upgrade_Ids[Loop_Index]):
                 eventPlayer.Card_Upgrade_Ids[Loop_Index] = random.choice(Reroll_Candidates)
                 # 补位的牌也算已出现, 后续回合不再抽到。
                 eventPlayer.Seen_Tech_Ids.append(eventPlayer.Card_Upgrade_Ids[Loop_Index])
@@ -293,6 +293,12 @@ rule "Feska - Confirm card":
             eventPlayer.Current_Choice_Kind = Choice_Kind.NONE
             eventPlayer.Is_Card_Panel_Visible = true
             eventPlayer.Is_Choice_Locked = false
+            return
+        # 限量卡不发"被拦"提示: 名额在发牌后被占满就静默重开卡面, 由池过滤保证新卡里没有它。
+        if eventPlayer.Chosen_Upgrade_Id == Tech_Id.ULTIMATE_BOT and feskaUltimateBotFull():
+            Target_Player = eventPlayer
+            eventPlayer.Is_Choice_Locked = false
+            feskaDealCards()
             return
         if eventPlayer.Chosen_Upgrade_Id == Tech_Id.NO_ULTIMATE and (Tech_Id.ULTIMATE_CHARGE in eventPlayer.Owned_Tech_Ids or Tech_Id.FREEZE_ALL in eventPlayer.Owned_Tech_Ids):
             smallMessage(eventPlayer, "与已持有的科技冲突")
