@@ -68,6 +68,9 @@ def feskaBuildPool():
             Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.SHIELD)
         if len(feskaDharmaHolders()) > 0:
             Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.DHARMA)
+        # 限量科技: 名额满了就不再进池, 判定同样不过滤存活。
+        if feskaUltimateBotFull():
+            Target_Player.Candidate_Upgrade_Ids = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade != Tech_Id.ULTIMATE_BOT)
     else:
         Target_Player.Candidate_Upgrade_Ids = Stat_Catalog_Indexes
 
@@ -248,9 +251,10 @@ rule "Feska - Replace taken unique card":
     @Condition (
         (Tech_Id.SHIELD in eventPlayer.Card_Upgrade_Ids and len(shieldTechHolders()) > 0)
         or (Tech_Id.DHARMA in eventPlayer.Card_Upgrade_Ids and len(feskaDharmaHolders()) > 0)
+        or (Tech_Id.ULTIMATE_BOT in eventPlayer.Card_Upgrade_Ids and feskaUltimateBotFull())
     )
 
-    # 唯一科技被其他玩家先选走后, 在场候选也要换掉, 不能只在抽取时过滤。
+    # 唯一/限量科技被其他玩家先选走后, 在场候选也要换掉, 不能只在抽取时过滤。
     Target_Player = eventPlayer
     feskaBuildPool()
     Reroll_Candidates = Target_Player.Candidate_Upgrade_Ids.filter(lambda upgrade: upgrade not in eventPlayer.Card_Upgrade_Ids)
@@ -278,7 +282,7 @@ rule "Feska - Confirm card":
     eventPlayer.Chosen_Upgrade_Id = eventPlayer.Card_Upgrade_Ids[eventPlayer.Selected_Card_Index]
     if eventPlayer.Current_Choice_Kind == Choice_Kind.TECH:
         if feskaUniqueTechTaken(eventPlayer.Chosen_Upgrade_Id):
-            smallMessage(eventPlayer, "该科技已被其他玩家选走")
+            smallMessage(eventPlayer, "该科技最多两人持有" if eventPlayer.Chosen_Upgrade_Id == Tech_Id.ULTIMATE_BOT else "该科技已被其他玩家选走")
             eventPlayer.Current_Choice_Kind = Choice_Kind.NONE
             eventPlayer.Is_Card_Panel_Visible = true
             eventPlayer.Is_Choice_Locked = false
