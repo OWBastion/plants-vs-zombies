@@ -53,7 +53,7 @@ settings {
                 "enableAbility2": false,
                 "ability1Cooldown%": 500,
                 "ability1Kb%": 0,
-                "health%": 200,
+                "health%": 230,
                 "movementGravity%": 90,
                 "ultGen%": 25,
                 "secondaryFireRechargeRate%": 500,
@@ -62,7 +62,7 @@ settings {
             "illari": {
                 "enablePrimaryFire": false,
                 "enableInfiniteAmmo": true,
-                "health%": 200,
+                "health%": 230,
                 "enableUlt": false
             },
             "hanzo": {
@@ -71,14 +71,14 @@ settings {
                 "enablePrimaryFire": false,
                 "damageReceived%": 105,
                 "enableAbility2": false,
-                "health%": 150,
+                "health%": 175,
                 "enableUlt": false,
                 "enableAbility1": false
             },
             "cassidy": {
                 "enablePrimaryFire": false,
                 "ability1Cooldown%": 200,
-                "health%": 200,
+                "health%": 230,
                 "enableUlt": false,
                 "enableSecondaryFire": false,
                 "ability2Cooldown%": 125
@@ -86,7 +86,7 @@ settings {
             "lucio": {
                 "enablePrimaryFire": false,
                 "jumpVerticalSpeed%": 90,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "enableUlt": false,
                 "enableSecondaryFire": false
@@ -101,7 +101,7 @@ settings {
             "soldier": {
                 "enablePrimaryFire": false,
                 "healingDealt%": 150,
-                "health%": 140,
+                "health%": 160,
                 "ability2Cooldown%": 67,
                 "movementSpeed%": 50,
                 "enableUlt": false,
@@ -118,7 +118,7 @@ settings {
                 "enablePrimaryFire": false,
                 "ability1Cooldown%": 100,
                 "enableAbility2": false,
-                "health%": 100,
+                "health%": 115,
                 "movementSpeed%": 50,
                 "enableSecondaryFire": false
             },
@@ -127,7 +127,7 @@ settings {
                 "damageDealt%": 130,
                 "combatUltGen%": 130,
                 "healingDealt%": 175,
-                "health%": 150,
+                "health%": 175,
                 "ability2Cooldown%": 180,
                 "movementSpeed%": 50,
                 "ultGen%": 130,
@@ -147,7 +147,7 @@ settings {
                 "secondaryFireRechargeRate%": 75,
                 "combatUltGen%": 110,
                 "enableAbility1": false,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "ultGen%": 110,
                 "passiveUltGen%": 110,
@@ -172,12 +172,14 @@ settings {
                 "enableAbility1": false
             },
             "ramattra": {
+                "health%": 115,
                 "enablePrimaryFire": false,
                 "enableAbility2": false,
                 "ability1Cooldown%": 0,
                 "enableUlt": false
             },
             "venture": {
+                "health%": 115,
                 "enablePrimaryFire": false,
                 "enableUlt": false,
                 "ability1Cooldown%": 50,
@@ -195,6 +197,7 @@ settings {
                 "enableAbility2": false
             },
             "juno": {
+                "health%": 115,
                 "enablePrimaryFire": false,
                 "damageDealt%": 227,
                 "jumpVerticalSpeed%": 150,
@@ -206,7 +209,7 @@ settings {
                 "jumpVerticalSpeed%": 125,
                 "projectileSpeed%": 125,
                 "ability2Cooldown%": 75,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "ability1Cooldown%": 75,
                 "enableUlt": false,
@@ -216,11 +219,12 @@ settings {
                 "enablePrimaryFire": false,
                 "ability2Cooldown%": 140,
                 "healingDealt%": 35,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "enableUlt": false
             },
             "mauga": {
+                "health%": 115,
                 "damageDealt%": 227,
                 "enablePrimaryFire": false,
                 "enableSecondaryFire": false,
@@ -234,7 +238,7 @@ settings {
                 "jumpVerticalSpeed%": 80,
                 "enablePassiveUnlimitedFuel": true,
                 "primaryFireKb%": 75,
-                "health%": 100,
+                "health%": 115,
                 "movementSpeed%": 50,
                 "enableUlt": false,
                 "enableAbility2": false,
@@ -243,12 +247,13 @@ settings {
             "junkerQueen": {
                 "enablePrimaryFire": false,
                 "ability1Cooldown%": 67,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "secondaryFireKb%": 0,
                 "锯齿利刃（格雷西）": "关闭"
             },
             "winston": {
+                "health%": 115,
                 "enablePrimaryFire": false,
                 "ultKb%": 50,
                 "ability1Cooldown%": 225,
@@ -268,7 +273,7 @@ settings {
                 "damageDealt%": 227,
                 "damageReceived%": 95,
                 "combatUltGen%": 180,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "ultGen%": 180,
                 "ultDuration%": 175,
@@ -321,7 +326,7 @@ settings {
             "zenyatta": {
                 "enablePrimaryFire": false,
                 "enableAbility2": false,
-                "health%": 150,
+                "health%": 175,
                 "movementSpeed%": 50,
                 "enableSecondaryFire": false,
                 "enableSpawningWithUlt": true
@@ -341,7 +346,7 @@ settings {
             "sojourn": {
                 "enablePrimaryFire": false,
                 "damageReceived%": 100,
-                "health%": 140,
+                "health%": 160,
                 "movementSpeed%": 50,
                 "充能射击": "关闭"
             },
@@ -377,7 +382,7 @@ settings {
                 "ability2Cooldown%": 225,
                 "ability2MaxHealing%": 150,
                 "primaryFireRechargeRate%": 125,
-                "health%": 200,
+                "health%": 230,
                 "ultDuration%": 25,
                 "enableUlt": false,
                 "enableSecondaryFire": false
@@ -387,7 +392,7 @@ settings {
                 "ability1Kb%": 15,
                 "secondaryFireRechargeRate%": 75,
                 "enableAbility2": false,
-                "health%": 50,
+                "health%": 55,
                 "movementSpeed%": 50,
                 "enableUlt": false
             },
@@ -396,7 +401,7 @@ settings {
                 "ability1Cooldown%": 200,
                 "secondaryFireCooldown%": 300,
                 "projectileSpeed%": 50,
-                "health%": 125,
+                "health%": 145,
                 "movementSpeed%": 50,
                 "enableUlt": false,
                 "ability2Cooldown%": 200
@@ -404,28 +409,28 @@ settings {
             "roadhog": {
                 "enablePrimaryFire": false,
                 "healingReceived%": 85,
-                "health%": 200,
+                "health%": 230,
                 "movementSpeed%": 50,
                 "enableUlt": false,
                 "enableAbility1": false
             },
             "kiriko": {
                 "enablePrimaryFire": false,
-                "health%": 200
+                "health%": 230
             },
             "hazard": {
                 "enablePrimaryFire": false,
                 "enableAbility2": false,
                 "尖刺护体移动速度惩罚": "150%",
                 "尖刺护体资源消耗": "0%",
-                "health%": 150,
+                "health%": 175,
                 "enableUlt": false
             },
             "sombra": {
                 "enablePrimaryFire": false,
                 "ability2Cooldown%": 400,
                 "projectileGravity%": 500,
-                "health%": 100,
+                "health%": 115,
                 "enableUlt": false,
                 "secondaryFireCooldown%": 250
             },
@@ -434,10 +439,16 @@ settings {
                 "ability2Cooldown%": 140,
                 "ability1Cooldown%": 200,
                 "projectileGravity%": 80,
-                "health%": 140,
+                "health%": 160,
                 "movementSpeed%": 50,
                 "ultDuration%": 300,
                 "enableSpawningWithUlt": true
+            },
+            "echo": {
+                "health%": 115
+            },
+            "freja": {
+                "health%": 115
             },
             "general": {
                 "damageDealt%": 180,
