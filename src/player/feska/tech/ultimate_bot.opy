@@ -4,7 +4,7 @@
 # 副武器是武器模式而非技能, 工坊没有定向禁用动作; 重生/换英雄的重放由 progression.opy 负责。
 # 充能 10%/秒, 满充约 10 秒。名额上限 2 人, 判定宏见 unique.opy 的 feskaUltimateBotFull()。
 #!define FESKA_ULTIMATE_BOT_CHARGE 10
-#!define UPGRADE_ROW_ULTIMATE_BOT ["大招工具人", "禁用技能 1 与技能 2，进攻期间每秒获得 10% 终极技能充能（最多两人持有）", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ROADHOG, Button.ULTIMATE), []]
+#!define UPGRADE_ROW_ULTIMATE_BOT ["大招工具人", "禁用技能 1 与技能 2，进攻期间每秒获得 10% 终极技能充能", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.ROADHOG, Button.ULTIMATE), []]
 
 rule "Feska - Ultimate bot disable abilities":
     @Event eachPlayer

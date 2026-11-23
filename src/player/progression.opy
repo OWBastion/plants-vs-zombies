@@ -282,7 +282,7 @@ rule "Feska - Confirm card":
     eventPlayer.Chosen_Upgrade_Id = eventPlayer.Card_Upgrade_Ids[eventPlayer.Selected_Card_Index]
     if eventPlayer.Current_Choice_Kind == Choice_Kind.TECH:
         if feskaUniqueTechTaken(eventPlayer.Chosen_Upgrade_Id):
-            smallMessage(eventPlayer, "该科技最多两人持有" if eventPlayer.Chosen_Upgrade_Id == Tech_Id.ULTIMATE_BOT else "该科技已被其他玩家选走")
+            smallMessage(eventPlayer, "该科技已被其他玩家选走")
             eventPlayer.Current_Choice_Kind = Choice_Kind.NONE
             eventPlayer.Is_Card_Panel_Visible = true
             eventPlayer.Is_Choice_Locked = false
