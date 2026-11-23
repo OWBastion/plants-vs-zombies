@@ -566,13 +566,11 @@ settings {
             "torbjorn": {
                 "damageDealt%": 100,
                 "weaponsEnabled": "hammer",
-                "jumpVerticalSpeed%": 225,
                 "ammoClipSize%": 50,
                 "combatUltGen%": 165,
                 "projectileGravity%": 200,
                 "ability2Cooldown%": 40,
                 "ability2Duration%": 200,
-                "movementSpeed%": 135,
                 "movementGravity%": 80,
                 "ultGen%": 165,
                 "passiveUltGen%": 165,
