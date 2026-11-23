@@ -409,7 +409,7 @@ settings {
             "roadhog": {
                 "enablePrimaryFire": false,
                 "healingReceived%": 85,
-                "health%": 330,
+                "health%": 300,
                 "movementSpeed%": 50,
                 "enableUlt": false,
                 "enableAbility1": false
