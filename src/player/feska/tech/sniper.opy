@@ -17,4 +17,4 @@ rule "Feska - Sniper":
     if eventPlayer.getAbilityCooldown(eventAbility) > 0:
         eventPlayer.Sniper_Next_At = getTotalTimeElapsed() + 1
         eventPlayer.setAbilityCooldown(eventAbility, eventPlayer.getAbilityCooldown(eventAbility) * 0.3)
-        playEffect(eventPlayer, DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR, Color.PURPLE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 0.5)
+        playEffect(eventPlayer, DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR_SOUND, null, eventPlayer, 10)

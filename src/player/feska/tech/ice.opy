@@ -16,4 +16,3 @@ rule "Feska - Ice blade":
 
     eventPlayer.Ice_Next_At = getTotalTimeElapsed() + 1
     victim.setStatusEffect(eventPlayer, Status.FROZEN, 0.6)
-    playEffect(eventPlayer, DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.AQUA, victim, 0.5)

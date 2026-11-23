@@ -288,15 +288,13 @@ rule "Feska - Confirm card":
             eventPlayer.Is_Choice_Locked = false
             return
         eventPlayer.Owned_Tech_Ids.append(eventPlayer.Chosen_Upgrade_Id)
-        if eventPlayer.Chosen_Upgrade_Id in [Tech_Id.BERSERK, Tech_Id.VICTORY_WILL, Tech_Id.LONE_WOLF, Tech_Id.PRESSURE_COOKER]:
+        if eventPlayer.Chosen_Upgrade_Id in [Tech_Id.BERSERK, Tech_Id.VICTORY_WILL, Tech_Id.LONE_WOLF]:
             if eventPlayer.Chosen_Upgrade_Id == Tech_Id.BERSERK:
                 createEffect(getPlayers(Team.2) if isGameInProgress() and Is_Attack_Phase and eventPlayer.isAlive() and eventPlayer.Is_Berserk else [], Effect.WINSTON_PRIMAL_RAGE, Color.RED, eventPlayer, 1, EffectReeval.VISIBILITY)
             elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.VICTORY_WILL:
                 createEffect(getPlayers(Team.2) if isGameInProgress() and eventPlayer.isAlive() and getTotalTimeElapsed() < eventPlayer.Victory_Will_Effect_End and eventPlayer.hasStatusEffect(Status.INVINCIBLE) else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.YELLOW, eventPlayer, 1, EffectReeval.VISIBILITY)
-            elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.LONE_WOLF:
-                createEffect(getPlayers(Team.2) if isGameInProgress() and Is_Attack_Phase and eventPlayer.isAlive() and eventPlayer.Is_Alone else [], Effect.MERCY_DAMAGE_BOOSTED, Color.BLUE, eventPlayer, 1, EffectReeval.VISIBILITY)
             else:
-                createEffect(getPlayers(Team.2) if isGameInProgress() and Is_Attack_Phase and eventPlayer.isAlive() else [], Effect.TORBJORN_OVERLOADING, Color.ORANGE, eventPlayer, 1, EffectReeval.VISIBILITY)
+                createEffect(getPlayers(Team.2) if isGameInProgress() and Is_Attack_Phase and eventPlayer.isAlive() and eventPlayer.Is_Alone else [], Effect.MERCY_DAMAGE_BOOSTED, Color.BLUE, eventPlayer, 1, EffectReeval.VISIBILITY)
             eventPlayer.Tech_Effect_Ids.append(getLastCreatedEntity())
     else:
         if eventPlayer.Chosen_Upgrade_Id == Stat_Upgrade_Id.ULTIMATE_CHARGE and Tech_Id.NO_ULTIMATE in eventPlayer.Owned_Tech_Ids:
@@ -319,9 +317,9 @@ rule "Feska - Confirm card":
         feskaRefreshShields()
         playEffect(getPlayers(Team.2), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.BLUE, eventPlayer, 2)
     elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.SELF_REPAIR:
-        playEffect(eventPlayer, DynamicEffect.HEAL_TARGET_ACTIVE, Color.GREEN, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 1)
+        playEffect(eventPlayer, DynamicEffect.HEAL_TARGET_ACTIVE, Color.GREEN, eventPlayer.getPosition(), 0.5)
     elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.ULTIMATE_CHARGE:
-        playEffect(eventPlayer, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR, Color.AQUA, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 1)
+        playEffect(eventPlayer, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR, Color.AQUA, eventPlayer.getPosition(), 0.5)
     elif eventPlayer.Chosen_Upgrade_Id == Tech_Id.HEARTSTEEL:
         # 只统计获得该科技之后的消灭, 不追认此前累计的统计值。
         eventPlayer.Elimination_Baseline = eventPlayer.getNumberOfElims()

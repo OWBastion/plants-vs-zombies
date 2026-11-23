@@ -13,6 +13,6 @@ rule "Feska - F5":
     Ready_Ability_Buttons = [Button.ABILITY_1, Button.ABILITY_2, Button.SECONDARY_FIRE].filter(lambda button: eventPlayer.getAbilityCooldown(button) > 0)
     if len(Ready_Ability_Buttons) > 0:
         eventPlayer.setAbilityCooldown(random.choice(Ready_Ability_Buttons), 0)
-        playEffect(eventPlayer, DynamicEffect.TRACER_RECALL_REAPPEAR, Color.AQUA, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 1)
+        playEffect(eventPlayer, DynamicEffect.TRACER_RECALL_REAPPEAR, Color.AQUA, eventPlayer.getPosition(), 0.5)
     if ruleCondition:
         loop()

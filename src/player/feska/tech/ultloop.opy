@@ -12,5 +12,5 @@ rule "Feska - Ultimate loop":
     @Condition eventAbility == Button.ULTIMATE
 
     if eventPlayer.getUltCharge() < 100:
-        playEffect(eventPlayer, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR, Color.AQUA, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 0.5)
+        playEffect(eventPlayer, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR_SOUND, null, eventPlayer, 10)
     eventPlayer.setUltCharge(min(eventPlayer.getUltCharge() + 25, 100))

@@ -12,4 +12,4 @@ rule "Feska - Back to basics":
     eventPlayer.Bonus_By_Stat[Stat_Bonus.HEALING] += Upgrade_Catalog[Tech_Id.NO_ULTIMATE][UPGRADE_COLUMN_HEALING]
     eventPlayer.setUltEnabled(false)
     feskaApplyUpgradeStats()
-    playEffect(eventPlayer, DynamicEffect.SOMBRA_LOGO, Color.PURPLE, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 1)
+    playEffect(eventPlayer, DynamicEffect.SOMBRA_LOGO, Color.PURPLE, eventPlayer.getPosition(), 0.5)

@@ -12,6 +12,4 @@ rule "Feska - Lifesteal on elimination":
     @Condition not eventPlayer.Is_Berserk
     @Condition Tech_Id.LIFESTEAL in eventPlayer.Owned_Tech_Ids
 
-    if eventPlayer.getHealth() < eventPlayer.getMaxHealth():
-        playEffect(eventPlayer, DynamicEffect.HEAL_TARGET_ACTIVE, Color.GREEN, eventPlayer.getEyePosition() + eventPlayer.getFacingDirection() * 1.5, 0.5)
     heal(eventPlayer, null, feskaMaxHealth(eventPlayer) * 0.05)

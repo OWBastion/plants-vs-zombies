@@ -10,6 +10,8 @@ rule "Feska - Pressure cooker":
     @Condition Tech_Id.PRESSURE_COOKER in eventPlayer.Owned_Tech_Ids
 
     wait(1, Wait.ABORT_WHEN_FALSE)
-    damage(getPlayersInRadius(eventPlayer, 15, Team.1, LosCheck.SURFACES), eventPlayer, feskaMaxHealth(eventPlayer) * 0.04)
+    Player_List = getPlayersInRadius(eventPlayer, 15, Team.1, LosCheck.SURFACES)
+    Player_List.filter(lambda player: player.isAlive() and not player.hasStatus(Status.BURNING)).setStatusEffect(null, Status.BURNING, 0.8)
+    damage(Player_List, eventPlayer, feskaMaxHealth(eventPlayer) * 0.04)
     if ruleCondition:
         loop()
