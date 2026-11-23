@@ -140,34 +140,6 @@ rule "[ai]: Lucio Amp":
         loop()
 
 
-# 音障: 充能满即释放; 按下后充能归零, 条件自然失效。
-rule "[ai]: Lucio Use Sound Barrier":
-    @Event eachPlayer
-    @Team 1
-    @Hero lucio
-    @Condition eventPlayer.isDummy()
-    @Condition eventPlayer.isAlive()
-    @Condition Is_Attack_Phase
-    @Condition eventPlayer.getUltCharge() == 100
-
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
-    wait(1)
-
-
-# 圣: 充能满即释放; 按下后充能归零, 条件自然失效。
-rule "[ai]: Zenyatta Use Transcendence":
-    @Event eachPlayer
-    @Team 1
-    @Hero zenyatta
-    @Condition eventPlayer.isDummy()
-    @Condition eventPlayer.isAlive()
-    @Condition Is_Attack_Phase
-    @Condition eventPlayer.getUltCharge() == 100
-
-    eventPlayer.forceButtonPress(Button.ULTIMATE)
-    wait(1)
-
-
 rule "[ai]: Roadhog Use Breather":
     @Event eachPlayer
     @Team 1
@@ -233,20 +205,21 @@ rule "[ai]: venture Use Ability 1":
         loop()
 
 
-rule "[ai]: brig Use ult":
+# 大招: 名单内英雄充能满即释放; 按下后充能归零, 条件自然失效。
+# 新增英雄需同时在 main.opy 的 team1 设置里放开终极技能。
+#!define AI_ULT_HEROES [Hero.LUCIO, Hero.ZENYATTA, Hero.BRIGITTE]
+
+rule "[ai]: Use Ultimate":
     @Event eachPlayer
     @Team 1
-    @Hero brigitte
+    @Condition eventPlayer.isDummy()
     @Condition eventPlayer.isAlive()
-    @Condition isGameInProgress()
-    @Condition eventPlayer.getUltCharge() == 100
     @Condition Is_Attack_Phase
+    @Condition eventPlayer.getHero() in AI_ULT_HEROES
+    @Condition eventPlayer.getUltCharge() == 100
 
-    wait(0.1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.forceButtonPress(Button.ULTIMATE)
-    wait(15)
-    if ruleCondition:
-        loop()
+    wait(1)
 
 
 rule "[ai]: ram Use Ability 1":
