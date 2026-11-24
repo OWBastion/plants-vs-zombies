@@ -1,7 +1,7 @@
 #!mainFile "../main.opy"
 
 # 与 main.opy 设置说明里的版本号保持一致。
-#!define MODE_VERSION "v26.1124.1"
+#!define MODE_VERSION "v26.1124.2"
 
 # 当前阶段剩余时间的比例(0-100): 进攻期按进攻计时, 准备期按准备计时, 条随时间缩短。
 #!define hudWaveRemaining() 100 * (Wave_Attack_Time_Left / Wave_Attack_Duration if Is_Attack_Phase else Wave_Prep_Time_Left / Wave_Prep_Duration)
