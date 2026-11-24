@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description": "植物大战僵尸 PvE 代码: BMAMW \n\nKook频道：kook.vip/EEC9UH\n\n企鹅坐牢群：445152554\n\n最后更新| v2025.0528.1",
+        "description": "植物大战僵尸 PvE 代码: BMAMW \n\nKook频道：kook.vip/EEC9UH\n\n企鹅坐牢群：445152554\n\n最后更新| v26.1124.1",
         "modeName": "植物大战僵尸 PvE"
     },
     "lobby": {
