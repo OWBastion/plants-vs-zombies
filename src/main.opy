@@ -594,6 +594,7 @@ settings {
                 "enableInfiniteAmmo": false,
                 "ability2Cooldown%": 125,
                 "healingDealt%": 105,
+                "movementSpeed%": 75,
             },
             "mauga": {
                 "ability2Cooldown%": 50,

@@ -492,6 +492,7 @@ rule "Feska - Wave end cleanup":
 #!include "feska/tech/death_dance.opy"
 #!include "feska/tech/methodical.opy"
 #!include "feska/tech/ultimate_bot.opy"
+#!include "feska/tech/judgment.opy"
 
 
 rule "Feska - Upgrade catalog":
@@ -553,7 +554,8 @@ rule "Feska - Upgrade catalog":
         UPGRADE_ROW_UNYIELDING,
         UPGRADE_ROW_DEATH_DANCE,
         UPGRADE_ROW_METHODICAL,
-        UPGRADE_ROW_ULTIMATE_BOT
+        UPGRADE_ROW_ULTIMATE_BOT,
+        UPGRADE_ROW_JUDGMENT
     ]
     Tech_Catalog_Indexes = []
     Stat_Catalog_Indexes = []
