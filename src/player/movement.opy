@@ -1,6 +1,6 @@
 #!mainFile "../main.opy"
 
-# 进攻阶段仍可自由移动的英雄: 托比昂、狮音与死神。
+# 进攻阶段仍可自由移动的英雄: 托比昂、死怨与斩仇。
 # 定点规则与重生后的移动恢复共用这一份名单, 避免两处各写一套导致复活后被重新定点。
 #!define FREE_MOVE_HEROES [Hero.TORBJORN, Hero.SHION, Hero.REAPER]
 
