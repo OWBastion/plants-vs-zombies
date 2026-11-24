@@ -28,3 +28,5 @@ pnpm run compile
 ```
 
 模块边界与 `#!include` 顺序即编译产物中的规则顺序。改动时保持规则相对顺序不变，以免改变 Workshop 执行语义。
+
+GitHub Actions 会在 PR 中编译并保存构建产物。`main` 的源码或构建工具变更会触发发布：按新加坡时间更新模式说明和 HUD 的版本号，编译后提交版本号，并发布带有 Workshop 文件的 GitHub Release。版本格式为 `YY.MMDD.N`，`N` 是当天的发布序号。也可以手动运行 Build and Release workflow。

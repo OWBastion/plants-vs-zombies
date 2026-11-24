@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  pull_request:
+    paths-ignore:
+      - docs/**
+      - '**/*.md'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.10.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: wrightkit/setup-wright@v1
+      - run: wright update provider opy
+      - run: pnpm run compile
+      - uses: actions/upload-artifact@v7
+        with:
+          name: plants-vs-zombies-build
+          path: main.compiled.ow
+          retention-days: 14
