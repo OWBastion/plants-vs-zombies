@@ -271,7 +271,7 @@ playervar Missing_Health_Percent
 # 坚韧: 受击后的 4 秒减伤窗口。
 playervar Is_Resolute
 playervar Resolute_Until
-# 银质子弹: 上一次命中时的弹夹余量, 用来识别"最后一发"; 0 表示未记录。
+# 银质子弹: 弹夹有子弹时记录的弹量; 最后一发结算后置 0, 防止重复触发。
 playervar Ammo_Before_Hit
 # 一板一眼: 选中时的原弹匣容量(换算附加伤害)与上一发命中时的弹量(同发多目标去重)。
 playervar Methodical_Original_Max_Ammo

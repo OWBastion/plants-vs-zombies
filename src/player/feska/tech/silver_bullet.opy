@@ -8,6 +8,16 @@
 #!define FESKA_SILVER_BULLET_PERCENT 2.5
 #!define UPGRADE_ROW_SILVER_BULLET ["银质子弹", "弹匣的最后一枚子弹额外造成 250% 伤害", UPGRADE_KIND_TECH, 0, 1, 0, 0, 0, abilityIconString(Hero.CASSIDY, Button.PRIMARY_FIRE), []]
 
+rule "Feska - Silver bullet track ammo":
+    @Event eachPlayer
+    @Team 2
+    @Condition Tech_Id.SILVER_BULLET in eventPlayer.Owned_Tech_Ids
+    @Condition eventPlayer.getAmmo(0) > 0
+    @Condition eventPlayer.Ammo_Before_Hit == 0
+
+    eventPlayer.Ammo_Before_Hit = eventPlayer.getAmmo(0)
+
+
 rule "Feska - Silver bullet":
     @Event playerDealtDamage
     @Team 2
@@ -21,5 +31,3 @@ rule "Feska - Silver bullet":
         damage(victim, eventPlayer, eventDamage * FESKA_SILVER_BULLET_PERCENT)
         wait(0.032)
         eventPlayer.Is_Spawning_Derived_Damage = false
-    else:
-        eventPlayer.Ammo_Before_Hit = eventPlayer.getAmmo(0)
