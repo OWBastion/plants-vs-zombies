@@ -298,11 +298,12 @@ settings {
                 "enablePrimaryFire": false,
                 "combatUltGen%": 300,
                 "projectileGravity%": 200,
-                "health%": 500,
+                "health%": 300,
                 "movementSpeed%": 50,
                 "ultGen%": 300,
                 "passiveUltGen%": 300,
                 "enableSpawningWithUlt": true,
+                "ability1Cooldown%": 200,
                 "ability2Cooldown%": 125
             },
             "lifeweaver": {
@@ -393,7 +394,7 @@ settings {
                 "ability1Kb%": 15,
                 "secondaryFireRechargeRate%": 75,
                 "enableAbility2": false,
-                "health%": 55,
+                "health%": 75,
                 "movementSpeed%": 50,
                 "enableUlt": false
             },
@@ -599,8 +600,7 @@ settings {
             "mauga": {
                 "ability2Cooldown%": 50,
                 "primaryFireIgniteDamage": 166,
-                "primaryFireIgniteDuration": 150,
-                "enableAbility1": false
+                "primaryFireIgniteDuration": 150
             },
             "pharah": {
                 "damageDealt%": 95,
@@ -672,10 +672,10 @@ settings {
                 "enableInfiniteAmmo": false,
             },
             "symmetra": {
-                "ability2Cooldown%": 275,
-                "damageDealt%": 80,
+                "ability2Cooldown%": 100,
+                "damageDealt%": 100,
                 "ability1Cooldown%": 260,
-                "jumpVerticalSpeed%": 150,
+                "jumpVerticalSpeed%": 100,
                 "enableInfiniteAmmo": false,
                 "movementGravity%": 75,
                 "enableSpawningWithUlt": true
@@ -736,7 +736,7 @@ settings {
                 "ability2Cooldown%": 150
             },
             "roadhog": {
-                "damageDealt%": 80,
+                "damageDealt%": 100,
                 "damageReceived%": 90,
                 "healingReceived%": 25,
                 "secondaryFireRechargeRate%": 500,
@@ -763,8 +763,8 @@ settings {
                 "ability1Cooldown%": 134
             },
             "sombra": {
-                "damageDealt%": 95,
-                "ability2Cooldown%": 500,
+                "damageDealt%": 100,
+                "ability2Cooldown%": 200,
                 "projectileGravity%": 120,
                 "enableInfiniteAmmo": false,
                 "secondaryFireCooldown%": 250
@@ -781,6 +781,10 @@ settings {
             "shion": {
                 "movementSpeed%": 75,
                 "ability2Duration%": 500
+            },
+            "doctrine": {
+                "secondaryFireCooldown%": 50,
+                "ability2Cooldown%": 50
             },
             "enabledHeroes": [
                 "reaper"
