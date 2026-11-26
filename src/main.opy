@@ -782,10 +782,11 @@ settings {
                 "movementSpeed%": 75,
                 "ability2Duration%": 500
             },
-            "doctrine": {
-                "secondaryFireCooldown%": 50,
-                "ability2Cooldown%": 50
-            },
+            # TODO: wright 0.50.0 缺少 hero.doctrine 的 zh-CN 设置映射(报 missing setting mapping), 补上后取消注释
+            # "doctrine": {
+            #     "secondaryFireCooldown%": 50,
+            #     "ability2Cooldown%": 50
+            # },
             "enabledHeroes": [
                 "reaper"
             ],
