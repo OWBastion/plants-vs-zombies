@@ -59,6 +59,21 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     elif getCurrentMap() == Map.ROUTE66:
         Zombie_Spawn_Positions = [vect(-40.92, 2.81, -37.62), vect(-36.01, 8.280, -44.02)]
         Brain_Positions = [vect(7.15, 1.60, -10.99)]
+    elif getCurrentMap() == Map.HORIZON_LUNAR_COLONY:
+        Zombie_Spawn_Positions = [vect(-29.20, 4.16, -97.13), vect(-9.47, 5.46, -100.14), vect(-4.01, 9.21, -115.65)]
+        Brain_Positions = [vect(-28.75, 3.40, -129.45)]
+    elif getCurrentMap() == Map.KINGS_ROW or getCurrentMap() == Map.KINGS_ROW_WINTER:
+        Zombie_Spawn_Positions = [vect(-83.46, 0.07, -40.96), vect(-82.36, 3.14, -35.83), vect(-56.06, -0.5, 1.93)]
+        Brain_Positions = [vect(-94.87, 0.56, 8.13)]
+    elif getCurrentMap() == Map.DORADO
+        Zombie_Spawn_Positions = [vect(107.23, 17.54, 17.08), vect(99.31, 19.95, 27.42), vect(115.25, 10.34, 8.1l9)]
+        Brain_Positions = [vect(137.23, 11.06, 27.95)]
+    elif getCurrentMap() == Map.PARIS
+        Zombie_Spawn_Positions = [vect(-81.24, 10.93, -54.58), vect(-109.65, 10.14, -67.57), vect(-81.94, 11.50, -63.47)]
+        Brain_Positions = [vect(-99.32, 11.50, -91.26)]
+    elif getCurrentMap() == Map.VOLSKAYA
+        Zombie_Spawn_Positions = [vect(-66.12, -3.46, 66.52), vect(-105.17, -4.48, 72.17)]
+        Brain_Positions = [vect(-108.04, -2.66, 40.88)]
     # 刷新点黄球与脑子白光柱只是调试标记, 关闭 Debug 时不生成。
     # 各图刷新点数量不同(庭院 1 个、艾兴瓦尔德 2 个), 越界索引会取到无效坐标, 按实际长度逐个判。
     if Debug_Enabled:
@@ -100,7 +115,7 @@ rule "[Mode]: Spawn Teleport":
         if eventPlayer.getTeam() == Team.1 and (not Is_Attack_Phase or Wave_Attack_Time_Left > 0):
             eventPlayer.enableRespawn()
         # 实测请求值比实际复活等待多约 2 秒: 5 -> 约 3 秒, 3 -> 约 1 秒
-        eventPlayer.setRespawnTime(3 if Current_Wave == Total_Wave_Count else 5)
+        eventPlayer.setRespawnTime(2 if Current_Wave == Total_Wave_Count else 4)
     else:
         eventPlayer.teleport(PLAYER_SPAWN_POSITION())
 
