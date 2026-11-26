@@ -65,13 +65,13 @@ rule "Disable Scoring, Intro hud, Arena Locations, Spawn Loc, Spawn detect":
     elif getCurrentMap() == Map.KINGS_ROW or getCurrentMap() == Map.KINGS_ROW_WINTER:
         Zombie_Spawn_Positions = [vect(-83.46, 0.07, -40.96), vect(-82.36, 3.14, -35.83), vect(-56.06, -0.5, 1.93)]
         Brain_Positions = [vect(-94.87, 0.56, 8.13)]
-    elif getCurrentMap() == Map.DORADO
+    elif getCurrentMap() == Map.DORADO:
         Zombie_Spawn_Positions = [vect(107.23, 17.54, 17.08), vect(99.31, 19.95, 27.42), vect(115.25, 10.34, 8.1l9)]
         Brain_Positions = [vect(137.23, 11.06, 27.95)]
-    elif getCurrentMap() == Map.PARIS
+    elif getCurrentMap() == Map.PARIS:
         Zombie_Spawn_Positions = [vect(-81.24, 10.93, -54.58), vect(-109.65, 10.14, -67.57), vect(-81.94, 11.50, -63.47)]
         Brain_Positions = [vect(-99.32, 11.50, -91.26)]
-    elif getCurrentMap() == Map.VOLSKAYA
+    elif getCurrentMap() == Map.VOLSKAYA:
         Zombie_Spawn_Positions = [vect(-66.12, -3.46, 66.52), vect(-105.17, -4.48, 72.17)]
         Brain_Positions = [vect(-108.04, -2.66, 40.88)]
     # 刷新点黄球与脑子白光柱只是调试标记, 关闭 Debug 时不生成。
